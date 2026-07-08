@@ -1,0 +1,21 @@
+/* Aequora Digital — Fonts
+   Plus Jakarta Sans is the sole type family across the real site (matches
+   <link> import on aequoradigital.com). Self-hosted variable fonts, both
+   upright and italic — italic weight-300 is used for gradient-clipped
+   emphasis words inside headlines (see typography.css / Type card). */
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("../assets/fonts/PlusJakartaSans-Variable.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("../assets/fonts/PlusJakartaSans-Italic-Variable.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  font-style: italic;
+  font-display: swap;
+}

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/aequora-digital-design-system-9c2f1bec-b26d-48cf-99d2-67a61e1b6123/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/aequora-digital-design-system-9c2f1bec-b26d-48cf-99d2-67a61e1b6123/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/aequora-digital-design-system-9c2f1bec-b26d-48cf-99d2-67a61e1b6123/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/aequora-digital-design-system-9c2f1bec-b26d-48cf-99d2-67a61e1b6123/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/aequora-digital-design-system-9c2f1bec-b26d-48cf-99d2-67a61e1b6123/tokens/effects.css">
+  <link rel="stylesheet" href="_ds/aequora-digital-design-system-9c2f1bec-b26d-48cf-99d2-67a61e1b6123/styles.css">
+  <script src="_ds/aequora-digital-design-system-9c2f1bec-b26d-48cf-99d2-67a61e1b6123/_ds_bundle.js"></script>
+  <style>
+    /* Nesta's brand override — chili red + gold, lifted from the jar/poncho logo,
+       layered on top of the Aequora token structure (same variables, new values). */
+    :root {
+      --navy: #B8241E;
+      --navy-dk: #430D0A;
+      --navy-lt: #E2472F;
+      --sand: #F6C445;
+      --terra: #F6C445;
+      --text-h: #2B0F0C;
+      --text-b: #4A2420;
+      --text-m: #8A5A4F;
+      --bg: #FBF3EA;
+      --bg-lt: #F5E4D3;
+      --action-secondary-hover: #f0d270;
+      --action-secondary-active: #e0be55;
+      --border-subtle: rgba(184, 36, 30, 0.14);
+      --border-default: rgba(184, 36, 30, 0.24);
+    }
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.6); opacity: 0.35; }
+    }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--surface-page); }
+    a { color: var(--text-link); }
+    a:hover { color: var(--text-link-hover); }
+
+    /* --- Nesta's custom motifs: hand-run, not template --- */
+    .grain { position: relative; }
+    .grain::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+      background-image: radial-gradient(rgba(184,36,30,0.05) 1px, transparent 1px);
+      background-size: 14px 14px;
+    }
+    .heat-rule {
+      display: flex; align-items: center; gap: 6px; height: 10px; margin: 0;
+    }
+    .heat-rule span {
+      flex: 1; height: 3px; background: repeating-linear-gradient(90deg, var(--navy) 0 6px, transparent 6px 12px);
+      border-radius: 2px;
+    }
+    .idx-num {
+      font: 800 15vw/1 var(--font-display); color: transparent;
+      -webkit-text-stroke: 1.5px rgba(184,36,30,0.14);
+      position: absolute; top: -0.35em; right: -0.02em; z-index: 0; user-select: none; pointer-events: none;
+    }
+    .tape {
+      position: absolute; width: 76px; height: 26px; background: rgba(246,196,69,0.55);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.12); transform: rotate(-6deg); z-index: 3;
+    }
+    .stamp-rotate { transform: rotate(-3.5deg); }
+    .stamp-rotate-r { transform: rotate(2.5deg); }
+    @media (max-width: 900px) {
+      .idx-num { display: none; }
+    }
+  </style>
+</helmet>
+
+<div style="font-family: var(--font-body); background: var(--surface-page); color: var(--text-secondary); overflow-x: hidden;">
+
+  <!-- HEADER -->
+  <header style="position: sticky; top: 0; z-index: 40; backdrop-filter: blur(14px); background: rgba(251,243,234,0.86); border-bottom: 1px solid var(--border-subtle);">
+    <div style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-3) var(--container-pad); display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); flex-wrap: wrap;">
+      <a href="#home" style="display: flex; align-items: center; gap: var(--space-3); text-decoration: none;">
+        <img src="images/nestas-logo.png" alt="Nesta's Chili Company" style="height: 44px; width: 44px; border-radius: var(--radius-md); object-fit: cover; box-shadow: var(--shadow-sm);">
+        <span style="font: 800 20px/1 var(--font-display); letter-spacing: var(--tracking-display); color: var(--text-h);">Nesta's Chili Co.</span>
+      </a>
+      <nav style="display: flex; align-items: center; gap: var(--space-6); flex-wrap: wrap;">
+        <a href="#story" style="text-decoration: none; font: 600 14px/1 var(--font-body); color: var(--text-secondary);">Story</a>
+        <a href="#products" style="text-decoration: none; font: 600 14px/1 var(--font-body); color: var(--text-secondary);">Products</a>
+        <a href="#awards" style="text-decoration: none; font: 600 14px/1 var(--font-body); color: var(--text-secondary);">Awards</a>
+        <a href="#where-to-buy" style="text-decoration: none; font: 600 14px/1 var(--font-body); color: var(--text-secondary);">Where to Buy</a>
+      </nav>
+      <a href="#contact" style="text-decoration: none;">
+        <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Button" variant="primary" size="md" hint-size="auto,46px">Contact</x-import>
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-9) var(--container-pad) var(--space-8); display: grid; grid-template-columns: 1.15fr 0.85fr; gap: var(--space-8); align-items: end; position: relative;">
+    <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" hint-size="100%,auto" style="width:100%;">
+      <div style="border-left: 3px solid var(--navy); padding-left: var(--space-6); position: relative;">
+        <span style="font: 700 12px/1 var(--font-display); letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy); background: rgba(184,36,30,0.08); padding: 5px 10px; border-radius: 3px;">Est. 2016 &middot; Davao City, PH</span>
+        <h1 style="font: var(--text-display-xl); letter-spacing: var(--tracking-display); color: var(--text-h); margin: var(--space-4) 0 var(--space-5); text-wrap: pretty;">Chili garlic paste and hot sauce, <span style="font-style: italic; font-weight: 600; position: relative; white-space: nowrap;">grown by hand<svg width="100%" height="10" viewBox="0 0 220 10" preserveAspectRatio="none" style="position: absolute; left: 0; bottom: -6px; width: 100%;"><path d="M2 6 Q 30 1, 55 6 T 110 6 T 165 6 T 218 6" fill="none" stroke="var(--navy)" stroke-width="2.5" stroke-linecap="round"/></svg></span>.</h1>
+        <p style="font: var(--text-body-lg); color: var(--text-secondary); max-width: 46ch; margin: 0 0 var(--space-7);">We grow our own superhot chilies on a 2.5-hectare farm, then craft them into small-batch paste and sauce. No shortcuts. Just heat.</p>
+        <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
+          <a href="#products" style="text-decoration: none;">
+            <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Button" variant="primary" size="lg" hint-size="auto,56px">See the products</x-import>
+          </a>
+          <a href="#where-to-buy" style="text-decoration: none;">
+            <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Button" variant="outline" size="lg" hint-size="auto,56px">Where to buy</x-import>
+          </a>
+        </div>
+      </div>
+    </x-import>
+    <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="150" hint-size="100%,auto" style="width:100%;">
+      <div style="position: relative;">
+        <div style="position: absolute; top: -18px; right: 6px; width: 92px; height: 92px; border-radius: 50%; border: 2px dashed var(--navy); display: flex; align-items: center; justify-content: center; transform: rotate(-8deg); background: var(--bg); z-index: 4;">
+          <span style="font: 800 12px/1.15 var(--font-display); color: var(--navy); text-align: center; text-transform: uppercase; letter-spacing: 0.02em;">Fiery<br>Cup<br>Winner</span>
+        </div>
+        <div style="position: absolute; inset: -24px 8px -24px -24px; background: radial-gradient(circle at 30% 20%, rgba(246,196,69,0.32), transparent 60%);"></div>
+        <img src="images/jar-chili-garlic-paste.png" alt="Jar of Nesta's Chili Garlic Paste" style="position: relative; width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); object-fit: cover; transform: rotate(-2deg);">
+        <div style="margin-top: var(--space-5); display: flex; flex-direction: column; gap: 0;">
+          <div style="display: flex; justify-content: space-between; padding: var(--space-3) 0; border-bottom: 1px solid var(--border-default);">
+            <span style="font: var(--text-body-sm); color: var(--text-muted);">Started with</span>
+            <span style="font: 700 15px var(--font-display); color: var(--text-h);">&#8369;1,000</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: var(--space-3) 0; border-bottom: 1px solid var(--border-default);">
+            <span style="font: var(--text-body-sm); color: var(--text-muted);">Farm today</span>
+            <span style="font: 700 15px var(--font-display); color: var(--text-h);">2.5 hectares</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: var(--space-3) 0;">
+            <span style="font: var(--text-body-sm); color: var(--text-muted);">Harvest cycle</span>
+            <span style="font: 700 15px var(--font-display); color: var(--text-h);">250&ndash;300kg / 2&ndash;3mo</span>
+          </div>
+        </div>
+      </div>
+    </x-import>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="products" style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-9) var(--container-pad); position: relative;">
+    <span class="idx-num" aria-hidden="true">01</span>
+    <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" hint-size="100%,auto" style="width:100%; position: relative; z-index: 1;">
+      <div style="max-width: 60ch; margin-bottom: var(--space-7);">
+        <span style="font: var(--text-label); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--navy);">01 &mdash; What we make</span>
+        <h2 style="font: var(--text-display-md); letter-spacing: var(--tracking-display); color: var(--text-h); margin: var(--space-3) 0 var(--space-4);">Small-batch heat, big flavor.</h2>
+        <div class="heat-rule"><span></span><span></span><span></span></div>
+      </div>
+    </x-import>
+    <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--space-6); position: relative; z-index: 1;">
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="0" hint-size="100%,auto" style="width:100%;">
+        <div style="position: relative; border: 1.5px solid var(--border-default); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface-card); height: 100%;">
+          <div style="position: absolute; top: 18px; left: -34px; width: 160px; text-align: center; background: var(--navy); color: var(--text-inverse); font: 800 11px/1 var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 0; transform: rotate(-45deg); box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 3;">Fan favorite</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; height: 100%;">
+            <img src="images/jar-chili-garlic-paste.png" alt="Nesta's Chili Garlic Paste jar" style="width: 100%; height: 100%; object-fit: cover;">
+            <div style="padding: var(--space-6); display: flex; flex-direction: column; justify-content: center;">
+              <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
+                <h3 style="font: var(--text-display-sm); color: var(--text-h); margin: 0;">Chili Garlic Paste</h3>
+              </div>
+              <p style="font: var(--text-body-md); color: var(--text-secondary); margin: 0 0 var(--space-4);">Mixed superhot chilies &mdash; Trinidad Moruga Scorpion, Carbon Scorpion, red habanero and Naga &mdash; coconut oil, soy, and a few secret spices. 100ml.</p>
+              <div style="display: flex; align-items: center; gap: 3px;">
+                <span style="font: 700 11px var(--font-display); color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px;">Heat</span>
+                <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--navy);"></span>
+                <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--navy);"></span>
+                <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--navy);"></span>
+                <span style="width: 16px; height: 16px; border-radius: 50%; background: var(--navy);"></span>
+                <span style="width: 16px; height: 16px; border-radius: 50%; background: rgba(184,36,30,0.15);"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </x-import>
+      <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+        <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="90" hint-size="100%,auto" style="width:100%; flex: 1;">
+          <div style="border: 1.5px solid var(--border-default); border-radius: var(--radius-lg); background: var(--surface-card); padding: var(--space-5); display: grid; grid-template-columns: 100px 1fr; gap: var(--space-4); align-items: center; height: 100%;">
+            <img src="images/mango-habanero-product.png" alt="Nesta's Mango Habanero hot sauce" style="width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-md); transform: rotate(-1.5deg);">
+            <div>
+              <h3 style="font: 700 17px var(--font-display); color: var(--text-h); margin: 0 0 var(--space-2);">Mango Habanero Hot Sauce</h3>
+              <p style="font: var(--text-body-sm); color: var(--text-secondary); margin: 0 0 var(--space-2);">Sweet mango, fiery habanero &mdash; the 2019 Fiery Cup winner.</p>
+              <span style="font: 700 11px var(--font-display); color: var(--navy); letter-spacing: 0.06em; text-transform: uppercase;">&#9733; Award winner</span>
+            </div>
+          </div>
+        </x-import>
+        <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="170" hint-size="100%,auto" style="width:100%; flex: 1;">
+          <div style="border: 1.5px solid var(--border-default); border-radius: var(--radius-lg); background: var(--navy-dk); padding: var(--space-5); display: grid; grid-template-columns: 100px 1fr; gap: var(--space-4); align-items: center; height: 100%;">
+            <div style="width: 100px; height: 100px; border-radius: var(--radius-md); background: linear-gradient(135deg, var(--navy), #6b1611); display: flex; align-items: center; justify-content: center;">
+              <span style="font: 800 10px/1.3 var(--font-display); color: var(--sand); letter-spacing: 0.06em; text-transform: uppercase; text-align: center;">Ground<br>Chili</span>
+            </div>
+            <div>
+              <h3 style="font: 700 17px var(--font-display); color: var(--text-inverse); margin: 0 0 var(--space-2);">Chili Powder</h3>
+              <p style="font: var(--text-body-sm); color: rgba(251,243,234,0.75); margin: 0;">Pure ground superhot chili, for cooking or making your own sauce.</p>
+            </div>
+          </div>
+        </x-import>
+      </div>
+    </div>
+    <p style="font: var(--text-body-sm); color: var(--text-muted); margin: var(--space-6) 0 0;">Bottle prices range &#8369;150&ndash;&#8369;450 depending on size.</p>
+  </section>
+
+  <!-- STORY -->
+  <section id="story" style="background: var(--surface-sunken); position: relative;">
+    <div style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-9) var(--container-pad); display: grid; grid-template-columns: 0.8fr 1.2fr; gap: var(--space-9); align-items: center;">
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" hint-size="100%,auto" style="width:100%;">
+        <div style="position: relative; max-width: 340px; margin: 0 auto;">
+          <div class="tape" style="top: -12px; left: 50%; margin-left: -38px;"></div>
+          <img src="images/founder-photo.png" alt="George Allen Callora at his chili farm in Davao City" style="width: 100%; border-radius: 2px; box-shadow: var(--shadow-md); object-fit: cover; transform: rotate(-2.5deg); background: white; padding: 10px 10px 44px; box-sizing: border-box;">
+        </div>
+      </x-import>
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="120" hint-size="100%,auto" style="width:100%;">
+        <div>
+          <span style="font: var(--text-label); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--navy);">02 &mdash; Our story</span>
+          <h2 style="font: var(--text-display-md); letter-spacing: var(--tracking-display); color: var(--text-h); margin: var(--space-3) 0 var(--space-5); text-wrap: pretty;">From a backyard hobby to a 2.5-hectare farm.</h2>
+          <p style="font: var(--text-body-lg); color: var(--text-secondary); margin: 0 0 var(--space-4);">George Allen Callora grew up around plants &mdash; his family kept ornamental plants and orchids. In 2016, growing chili peppers as a hobby turned into Nesta's Chili Company, named in memory of his aunt.</p>
+          <p style="font: var(--text-body-lg); color: var(--text-secondary); margin: 0 0 var(--space-6);">What started with &#8369;1,000 and a 20-square-meter greenhouse is now a 2.5-hectare farm, harvesting 250&ndash;300 kilos of superhot chili every two to three months &mdash; supplying raw chili to hot sauce makers, restaurants and franchises across Davao City.</p>
+          <div style="position: relative; padding-left: var(--space-6);">
+            <span style="position: absolute; left: -4px; top: -14px; font: 700 46px/1 var(--font-display); color: var(--navy); opacity: 0.25;">&ldquo;</span>
+            <p style="font: italic 500 18px/1.5 var(--font-display); color: var(--text-h); margin: 0;">During a crisis, we can slow down, but never back down.</p>
+            <p style="font: var(--text-body-sm); color: var(--text-muted); margin: var(--space-2) 0 0;">&mdash; George Allen Callora, Founder</p>
+          </div>
+        </div>
+      </x-import>
+    </div>
+  </section>
+
+  <!-- AWARDS -->
+  <section id="awards" style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-9) var(--container-pad); position: relative;">
+    <span class="idx-num" aria-hidden="true">03</span>
+    <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" hint-size="100%,auto" style="width:100%; position: relative; z-index: 1;">
+      <div style="max-width: 60ch; margin-bottom: var(--space-8);">
+        <span style="font: var(--text-label); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--navy);">03 &mdash; Recognition</span>
+        <h2 style="font: var(--text-display-md); letter-spacing: var(--tracking-display); color: var(--text-h); margin: var(--space-3) 0 var(--space-4);">Awards don't lie.</h2>
+        <div class="heat-rule"><span></span><span></span><span></span></div>
+      </div>
+    </x-import>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-7); position: relative; z-index: 1; padding-top: var(--space-4);">
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="0" hint-size="100%,auto" style="width:100%;">
+        <div class="stamp-rotate" style="position: relative; background: var(--surface-card); border: 1.5px solid var(--border-default); padding: var(--space-2); box-shadow: var(--shadow-sm);">
+          <span style="position: absolute; top: -8px; left: 50%; margin-left: -6px; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); box-shadow: 0 2px 3px rgba(0,0,0,0.3); z-index: 2;"></span>
+          <img src="images/fiery-cup-award.png" alt="2019 Philippine Chili Festival Fiery Cup certificate" style="width: 100%; height: 190px; object-fit: cover;">
+          <div style="padding: var(--space-4) var(--space-3) var(--space-3);">
+            <p style="font: 700 14px/1.4 var(--font-display); color: var(--text-h); margin: 0 0 var(--space-2);">2019 Fiery Cup &mdash; First Place</p>
+            <p style="font: var(--text-body-sm); color: var(--text-secondary); margin: 0;">Hot Sauce, Fruit Category &mdash; Mango Habanero.</p>
+          </div>
+        </div>
+      </x-import>
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="90" hint-size="100%,auto" style="width:100%; margin-top: 28px;">
+        <div class="stamp-rotate-r" style="position: relative; background: var(--surface-card); border: 1.5px solid var(--border-default); padding: var(--space-2); box-shadow: var(--shadow-sm);">
+          <span style="position: absolute; top: -8px; left: 50%; margin-left: -6px; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); box-shadow: 0 2px 3px rgba(0,0,0,0.3); z-index: 2;"></span>
+          <img src="images/yfc-quote-card.png" alt="George Allen Callora, Young Farmers Challenge 2021" style="width: 100%; height: 190px; object-fit: cover;">
+          <div style="padding: var(--space-4) var(--space-3) var(--space-3);">
+            <p style="font: 700 14px/1.4 var(--font-display); color: var(--text-h); margin: 0 0 var(--space-2);">Young Farmers Challenge 2021</p>
+            <p style="font: var(--text-body-sm); color: var(--text-secondary); margin: 0;">Regional Awardee &amp; National Nominee.</p>
+          </div>
+        </div>
+      </x-import>
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="180" hint-size="100%,auto" style="width:100%;">
+        <div class="stamp-rotate" style="position: relative; background: var(--surface-card); border: 1.5px solid var(--border-default); padding: var(--space-2); box-shadow: var(--shadow-sm);">
+          <span style="position: absolute; top: -8px; left: 50%; margin-left: -6px; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); box-shadow: 0 2px 3px rgba(0,0,0,0.3); z-index: 2;"></span>
+          <img src="images/magazine-feature.png" alt="Magazine feature on Nesta's Chili Company" style="width: 100%; height: 190px; object-fit: cover; object-position: top;">
+          <div style="padding: var(--space-4) var(--space-3) var(--space-3);">
+            <p style="font: 700 14px/1.4 var(--font-display); color: var(--text-h); margin: 0 0 var(--space-2);">&ldquo;Life Is Better with Chili&rdquo;</p>
+            <p style="font: var(--text-body-sm); color: var(--text-secondary); margin: 0;">Region XI feature on a top YFC national qualifier.</p>
+          </div>
+        </div>
+      </x-import>
+    </div>
+  </section>
+
+  <!-- WHERE TO BUY -->
+  <section id="where-to-buy" style="background: var(--surface-sunken); position: relative;">
+    <div style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-9) var(--container-pad); position: relative;">
+      <span class="idx-num" aria-hidden="true">04</span>
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" hint-size="100%,auto" style="width:100%; position: relative; z-index: 1;">
+        <div style="max-width: 60ch; margin-bottom: var(--space-8);">
+          <span style="font: var(--text-label); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--navy);">04 &mdash; Where to find us</span>
+          <h2 style="font: var(--text-display-md); letter-spacing: var(--tracking-display); color: var(--text-h); margin: var(--space-3) 0 var(--space-4);">Get your hands on the heat.</h2>
+          <div class="heat-rule"><span></span><span></span><span></span></div>
+        </div>
+      </x-import>
+      <div style="position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-7);">
+        <div style="position: absolute; top: 17px; left: 8%; right: 8%; height: 2px; background: repeating-linear-gradient(90deg, var(--border-default) 0 8px, transparent 8px 16px); z-index: 0;"></div>
+        <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="0" hint-size="100%,auto" style="width:100%;">
+          <div>
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--text-inverse); font: 700 15px var(--font-display); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); position: relative; z-index: 1;">1</div>
+            <h3 style="font: var(--text-display-sm); color: var(--text-h); margin: 0 0 var(--space-3);">Kadiwa &amp; farmers markets</h3>
+            <p style="font: var(--text-body-md); color: var(--text-secondary); margin: 0;">Find fresh jars at Kadiwa fairs and local farmers markets around Davao City.</p>
+          </div>
+        </x-import>
+        <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="90" hint-size="100%,auto" style="width:100%;">
+          <div>
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--text-inverse); font: 700 15px var(--font-display); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); position: relative; z-index: 1;">2</div>
+            <h3 style="font: var(--text-display-sm); color: var(--text-h); margin: 0 0 var(--space-3);">On the menu</h3>
+            <p style="font: var(--text-body-md); color: var(--text-secondary); margin: 0;">Ask for Nesta's at Burger Machine and Fabario's Pizza in Davao City.</p>
+          </div>
+        </x-import>
+        <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="180" hint-size="100%,auto" style="width:100%;">
+          <div>
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--text-inverse); font: 700 15px var(--font-display); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); position: relative; z-index: 1;">3</div>
+            <h3 style="font: var(--text-display-sm); color: var(--text-h); margin: 0 0 var(--space-3);">Buying for your business?</h3>
+            <p style="font: var(--text-body-md); color: var(--text-secondary); margin: 0;">We also supply raw superhot chili to restaurants and hot sauce makers. Message us to talk bulk orders.</p>
+          </div>
+        </x-import>
+      </div>
+    </div>
+  </section>
+
+  <!-- IN THEIR WORDS -->
+  <section id="testimonials" style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-9) var(--container-pad); position: relative;">
+    <span class="idx-num" aria-hidden="true">05</span>
+    <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" hint-size="100%,auto" style="width:100%; position: relative; z-index: 1;">
+      <div style="max-width: 60ch; margin-bottom: var(--space-8);">
+        <span style="font: var(--text-label); letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--navy);">05 &mdash; In their words</span>
+        <h2 style="font: var(--text-display-md); letter-spacing: var(--tracking-display); color: var(--text-h); margin: var(--space-3) 0 var(--space-4);">Straight from the farm.</h2>
+        <div class="heat-rule"><span></span><span></span><span></span></div>
+      </div>
+    </x-import>
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--space-8); position: relative; z-index: 1; align-items: center;">
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="0" hint-size="100%,auto" style="width:100%;">
+        <div style="position: relative; padding-left: var(--space-7);">
+          <span style="position: absolute; left: -12px; top: -34px; font: 800 110px/1 var(--font-display); color: var(--navy); opacity: 0.1; z-index: 0;">&ldquo;</span>
+          <p style="position: relative; font: italic 500 26px/1.45 var(--font-display); color: var(--text-h); margin: 0 0 var(--space-5); text-wrap: pretty;">We need a doctor sometimes, we need a policeman sometimes, we need an engineer sometimes, we need an accountant sometimes. But three times a day we need a farmer.</p>
+          <p style="font: var(--text-body-sm); color: var(--text-muted); margin: 0;">&mdash; George Allen M. Callora, YFC 2021 Regional Awardee &amp; National Nominee</p>
+        </div>
+      </x-import>
+      <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="120" hint-size="100%,auto" style="width:100%;">
+        <div style="border: 1.5px dashed var(--border-default); border-radius: var(--radius-lg); padding: var(--space-6); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); min-height: 180px; justify-content: center;">
+          <p style="font: var(--text-body-md); color: var(--text-muted); margin: 0;">Tried Nesta's? We'd love to feature your story here.</p>
+          <a href="#contact" style="text-decoration: none;">
+            <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Button" variant="outline" size="md" hint-size="auto,46px">Share your story</x-import>
+          </a>
+        </div>
+      </x-import>
+    </div>
+  </section>
+
+  <!-- CONTACT / FOOTER -->
+  <footer id="contact" style="background: var(--navy-dk); color: var(--text-inverse);">
+    <div style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-9) var(--container-pad) var(--space-7); display: grid; grid-template-columns: 1.2fr 0.8fr; gap: var(--space-8);">
+      <div>
+        <h2 style="font: var(--text-display-md); letter-spacing: var(--tracking-display); color: var(--text-inverse); margin: 0 0 var(--space-4); text-wrap: pretty;">Want to order or stock Nesta's?</h2>
+        <p style="font: var(--text-body-lg); color: rgba(251,243,234,0.78); margin: 0 0 var(--space-6); max-width: 46ch;">Message us on Facebook &mdash; we'll help you find the nearest market, restaurant, or set up a bulk order.</p>
+        <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Button" variant="secondary" size="lg" hint-size="auto,56px">Message us on Facebook</x-import>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+        <div style="display: flex; align-items: center; gap: var(--space-3);">
+          <img src="images/nestas-logo.png" alt="Nesta's Chili Company" style="height: 40px; width: 40px; border-radius: var(--radius-sm); object-fit: cover;">
+          <span style="font: 800 18px/1 var(--font-display); color: var(--text-inverse);">Nesta's Chili Co.</span>
+        </div>
+        <p style="font: var(--text-body-md); color: rgba(251,243,234,0.6); margin: 0;">Grown and made in Davao City, Philippines.</p>
+        <nav style="display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-2);">
+          <a href="#story" style="text-decoration: none; font: var(--text-body-md); color: rgba(251,243,234,0.78);">Story</a>
+          <a href="#products" style="text-decoration: none; font: var(--text-body-md); color: rgba(251,243,234,0.78);">Products</a>
+          <a href="#awards" style="text-decoration: none; font: var(--text-body-md); color: rgba(251,243,234,0.78);">Awards</a>
+          <a href="#where-to-buy" style="text-decoration: none; font: var(--text-body-md); color: rgba(251,243,234,0.78);">Where to buy</a>
+        </nav>
+      </div>
+    </div>
+    <div style="border-top: 1px solid var(--border-inverse);">
+      <p style="max-width: var(--container-max); margin: 0 auto; padding: var(--space-5) var(--container-pad); font: var(--text-body-xs); color: rgba(251,243,234,0.5);">&copy; 2026 Nesta's Chili Company. All rights reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+</body>
+</html>

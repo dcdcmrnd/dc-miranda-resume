@@ -1,0 +1,31 @@
+/* Aequora Digital — Type tokens
+   Single family (Plus Jakarta Sans). Desktop reference sizes distilled from
+   the source site's clamp() ranges — components should still clamp/scale for
+   real responsive layouts. Italic weight-300 is reserved for the gradient
+   "emphasis" word inside hero-style headlines, never for whole sentences. */
+
+:root {
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  /* Display scale — heavy weight, tight negative tracking */
+  --text-display-xl: 800 72px/1.04 var(--font-display); /* hero h1 */
+  --text-display-lg: 800 56px/1.08 var(--font-display); /* about / pricing h2 */
+  --text-display-md: 700 40px/1.1 var(--font-display);  /* section h2 */
+  --text-display-sm: 700 28px/1.15 var(--font-display); /* card / subsection titles */
+
+  /* Emphasis — italic, light weight, brand-gradient text-fill (see Colors) */
+  --text-emphasis: italic 300 1em/1 var(--font-display);
+
+  /* Body scale */
+  --text-body-xl: 400 18px/1.6 var(--font-body);
+  --text-body-lg: 400 16px/1.78 var(--font-body); /* hero subhead line-height */
+  --text-body-md: 400 15px/1.6 var(--font-body);
+  --text-body-sm: 500 13px/1.5 var(--font-body);
+  --text-body-xs: 600 11px/1.4 var(--font-body);
+
+  /* Label / eyebrow / section-label — wide-tracked uppercase */
+  --text-label: 700 11px/1.2 var(--font-body);
+  --tracking-label: 0.18em;
+  --tracking-display: -0.03em;
+}

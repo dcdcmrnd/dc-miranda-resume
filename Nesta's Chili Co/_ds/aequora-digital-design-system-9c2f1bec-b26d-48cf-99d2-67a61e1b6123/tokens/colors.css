@@ -1,0 +1,66 @@
+/* Aequora Digital — Color tokens
+   Source of truth: live :root custom properties on aequoradigital.com
+   ("Deep Ocean Water + Warm Sand" palette). Base brand tokens below use the
+   site's own variable names so values stay traceable to source; semantic
+   aliases follow this system's naming convention and are what components
+   consume. */
+
+:root {
+  /* ---- Base: brand (verbatim from source site) ---- */
+  --navy: #0D5C7A;      /* vivid ocean blue — primary */
+  --navy-dk: #082030;   /* ocean abyss — dark sections */
+  --navy-lt: #1A9AB8;   /* bright ocean surface — hover state */
+  --sand: #DEC99A;      /* warm sand — secondary accent */
+  --terra: #18C4D8;     /* bioluminescent aqua — small accents, dot, underline */
+  --white: #F2FAFE;     /* sea-white — text on dark, hero background */
+  --bg: #E8F5FA;        /* sea mist — page background */
+  --bg-lt: #D5EDF5;     /* shallow water — sunken surfaces */
+
+  /* ---- Base: text ---- */
+  --text-h: #0A1E2C;    /* dark ocean — headings, blue-tinted not black */
+  --text-b: #123550;    /* ocean body — body copy */
+  --text-m: #3A789A;    /* ocean mist — muted/secondary text */
+
+  /* ---- Base: utility (not on source site — added for form/feedback states) ---- */
+  --success-500: #1F9D6B; /* @kind color */
+  --danger-500: #E5484D;  /* @kind color */
+
+  /* ---- Semantic: surfaces ---- */
+  --surface-page: var(--bg);
+  --surface-card: #FFFFFF;
+  --surface-sunken: var(--bg-lt);
+  --surface-inverse: var(--navy-dk);
+  --surface-brand: var(--navy);
+
+  /* ---- Semantic: text ---- */
+  --text-primary: var(--text-h);
+  --text-secondary: var(--text-b);
+  --text-muted: var(--text-m);
+  --text-inverse: var(--white);
+  --text-brand: var(--navy);
+  --text-link: var(--navy);
+  --text-link-hover: var(--navy-lt);
+
+  /* ---- Semantic: borders ---- */
+  --border-subtle: rgba(13, 92, 122, 0.12);
+  --border-default: rgba(13, 92, 122, 0.2);
+  --border-inverse: rgba(255, 255, 255, 0.09);
+
+  /* ---- Semantic: interactive ---- */
+  --action-primary: var(--navy);
+  --action-primary-hover: var(--navy-lt);
+  --action-primary-active: var(--navy-dk);
+  --action-secondary: var(--sand);
+  --action-secondary-hover: #d0b87f;
+  --action-secondary-active: #bfa76a;
+  --action-disabled: var(--bg-lt);
+  --action-disabled-text: var(--text-m);
+
+  /* ---- Semantic: feedback ---- */
+  --feedback-success: var(--success-500);
+  --feedback-danger: var(--danger-500);
+  --feedback-warning: var(--terra);
+
+  /* ---- Focus ---- */
+  --focus-ring: var(--navy);
+}
