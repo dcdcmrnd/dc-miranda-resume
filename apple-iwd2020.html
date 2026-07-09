@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apple IWD 2020 — Recreated</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        color: #111;
+        background: #f7f7f7;
+        font-family: "SF Pro Text", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        --scroll-progress: 0;
+        --pointer-x: 0;
+        --pointer-y: 0;
+        --hero-glow-x: 0px;
+        --hero-glow-y: 0px;
+        --hero-text-x: 0px;
+        --hero-text-y: 0px;
+        --hero-shift-x: 0px;
+        --hero-shift-y: 0px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; background: #f7f7f7; overflow-x: hidden; }
+      a { color: #0066cc; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .page { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
+      .hero {
+        position: relative;
+        padding: 60px 0 36px;
+        text-align: center;
+        overflow: hidden;
+        isolation: isolate;
+        transform: translate3d(var(--hero-shift-x), var(--hero-shift-y), 0);
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: -20% auto auto 50%;
+        width: 760px;
+        height: 760px;
+        transform: translate3d(calc(-50% + var(--hero-glow-x)), var(--hero-glow-y), 0);
+        background: radial-gradient(circle, rgba(0, 102, 204, 0.16) 0%, rgba(0, 102, 204, 0.06) 30%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .hero > * { position: relative; z-index: 1; }
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(3rem, 5vw, 5.2rem);
+        line-height: 0.96;
+        letter-spacing: -0.04em;
+        color: #111;
+        transform: translate3d(var(--hero-text-x), var(--hero-text-y), 0);
+      }
+      .hero p {
+        margin: 24px auto 0;
+        max-width: 760px;
+        font-size: 1.1rem;
+        color: #4d4d4d;
+        line-height: 1.7;
+        transform: translate3d(calc(var(--hero-text-x) * 0.75), calc(var(--hero-text-y) * 0.75), 0);
+      }
+      .hero .note {
+        margin-top: 18px;
+        color: #888;
+        font-size: 0.96rem;
+        transform: translate3d(calc(var(--hero-text-x) * 0.5), calc(var(--hero-text-y) * 0.5), 0);
+      }
+      .section { margin-top: 60px; }
+      .section h2 { font-size: 2rem; margin-bottom: 16px; color: #111; line-height: 1.05; }
+      .section p { max-width: 760px; color: #4d4d4d; line-height: 1.7; margin: 0; }
+      .banner { margin: 42px 0 0; position: relative; border-radius: 28px; overflow: hidden; background: #111; color: #fff; }
+      .banner::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.14), transparent 28%); pointer-events: none; }
+      .banner img { width: 100%; height: auto; display: block; opacity: 0.12; }
+      .banner-content { position: relative; padding: 56px 40px 70px; }
+      .banner-title { font-size: clamp(2rem, 3vw, 3.4rem); margin: 0 0 12px; }
+      .banner-copy { max-width: 720px; font-size: 1rem; color: #f3f3f3; line-height: 1.7; margin-bottom: 22px; }
+      .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 18px; border-radius: 999px; background: #fff; color: #111; font-weight: 600; transition: transform 180ms ease; }
+      .btn:hover { transform: translateY(-2px); }
+      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 30px; }
+      .card { background: #fff; border-radius: 28px; overflow: hidden; box-shadow: 0 16px 50px rgba(0,0,0,0.08); }
+      .card-visual { position: relative; min-height: 220px; background: #e7eefc; display: grid; place-items: center; }
+      .card-visual::before { content: "Image placeholder"; color: #7d8ca5; font-size: 0.93rem; }
+      .card-body { padding: 28px; }
+      .card-title { margin: 0 0 9px; font-size: 1.15rem; color: #111; line-height: 1.2; }
+      .card-text { margin: 0 0 12px; color: #555; line-height: 1.65; font-size: 0.98rem; }
+      .card-link { color: #0066cc; font-weight: 600; }
+      .round-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+      .round-list li { padding: 24px 26px; border-radius: 22px; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+      .round-list li h3 { margin: 0 0 8px; font-size: 1.1rem; color: #111; }
+      .round-list li p { margin: 0; color: #555; line-height: 1.7; }
+      .footer { margin-top: 64px; padding-top: 46px; border-top: 1px solid #ddd; color: #6d6d6d; font-size: 0.95rem; }
+      .footer-links { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 0; }
+      .footer-links a { color: #1d7df8; }
+      @media (max-width: 720px) { .banner-content { padding: 40px 24px 50px; } }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { transition: none !important; animation: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div class="hero-shell">
+          <div class="hero-eyebrow">International Women’s Day</div>
+          <h1>International Women’s Day</h1>
+          <p class="hero-copy">Discover stories of creative women who are changing the world. Watch the film, explore featured leaders, and learn how to join today’s programs that support inspiration and action.</p>
+          <p class="hero-copy" style="margin-top: 12px; font-size: 0.96rem; color: #888;">Recreated here with placeholder imagery and the original content style.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#watch">Watch the film</a>
+            <a class="btn" href="#featured">Featured voices</a>
+          </div>
+        </div>
+      </header>
+
+      <section class="section" id="watch">
+        <div class="banner">
+          <div class="banner-content">
+            <p class="banner-title">Watch the Behind the Mac Film for International Women’s Day</p>
+            <p class="banner-copy">A short film that celebrates creative women around the world who are making a difference with their ideas, actions, and leadership.</p>
+            <a class="btn" href="#">Watch the film</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="featured">
+        <div class="section-intro">
+          <h2>Featured voices</h2>
+          <p>Profiles of powerful women and organizations that inspire change in education, music, film, technology, activism, and more.</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Malala Yousafzai</h3>
+              <p class="card-text">The youngest Nobel laureate fights for every girl’s right to education around the world.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">DJ Switch</h3>
+              <p class="card-text">A young Ghanaian musician who founded DJ Switch Foundation to open better opportunities for education.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Lady Gaga</h3>
+              <p class="card-text">Born This Way Foundation builds a kinder, braver world by supporting youth wellness and acceptance.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Tarana Burke</h3>
+              <p class="card-text">Founder of the ‘me too.’ movement, helping people find justice and begin to heal.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="cards">
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Diane von Furstenberg</h3>
+              <p class="card-text">Fashion designer and creator of the DVF Awards, providing exposure and resources for women helping women.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Audrey Gelman</h3>
+              <p class="card-text">CEO and cofounder of The Wing, recognized for innovation across corporate and political arenas.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Amani Al‑Khatahtbeh</h3>
+              <p class="card-text">Founder of MuslimGirl.com and Muslim Women’s Day, empowering women to change media narratives everywhere.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Ava DuVernay</h3>
+              <p class="card-text">Director and storyteller leading conversations about race, justice, and equality in America.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="cards">
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Gloria Steinem</h3>
+              <p class="card-text">Activist, journalist, and founder of Ms. magazine, a leader of the feminist movement.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Black Mamba Anti-Poaching Unit</h3>
+              <p class="card-text">A female-run unit that protects endangered species in South Africa through courageous conservation work.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Elizabeth Banks</h3>
+              <p class="card-text">Actor, producer, and director who weaves feminist ideas into her work and storytelling.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Alicia Keys</h3>
+              <p class="card-text">A 15-time GRAMMY® winner celebrated for music, creativity, and philanthropy.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="cards">
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Lilly Singh</h3>
+              <p class="card-text">The first LGBTQ woman in the U.S. to host a network late-night talk show in more than 30 years.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Marie Kondo</h3>
+              <p class="card-text">Author and creator of a global tidying movement through books and a Netflix series.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Greta Gerwig</h3>
+              <p class="card-text">Director and writer expanding the stories Hollywood tells with films like Lady Bird and Little Women.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Victoria Monét</h3>
+              <p class="card-text">Singer, songwriter, and performer celebrated for her music and role in Apple Music Up Next.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="cards">
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Huang Ningning</h3>
+              <p class="card-text">Sustainable fashion entrepreneur turning recycled plastic into beautiful new products.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Olivia Wilde</h3>
+              <p class="card-text">Actor, producer, and director using film to amplify gender equality in the industry.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Megan Rapinoe &amp; Shannon Boxx</h3>
+              <p class="card-text">World Cup champions who fought for equal pay and athlete empowerment.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Aliona Doletskaya</h3>
+              <p class="card-text">Editor-in-chief and media leader championing new creative voices in Russia and beyond.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="cards">
+          <article class="card">
+            <div class="card-visual">Image placeholder</div>
+            <div class="card-body">
+              <h3 class="card-title">Kwak Sin Ae</h3>
+              <p class="card-text">Producer of Parasite, a barrier-breaking film that won Best Picture at the Academy Awards.</p>
+              <a class="card-link" href="#">Learn more</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Get involved</h2>
+        <ul class="round-list">
+          <li>
+            <h3>Today at Apple — She Creates</h3>
+            <p>From March 1 through 31, discover how female creativity can empower communities through hands-on sessions using iPad, iPhone, and Mac.</p>
+            <a href="#">Sign up for Today at Apple sessions</a>
+          </li>
+          <li>
+            <h3>Kode With Klossy</h3>
+            <p>Free coding camps where young women learn STEAM concepts and build confidence for today’s technology-driven world.</p>
+            <a href="https://www.kodewithklossy.com/" target="_blank">Visit kodewithklossy.com</a>
+          </li>
+          <li>
+            <h3>Malala Fund</h3>
+            <p>With 130 million girls out of school globally, Malala Fund champions every girl’s right to a safe, free, quality education.</p>
+            <a href="https://malala.org/" target="_blank">Visit malala.org</a>
+          </li>
+        </ul>
+      </section>
+
+      <footer class="footer">
+        <p>More ways to shop: <a href="https://www.apple.com/retail/">Find an Apple Store</a> or <a href="https://locate.apple.com/">other retailer</a> near you. Or call <a href="tel:1-800-692-7753">1-800-MY-APPLE</a>.</p>
+        <div class="footer-links">
+          <a href="https://www.apple.com/choose-country-region/">United States. Choose your country or region</a>
+          <a href="https://www.apple.com/legal/privacy/">Privacy Policy</a>
+          <a href="https://www.apple.com/legal/internet-services/terms/site.html">Terms of Use</a>
+          <a href="https://www.apple.com/us/shop/goto/help/sales_refunds">Sales and Refunds</a>
+          <a href="https://www.apple.com/legal/">Legal</a>
+          <a href="https://www.apple.com/sitemap/">Site Map</a>
+        </div>
+        <p>Copyright © 2026 Apple Inc. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <script>
+      const root = document.documentElement;
+      let ticking = false;
+
+      const updateParallax = () => {
+        const scrollTop = window.scrollY || window.pageYOffset;
+        const progress = Math.min(scrollTop / 560, 1);
+        const pointerX = parseFloat(root.style.getPropertyValue('--pointer-x')) || 0;
+        const pointerY = parseFloat(root.style.getPropertyValue('--pointer-y')) || 0;
+
+        root.style.setProperty('--scroll-progress', progress.toFixed(4));
+        root.style.setProperty('--hero-stage-x', `${(pointerX * 10).toFixed(2)}px`);
+        root.style.setProperty('--hero-stage-y', `${(progress * 18 + pointerY * 6).toFixed(2)}px`);
+        root.style.setProperty('--hero-glow-x', `${(pointerX * -16).toFixed(2)}px`);
+        root.style.setProperty('--hero-glow-y', `${(progress * 24 + pointerY * -8).toFixed(2)}px`);
+        root.style.setProperty('--hero-orb-x', `${(pointerX * 18).toFixed(2)}px`);
+        root.style.setProperty('--hero-orb-y', `${(progress * -12 + pointerY * 10).toFixed(2)}px`);
+        root.style.setProperty('--hero-content-x', `${(pointerX * 8).toFixed(2)}px`);
+        root.style.setProperty('--hero-content-y', `${(pointerY * 6 + progress * 10).toFixed(2)}px`);
+        ticking = false;
+      };
+
+      const requestParallaxUpdate = () => {
+        if (!ticking) {
+          ticking = true;
+          window.requestAnimationFrame(updateParallax);
+        }
+      };
+
+      const updatePointer = (event) => {
+        const point = event?.touches ? event.touches[0] : event;
+        const clientX = point?.clientX ?? window.innerWidth / 2;
+        const clientY = point?.clientY ?? window.innerHeight / 2;
+        const x = (clientX / window.innerWidth - 0.5) * 2;
+        const y = (clientY / window.innerHeight - 0.5) * 2;
+
+        root.style.setProperty('--pointer-x', x.toFixed(3));
+        root.style.setProperty('--pointer-y', y.toFixed(3));
+        requestParallaxUpdate();
+      };
+
+      window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
+      window.addEventListener('mousemove', updatePointer, { passive: true });
+      window.addEventListener('touchmove', updatePointer, { passive: true });
+      updatePointer({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+      requestParallaxUpdate();
+    </script>
+  </body>
+      window.addEventListener('touchmove', updatePointer, { passive: true });
+      updatePointer({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+      requestParallaxUpdate();
+    </script>
+</html>

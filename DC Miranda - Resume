@@ -1,1 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DC Miranda | Resume</title>
+    <style>
+      :root {
+        --bg: #07111f;
+        --bg-soft: #0f1d31;
+        --card: rgba(10, 19, 33, 0.78);
+        --text: #f3f7ff;
+        --muted: #aebfd8;
+        --accent: #5ee7c7;
+        --accent-2: #86a8ff;
+        --border: rgba(255, 255, 255, 0.12);
+        --shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+        --scroll-progress: 0;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at top left, #13243d 0%, var(--bg) 45%, #050911 100%);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body::before {
+        background: linear-gradient(120deg, rgba(94,231,199,0.15), rgba(134,168,255,0.08));
+        transform: translate3d(0, calc(var(--scroll-progress) * -40px), 0);
+        filter: blur(25px);
+      }
+
+      body::after {
+        background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+        background-size: 20px 20px;
+        opacity: 0.12;
+        transform: translate3d(0, calc(var(--scroll-progress) * 40px), 0);
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 36px 24px 80px;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: linear-gradient(135deg, rgba(10,20,35,0.92), rgba(8,15,26,0.8));
+        border-radius: 30px;
+        padding: 44px;
+        box-shadow: var(--shadow);
+        margin-bottom: 24px;
+      }
+
+      .hero::before,
+      .hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(4px);
+        opacity: 0.6;
+      }
+
+      .hero::before {
+        width: 320px;
+        height: 320px;
+        background: radial-gradient(circle, rgba(94,231,199,0.24), transparent 70%);
+        top: -80px;
+        right: -80px;
+        transform: translate3d(0, calc(var(--scroll-progress) * -30px), 0);
+      }
+
+      .hero::after {
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle, rgba(134,168,255,0.18), transparent 70%);
+        bottom: -60px;
+        left: -50px;
+        transform: translate3d(0, calc(var(--scroll-progress) * 35px), 0);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        font-size: 0.78rem;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin: 0 0 10px;
+      }
+
+      .role {
+        font-size: 1.08rem;
+        color: var(--accent-2);
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+
+      .hero p {
+        max-width: 780px;
+        color: var(--muted);
+        font-size: 1rem;
+        margin: 0 0 20px;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        border: 1px solid rgba(94,231,199,0.3);
+        border-radius: 999px;
+        background: rgba(94,231,199,0.08);
+        color: var(--text);
+        font-size: 0.95rem;
+      }
+
+      .section-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        backdrop-filter: blur(10px);
+        transform: translate3d(0, calc(var(--scroll-progress) * 18px), 0);
+      }
+
+      h2 {
+        font-size: 1.2rem;
+        margin-top: 0;
+        margin-bottom: 12px;
+        color: var(--accent);
+      }
+
+      .summary {
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .experience-item {
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .experience-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .experience-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .meta {
+        color: var(--accent-2);
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--muted);
+      }
+
+      li + li { margin-top: 7px; }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+      }
+
+      .skill-box {
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        background: rgba(255,255,255,0.03);
+        padding: 14px 14px 12px;
+      }
+
+      .skill-box strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text);
+      }
+
+      .skill-box span {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .links {
+        display: grid;
+        gap: 12px;
+      }
+
+      .link-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        text-decoration: none;
+        color: var(--text);
+      }
+
+      .link-card:hover {
+        border-color: rgba(94,231,199,0.35);
+        transform: translateY(-2px);
+      }
+
+      .contact-block {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      .contact-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .contact-pill:hover {
+        border-color: rgba(94,231,199,0.3);
+      }
+
+      a { color: var(--accent); }
+
+      @media (max-width: 700px) {
+        .hero { padding: 28px; }
+        .section-card { padding: 22px; }
+        .link-card { flex-direction: column; align-items: flex-start; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-content">
+          <span class="eyebrow">Video Editing • Automation • Growth</span>
+          <h1>DC Miranda</h1>
+          <div class="role">Video Editor & GoHighLevel Specialist</div>
+          <p>
+            I create scroll-stopping video content, build conversion-focused funnels, and use automation to streamline marketing workflows.
+            My work blends storytelling, strategy, and AI-powered production to turn ideas into measurable results.
+          </p>
+          <div class="pill-row">
+            <span class="pill">🎬 Video Editing</span>
+            <span class="pill">⚙️ GHL Automation</span>
+            <span class="pill">📈 Paid Ads</span>
+            <span class="pill">🤖 AI Tools</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <h2>Professional Summary</h2>
+        <p class="summary">
+          Experienced video editor and GoHighLevel specialist with a strong background in automation, funnel building, and digital marketing.
+          Skilled in crafting engaging content, streamlining workflows, and optimizing campaigns to drive conversions.
+          Passionate about leveraging AI tools to enhance both speed and creativity.
+        </p>
+      </section>
+
+      <section class="section-card">
+        <h2>Work Experience</h2>
+        <div class="grid">
+          <div class="experience-item">
+            <div class="experience-title">Video Editing, Automation, and Digital Ads Specialist</div>
+            <div class="meta">Freelance • 2021 – Present</div>
+            <ul>
+              <li>Edited short-form and long-form video content for Instagram Reels, YouTube Shorts, and ad campaigns using CapCut, VEED, Descript, and Adobe Premiere Pro.</li>
+              <li>Built and automated funnels, workflows, and pipelines with GoHighLevel to support lead generation and nurture systems.</li>
+              <li>Launched and optimized Google Ads and Meta Ads campaigns with performance tracking and audience targeting.</li>
+              <li>Designed landing pages and web experiences on ClickFunnels, Kajabi, and WordPress for conversion-focused campaigns.</li>
+              <li>Used AI tools such as ChatGPT, Claude, ElevenLabs, and MidJourney for scripting, creative planning, captioning, and voiceovers.</li>
+              <li>Managed projects and collaboration through Notion, Trello, and Slack to keep delivery efficient and organized.</li>
+            </ul>
+          </div>
+
+          <div class="experience-item">
+            <div class="experience-title">Outsourced Doers — Social Media & Web Developer</div>
+            <div class="meta">2020 – 2021</div>
+            <ul>
+              <li>Created and edited branded video and graphic content for client social media accounts.</li>
+              <li>Designed and maintained websites on WordPress, Squarespace, and GoHighLevel with responsive, conversion-focused layouts.</li>
+            </ul>
+          </div>
+
+          <div class="experience-item">
+            <div class="experience-title">Other Roles in Customer Support, Tech Assistance & Marketing</div>
+            <div class="meta">2014 – 2019</div>
+            <ul>
+              <li>Supported customers and teams with technical assistance, campaign help, research, quality assurance, and remote coordination.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <h2>Tools & Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-box">
+            <strong>Video Editing</strong>
+            <span>CapCut, VEED, Descript, Adobe Premiere Pro</span>
+          </div>
+          <div class="skill-box">
+            <strong>Screen Recording & Streaming</strong>
+            <span>OBS Studio, Loom</span>
+          </div>
+          <div class="skill-box">
+            <strong>Graphic Design</strong>
+            <span>Canva, Adobe Photoshop, Adobe Illustrator</span>
+          </div>
+          <div class="skill-box">
+            <strong>Funnels & Web</strong>
+            <span>ClickFunnels, Kajabi, GoHighLevel, WordPress</span>
+          </div>
+          <div class="skill-box">
+            <strong>Automation & CRM</strong>
+            <span>GoHighLevel workflows, pipelines, triggers, Zapier</span>
+          </div>
+          <div class="skill-box">
+            <strong>Advertising & AI</strong>
+            <span>Google Ads, Meta Ads Manager, ChatGPT, Claude, ElevenLabs</span>
+          </div>
+          <div class="skill-box">
+            <strong>Productivity</strong>
+            <span>Notion, Google Workspace, Trello, Slack</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <h2>Let’s Connect</h2>
+        <p class="summary">
+          Looking for a video editor or GHL expert to elevate your content and automate your workflows? Let’s connect.
+        </p>
+        <div class="contact-block">
+          <a class="contact-pill" href="mailto:dc@aequoradigital.com">✉️ dc@aequoradigital.com</a>
+          <a class="contact-pill" href="https://wa.me/639953151787">📱 +63 995 315 1787</a>
+          <a class="contact-pill" href="https://app.notion.com/p/1a9a2bae673880779176edcf0d9e264f?pvs=21">🌐 Portfolio</a>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <h2>Selected Work Links</h2>
+        <div class="links">
+          <a class="link-card" href="https://drive.google.com/file/d/1DGOQpx4uDRX8DFot35eGjw-N-eCvDx5M/view?usp=sharing" target="_blank" rel="noreferrer">
+            <span>AI Talking Head Demo</span>
+            <span>Open Drive</span>
+          </a>
+          <a class="link-card" href="https://drive.google.com/file/d/1mZFJ7r3PKA64NUfgIn2ZR1ZMYZUsGNu5/view?usp=sharing" target="_blank" rel="noreferrer">
+            <span>Course Walkthrough Video</span>
+            <span>Open Drive</span>
+          </a>
+          <a class="link-card" href="https://drive.google.com/file/d/1Oo-IFk9EyPYk-J_4zcyTdXfiy5Z8CfcZ/view?usp=sharing" target="_blank" rel="noreferrer">
+            <span>AI-Assisted Talking Head Production</span>
+            <span>Open Drive</span>
+          </a>
+          <a class="link-card" href="https://drive.google.com/file/d/10pPppvF0aScidHWUu0uFMUIMGSHQSs1A/view?usp=drive_link" target="_blank" rel="noreferrer">
+            <span>Course Explainer Walkthrough</span>
+            <span>Open Drive</span>
+          </a>
+          <a class="link-card" href="https://drive.google.com/file/d/1DhlfNliYJYvNu4ylvCxjvP59sYaB1jgl/view?usp=drive_link" target="_blank" rel="noreferrer">
+            <span>Social Media Reels</span>
+            <span>Open Drive</span>
+          </a>
+          <a class="link-card" href="https://drive.google.com/file/d/1PsfUqRn9iZUgrB4IVPSmMh0aH-VQ_bWc/view?usp=sharing" target="_blank" rel="noreferrer">
+            <span>Additional Reel Sample</span>
+            <span>Open Drive</span>
+          </a>
+          <a class="link-card" href="https://drive.google.com/file/d/1QXIdlrhvt589mz4yXAJAEHBN_BbUfvX9/view?usp=drive_link" target="_blank" rel="noreferrer">
+            <span>More Reel Content</span>
+            <span>Open Drive</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const root = document.documentElement;
+      const updateParallax = () => {
+        const scrollTop = window.scrollY;
+        const maxScroll = document.body.scrollHeight - window.innerHeight;
+        const progress = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
+        root.style.setProperty('--scroll-progress', progress.toFixed(4));
+      };
+      window.addEventListener('scroll', updateParallax, { passive: true });
+      updateParallax();
+    </script>
+  </body>
+</html>
 

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Detail | DC Miranda</title>
+    <style>
+      :root {
+        --bg: #050816;
+        --panel: rgba(10, 17, 32, 0.86);
+        --text: #f6fbff;
+        --muted: #a8b7cf;
+        --accent: #6ef2d4;
+        --accent-2: #86a8ff;
+        --line: rgba(255,255,255,0.12);
+        --shadow: 0 24px 70px rgba(0,0,0,0.34);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(110,242,212,0.18), transparent 28%),
+          radial-gradient(circle at top right, rgba(134,168,255,0.16), transparent 30%),
+          linear-gradient(135deg, #060a14 0%, #07111f 42%, #04070e 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      .page {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 32px 20px 70px;
+      }
+
+      .hero {
+        border-radius: 32px;
+        padding: 32px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        backdrop-filter: blur(16px);
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(110,242,212,0.12);
+        color: var(--accent);
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+      }
+
+      h1 { margin: 0 0 10px; font-size: clamp(1.8rem, 3.6vw, 2.6rem); }
+      .lead { color: var(--accent-2); font-weight: 700; margin-bottom: 12px; }
+      .desc { color: var(--muted); max-width: 800px; }
+
+      .video-shell {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: #000;
+        margin-top: 20px;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .box {
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .box h3 { margin: 0 0 6px; font-size: 1rem; }
+      .box p, .box li { color: var(--muted); font-size: 0.95rem; }
+      .box ul { margin: 6px 0 0 18px; padding: 0; }
+
+      .back-link {
+        display: inline-flex;
+        margin-top: 18px;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      @media (max-width: 700px) {
+        .hero { padding: 24px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <a class="back-link" href="DC Miranda - Resume.html">← Back to main resume</a>
+        <div class="eyebrow">Portfolio Detail</div>
+        <h1 id="title">Project Showcase</h1>
+        <div class="lead" id="lead">Immersive view of a selected project or experience</div>
+        <p class="desc" id="description">This page opens in a polished, presentation-style format with a video embed and supporting context.</p>
+
+        <div class="video-shell">
+          <iframe id="videoFrame" src="" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="info-grid">
+          <div class="box">
+            <h3>What this demonstrates</h3>
+            <p id="demonstrates"></p>
+          </div>
+          <div class="box">
+            <h3>Highlights</h3>
+            <ul id="highlights"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const items = {
+        'portfolio': {
+          title: 'Portfolio Experience',
+          lead: 'A polished presentation of my work and professional positioning',
+          description: 'This page is designed to feel like a product story — showing how I present work, build credibility, and make projects easier to understand.',
+          video: 'https://www.youtube.com/embed/ScMzIvxBSi4?rel=0',
+          demonstrates: 'Shows how I package experience for a modern digital audience and make a portfolio feel immersive and credible.',
+          highlights: ['High-end presentation style', 'Narrative-driven storytelling', 'Built for recruiters and hiring managers']
+        },
+        'ai-talking-head': {
+          title: 'AI Talking Head Demo',
+          lead: 'AI-assisted video production with a polished, modern finish',
+          description: 'This sample highlights storytelling, synthetic media, and how AI tools can be combined into a compelling production workflow.',
+          video: 'https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0',
+          demonstrates: 'Shows AI media creation, editing flow, and storytelling quality.',
+          highlights: ['Synthetic media workflow', 'Voice + avatar integration', 'Polished final composition']
+        },
+        'course-walkthrough': {
+          title: 'Course Walkthrough Video',
+          lead: 'Structured content designed to guide and educate',
+          description: 'This walkthrough demonstrates how I turn complex topics into clear, engaging visual experiences.',
+          video: 'https://www.youtube.com/embed/2Vv-BfVoq4g?rel=0',
+          demonstrates: 'Highlights educational pacing, screen recording, and visual clarity.',
+          highlights: ['Clear structure', 'Step-by-step guidance', 'Professional editing']
+        },
+        'talking-head-production': {
+          title: 'Talking Head Production',
+          lead: 'A full AI-assisted talking-head production sample',
+          description: 'This sample shows the full pipeline of creating a polished talking-head experience using modern AI tools.',
+          video: 'https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0',
+          demonstrates: 'Highlights voice, avatar, music, and production assembly.',
+          highlights: ['Talking avatar', 'AI voiceover', 'Editing and composition']
+        },
+        'course-explainer': {
+          title: 'Course Explainer Walkthrough',
+          lead: 'Explainer content designed around learning and retention',
+          description: 'This experience emphasizes making educational content simple, digestible, and easy to follow.',
+          video: 'https://www.youtube.com/embed/3fumBcKC6RE?rel=0',
+          demonstrates: 'Shows how information can be taught clearly through visual storytelling.',
+          highlights: ['Narrative pacing', 'Visual clarity', 'Learning-focused structure']
+        },
+        'social-reels': {
+          title: 'Social Media Reels',
+          lead: 'Short-form content built for attention and engagement',
+          description: 'These reels represent the kind of fast, punchy content that can perform well on social platforms.',
+          video: 'https://www.youtube.com/embed/kJQP7kiw5Fk?rel=0',
+          demonstrates: 'Highlights short-form creative storytelling, pace, and visual energy.',
+          highlights: ['Short-form editing', 'Engagement-ready pacing', 'Platform-tailored content']
+        },
+        'reel-sample': {
+          title: 'Additional Reel Sample',
+          lead: 'More short-form creative examples',
+          description: 'This adds extra depth to the portfolio by showing range in format and style.',
+          video: 'https://www.youtube.com/embed/18uDutylDa4?rel=0',
+          demonstrates: 'Shows additional creative samples and motion-based content style.',
+          highlights: ['Visual variety', 'Creative experimentation', 'Fast-paced editing']
+        },
+        'experience-freelance': {
+          title: 'Freelance Web & Digital Growth Specialist',
+          lead: 'Experience building digital products and growth systems',
+          description: 'This section highlights experience that connects web work, automation, and conversion-focused implementation.',
+          video: 'https://www.youtube.com/embed/ScMzIvxBSi4?rel=0',
+          demonstrates: 'Shows how experience can be expressed as a story of delivery and growth.',
+          highlights: ['Web creation', 'Automation systems', 'Growth-focused execution']
+        },
+        'experience-outsourced': {
+          title: 'Web & Social Media Developer at Outsourced Doers',
+          lead: 'Experience in client websites and branded content delivery',
+          description: 'This experience demonstrates working within a fast-paced service environment where websites and creative assets needed to be delivered efficiently.',
+          video: 'https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0',
+          demonstrates: 'Highlights client delivery, web implementation, and content collaboration.',
+          highlights: ['Client website delivery', 'Brand consistency', 'Fast-turnaround execution']
+        },
+        'experience-support': {
+          title: 'Support, Operations & Marketing Experience',
+          lead: 'Professional foundation in coordination and problem-solving',
+          description: 'This section shows the operations and support background that supports strong execution in modern web and product teams.',
+          video: 'https://www.youtube.com/embed/2Vv-BfVoq4g?rel=0',
+          demonstrates: 'Highlights communication, reliability, and day-to-day execution.',
+          highlights: ['Client support', 'Cross-functional coordination', 'Reliable execution']
+        }
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug') || 'portfolio';
+      const item = items[slug] || items.portfolio;
+
+      document.getElementById('title').textContent = item.title;
+      document.getElementById('lead').textContent = item.lead;
+      document.getElementById('description').textContent = item.description;
+      document.getElementById('videoFrame').src = item.video;
+      document.getElementById('demonstrates').textContent = item.demonstrates;
+      const highlights = document.getElementById('highlights');
+      highlights.innerHTML = item.highlights.map((h) => `<li>${h}</li>`).join('');
+    </script>
+  </body>
+</html>

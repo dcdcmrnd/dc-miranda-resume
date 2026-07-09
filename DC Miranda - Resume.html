@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DC Miranda | Full-Stack Web Developer</title>
+    <style>
+      :root {
+        --bg: #03111d;
+        --panel: rgba(7, 22, 34, 0.84);
+        --text: #f4fcff;
+        --muted: #a2c2d7;
+        --accent: #8de7ff;
+        --accent-2: #4dd3ff;
+        --line: rgba(255, 255, 255, 0.15);
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+        --scroll-progress: 0;
+        --pointer-x: 0;
+        --pointer-y: 0;
+        --wave-shift: 0;
+        --hero-shift-x: 0px;
+        --hero-shift-y: 0px;
+        --hero-overlay-x: 0px;
+        --hero-overlay-y: 0px;
+        --hero-content-x: 0px;
+        --hero-content-y: 0px;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 50% -10%, rgba(255, 242, 189, 0.26), transparent 24%),
+          linear-gradient(180deg, #93c8ff 0%, #6aa2dd 14%, #2b5c9a 36%, #10234c 62%, #050b1a 100%);
+        line-height: 1.65;
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body::before {
+        background:
+          radial-gradient(circle at 55% 18%, rgba(255, 230, 170, 0.56), transparent 18%),
+          radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.18), transparent 12%),
+          linear-gradient(180deg, rgba(255,255,255,0.14), transparent 58%);
+        transform: translate3d(calc(var(--pointer-x) * 10px), calc(var(--scroll-progress) * -200px), 0);
+        filter: blur(32px);
+      }
+
+      body::after {
+        background-image:
+          radial-gradient(circle, rgba(255,255,255,0.22) 1px, transparent 1px),
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 2px, transparent 2px 18px),
+          linear-gradient(180deg, rgba(20, 130, 190, 0.12), transparent 70%);
+        background-size: 20px 20px, 100% 100%, 100% 100%;
+        opacity: 0.16;
+        transform: translate3d(calc(var(--pointer-x) * -18px), calc(var(--pointer-y) * 16px + var(--scroll-progress) * 240px), 0);
+      }
+
+      .parallax-orb {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        filter: blur(5px);
+      }
+
+      .orb-a {
+        width: 460px;
+        height: 460px;
+        top: -120px;
+        right: -160px;
+        background: radial-gradient(circle, rgba(141, 231, 255, 0.34), transparent 68%);
+        transform: translate3d(calc(var(--pointer-x) * 22px), calc(var(--scroll-progress) * -120px), 0);
+      }
+
+      .orb-b {
+        width: 320px;
+        height: 320px;
+        left: -100px;
+        top: 260px;
+        background: radial-gradient(circle, rgba(77, 211, 255, 0.24), transparent 70%);
+        transform: translate3d(calc(var(--pointer-x) * -22px), calc(var(--scroll-progress) * 140px), 0);
+      }
+
+      .water-veil,
+      .wave,
+      .sky-sun,
+      .sky-clouds,
+      .sea-glow {
+        position: fixed;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .sky-sun {
+        width: 280px;
+        height: 280px;
+        top: 8%;
+        left: 50%;
+        transform: translateX(-50%) translateY(calc(var(--pointer-y) * -12px));
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 245, 203, 0.96) 0%, rgba(255, 223, 152, 0.32) 30%, transparent 52%);
+        filter: blur(5px);
+        opacity: 0.96;
+      }
+
+      .sky-clouds {
+        top: 6%;
+        left: 0;
+        width: 100%;
+        height: 210px;
+        background:
+          radial-gradient(circle at 20% 50%, rgba(255,255,255,0.26), transparent 16%),
+          radial-gradient(circle at 70% 35%, rgba(255,255,255,0.18), transparent 18%),
+          linear-gradient(180deg, rgba(255,255,255,0.14), transparent 68%);
+      }
+
+      .sea-glow {
+        bottom: 0;
+        left: 50%;
+        width: 140%;
+        height: 320px;
+        transform: translateX(-50%) translateY(calc(var(--pointer-y) * 16px));
+        background:
+          radial-gradient(circle at 50% 2%, rgba(117, 233, 255, 0.16), transparent 28%),
+          linear-gradient(180deg, rgba(30, 147, 218, 0.24), rgba(2, 13, 25, 0.06));
+      }
+
+      .water-veil {
+        height: 190px;
+        border-radius: 50% 50% 0 0;
+        filter: blur(6px);
+        opacity: 0.8;
+      }
+
+      .water-veil-a {
+        bottom: -90px;
+        background:
+          radial-gradient(circle at 30% 20%, rgba(255,255,255,0.22), transparent 22%),
+          linear-gradient(180deg, rgba(88, 180, 213, 0.24), rgba(5, 31, 45, 0.08));
+        transform: translate3d(0, calc(var(--scroll-progress) * 70px), 0) scaleX(1.08);
+      }
+
+      .water-veil-b {
+        bottom: -120px;
+        height: 240px;
+        background:
+          radial-gradient(circle at 70% 0%, rgba(255,255,255,0.16), transparent 28%),
+          linear-gradient(180deg, rgba(28, 132, 170, 0.2), rgba(5, 22, 31, 0.04));
+        transform: translate3d(calc(var(--pointer-x) * -10px), calc(var(--scroll-progress) * 100px), 0) scale(1.06);
+      }
+
+      .water-veil-c {
+        bottom: -140px;
+        height: 280px;
+        background:
+          radial-gradient(circle at 50% 20%, rgba(214, 247, 255, 0.16), transparent 30%),
+          linear-gradient(180deg, rgba(17, 120, 155, 0.28), rgba(4, 16, 24, 0.18));
+        transform: translate3d(calc(var(--pointer-x) * 14px), calc(var(--scroll-progress) * 140px), 0) scale(1.12);
+      }
+
+      .wave {
+        height: 170px;
+        border-radius: 46% 54% 0 0;
+        opacity: 0.62;
+        mix-blend-mode: screen;
+      }
+
+      .wave-one {
+        bottom: 50px;
+        background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(164, 239, 255, 0.2), rgba(255,255,255,0.06));
+        transform: translate3d(calc(var(--wave-shift) * -1px), 0, 0) skewX(-8deg);
+        filter: blur(1px);
+      }
+
+      .wave-two {
+        bottom: 18px;
+        height: 120px;
+        background: linear-gradient(90deg, rgba(112, 221, 255, 0.22), rgba(255,255,255,0.12), rgba(110, 212, 255, 0.16));
+        transform: translate3d(calc(var(--wave-shift) * 0.8px), 0, 0) skewX(10deg);
+        opacity: 0.45;
+      }
+
+      .wave-three {
+        bottom: -10px;
+        height: 90px;
+        background: linear-gradient(90deg, rgba(255,255,255,0.07), rgba(84, 199, 255, 0.12), rgba(255,255,255,0.06));
+        transform: translate3d(calc(var(--wave-shift) * -0.6px), 0, 0) skewX(-6deg);
+        opacity: 0.42;
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        max-width: 1220px;
+        margin: 0 auto;
+        padding: 34px 22px 86px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(16px);
+        overflow: hidden;
+      }
+
+      .hero {
+        position: relative;
+        padding: 46px;
+        margin-bottom: 22px;
+        transform: translate3d(var(--hero-shift-x), var(--hero-shift-y), 0);
+        background: radial-gradient(circle at top center, rgba(255,255,255,0.12), transparent 22%),
+          linear-gradient(180deg, rgba(6, 23, 45, 0.96), rgba(4, 16, 27, 0.96));
+        overflow: hidden;
+        will-change: transform;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(255,255,255,0.06), transparent 56%);
+        transform: translate3d(var(--hero-overlay-x), var(--hero-overlay-y), 0);
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        left: -20px;
+        right: -20px;
+        bottom: -18px;
+        height: 130px;
+        background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.14), transparent 34%);
+        opacity: 0.82;
+        transform: translate3d(calc(var(--scroll-progress) * 18px), calc(var(--pointer-x) * -12px), 0) scaleX(1.08);
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .hero .eyebrow,
+      .hero h1,
+      .hero .lead,
+      .hero .hero-actions {
+        transition: transform 200ms ease-out;
+        will-change: transform;
+      }
+
+      .hero .eyebrow {
+        transform: translate3d(calc(var(--hero-content-x) * 0.7), calc(var(--hero-content-y) * 0.7), 0);
+      }
+
+      .hero h1 {
+        transform: translate3d(calc(var(--hero-content-x) * 1.2), calc(var(--hero-content-y) * -0.9), 0);
+      }
+
+      .hero .lead {
+        transform: translate3d(calc(var(--hero-content-x) * 0.9), calc(var(--hero-content-y) * 0.7), 0);
+      }
+
+      .hero .hero-actions {
+        transform: translate3d(calc(var(--hero-content-x) * 0.6), calc(var(--hero-content-y) * 1.1), 0);
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(110,242,212,0.12);
+        color: var(--accent);
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+      }
+
+      h1 {
+        font-size: clamp(2.25rem, 4.8vw, 3.3rem);
+        line-height: 1.06;
+        margin: 0 0 10px;
+      }
+
+      .lead {
+        color: var(--accent-2);
+        font-weight: 700;
+        font-size: 1.08rem;
+        margin-bottom: 14px;
+      }
+
+      .hero p {
+        max-width: 830px;
+        color: var(--muted);
+        margin: 0 0 20px;
+        font-size: 1rem;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: transform 180ms ease, border-color 180ms ease;
+      }
+
+      .btn:hover { transform: translateY(-2px); }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #04101b;
+      }
+
+      .btn-secondary {
+        border: 1px solid rgba(255,255,255,0.16);
+        color: var(--text);
+        background: rgba(255,255,255,0.03);
+      }
+
+      .section {
+        padding: 28px 30px 30px;
+        margin-bottom: 20px;
+        transform: translate3d(0, calc(var(--scroll-progress) * 100px), 0);
+        position: relative;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(141, 231, 255, 0.06), transparent 58%);
+        pointer-events: none;
+      }
+
+      h2 {
+        margin: 0 0 10px;
+        font-size: 1.18rem;
+        color: var(--accent);
+      }
+
+      .intro {
+        margin: 0 0 16px;
+        color: var(--muted);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+      }
+
+      .stat {
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+      }
+
+      .stat span { color: var(--muted); font-size: 0.95rem; }
+
+      .capabilities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+
+      .cap-card {
+        padding: 18px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .cap-card h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+
+      .cap-card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+      .proof-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+      }
+
+      .proof-card {
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.04);
+        transition: transform 200ms ease, border-color 200ms ease;
+      }
+
+      .proof-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(110,242,212,0.3);
+      }
+
+      .preview {
+        height: 122px;
+        position: relative;
+        background:
+          radial-gradient(circle at 10% 20%, rgba(255,255,255,0.28), transparent 18%),
+          radial-gradient(circle at 80% 80%, rgba(144, 232, 255, 0.24), transparent 20%),
+          linear-gradient(135deg, rgba(77, 211, 255, 0.2), rgba(8, 51, 75, 0.42));
+        overflow: hidden;
+      }
+
+      .preview::before,
+      .preview::after {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.2);
+      }
+
+      .preview::before {
+        width: 180px;
+        height: 180px;
+        top: -40px;
+        right: -20px;
+        background: radial-gradient(circle, rgba(255,255,255,0.28), transparent 72%);
+      }
+
+      .preview::after {
+        width: 110px;
+        height: 110px;
+        bottom: -24px;
+        left: 20px;
+        background: radial-gradient(circle, rgba(123, 221, 255, 0.26), transparent 70%);
+      }
+
+      .proof-body { padding: 16px; }
+      .proof-body h3 { margin: 0 0 6px; font-size: 1rem; }
+      .proof-body p { margin: 0 0 10px; color: var(--muted); font-size: 0.94rem; }
+      .proof-link { color: var(--accent); font-weight: 700; text-decoration: none; }
+
+      .timeline {
+        display: grid;
+        gap: 12px;
+      }
+
+      .timeline-item {
+        padding: 16px 18px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .timeline-item strong { display: block; margin-bottom: 4px; }
+      .timeline-item span { color: var(--muted); font-size: 0.95rem; }
+
+      .timeline-link {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .tech-list { display: flex; flex-wrap: wrap; gap: 10px; }
+      .tech-list span {
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: var(--text);
+      }
+
+      .contact-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .contact-card {
+        padding: 16px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .contact-card a {
+        color: var(--accent);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      @media (max-width: 700px) {
+        .hero { padding: 28px; }
+        .section { padding: 22px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { transition: none !important; animation: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sky-sun"></div>
+    <div class="sky-clouds"></div>
+    <div class="sea-glow"></div>
+    <div class="parallax-orb orb-a"></div>
+    <div class="parallax-orb orb-b"></div>
+    <div class="water-veil water-veil-a"></div>
+    <div class="water-veil water-veil-b"></div>
+    <div class="water-veil water-veil-c"></div>
+    <div class="wave wave-one"></div>
+    <div class="wave wave-two"></div>
+    <div class="wave wave-three"></div>
+
+    <main class="page">
+      <section class="hero panel">
+        <div class="eyebrow">Full-Stack Web Developer • AI-Enabled Digital Builder</div>
+        <h1>DC Miranda</h1>
+        <div class="lead">I build websites that feel polished, convert well, and can scale with automation and AI.</div>
+        <p>
+          This page is designed to show credibility for full-stack web development roles. It highlights the kind of work I can do for a business: build custom websites, launch membership portals, connect automation, and create systems that help growth happen faster.
+        </p>
+        <div class="pill-row">
+          <span class="pill">⚙️ Full-Stack Builds</span>
+          <span class="pill">🤖 AI-Enabled Workflows</span>
+          <span class="pill">📈 Conversion-Focused UX</span>
+          <span class="pill">🧠 Automation & CRM</span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="mailto:dc@aequoradigital.com">Let’s Connect</a>
+          <a class="btn btn-secondary" href="project-detail.html?slug=portfolio" rel="noreferrer">View Portfolio</a>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>Why this is credible for web development</h2>
+        <p class="intro">
+          I’m positioning this page around the same kind of value that modern service businesses emphasize: full-stack delivery, smart automation, SEO-ready structure, and a polished user experience from concept to launch.
+        </p>
+        <div class="stats-grid">
+          <div class="stat">
+            <strong>Full-stack mindset</strong>
+            <span>Front end, backend logic, integrations, and launch-ready execution.</span>
+          </div>
+          <div class="stat">
+            <strong>AI-assisted delivery</strong>
+            <span>Content, automation, workflow design, and faster execution with modern tools.</span>
+          </div>
+          <div class="stat">
+            <strong>Growth-ready UX</strong>
+            <span>Designed to support lead capture, conversions, and digital experiences.</span>
+          </div>
+          <div class="stat">
+            <strong>Business-focused</strong>
+            <span>Built for service businesses, membership products, and client-facing platforms.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>What I can build</h2>
+        <p class="intro">These are the kinds of website and digital experience capabilities I can bring into a role or project.</p>
+        <div class="capabilities-grid">
+          <article class="cap-card">
+            <h3>Modern websites</h3>
+            <p>Landing pages, service business sites, and polished marketing websites designed to look sharp and convert.</p>
+          </article>
+          <article class="cap-card">
+            <h3>Membership portals</h3>
+            <p>Client areas, course portals, gated content, dashboards, and onboarding experiences that feel structured and professional.</p>
+          </article>
+          <article class="cap-card">
+            <h3>Automation and CRM</h3>
+            <p>Forms, lead routing, follow-up automation, pipelines, and integrations that support smoother business operations.</p>
+          </article>
+          <article class="cap-card">
+            <h3>SEO and performance</h3>
+            <p>Search-friendly structure, discoverability, and performance-oriented thinking that helps sites get found and used.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>Project proof and portfolio links</h2>
+        <p class="intro">These links open immersive detail pages with embedded video and story context.</p>
+        <div class="proof-grid">
+          <article class="proof-card">
+            <div class="preview"></div>
+            <div class="proof-body">
+              <h3>AI Talking Head Demo</h3>
+              <p>Showcases AI-assisted content creation and polished digital presentation.</p>
+              <a class="proof-link" href="project-detail.html?slug=ai-talking-head">Open project →</a>
+            </div>
+          </article>
+          <article class="proof-card">
+            <div class="preview"></div>
+            <div class="proof-body">
+              <h3>Course Walkthrough Video</h3>
+              <p>Demonstrates intuitive structure, pacing, and polished delivery for learning experiences.</p>
+              <a class="proof-link" href="project-detail.html?slug=course-walkthrough">Open project →</a>
+            </div>
+          </article>
+          <article class="proof-card">
+            <div class="preview"></div>
+            <div class="proof-body">
+              <h3>Talking Head Production</h3>
+              <p>Highlights AI media workflows, editing, and content assembly in a polished package.</p>
+              <a class="proof-link" href="project-detail.html?slug=talking-head-production">Open project →</a>
+            </div>
+          </article>
+          <article class="proof-card">
+            <div class="preview"></div>
+            <div class="proof-body">
+              <h3>Course Explainer Walkthrough</h3>
+              <p>Shows structured explainers designed for product education and client understanding.</p>
+              <a class="proof-link" href="project-detail.html?slug=course-explainer">Open project →</a>
+            </div>
+          </article>
+          <article class="proof-card">
+            <div class="preview"></div>
+            <div class="proof-body">
+              <h3>Social Media Reels</h3>
+              <p>Short-form visual work and campaign-style storytelling examples.</p>
+              <a class="proof-link" href="project-detail.html?slug=social-reels">Open project →</a>
+            </div>
+          </article>
+          <article class="proof-card">
+            <div class="preview"></div>
+            <div class="proof-body">
+              <h3>Additional Reel Sample</h3>
+              <p>More examples of short-form digital content and visual execution.</p>
+              <a class="proof-link" href="project-detail.html?slug=reel-sample">Open project →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>Experience and strengths</h2>
+        <div class="timeline">
+          <a class="timeline-link" href="project-detail.html?slug=experience-freelance">
+            <div class="timeline-item">
+              <strong>Freelance Web & Digital Growth Specialist • 2021–Present</strong>
+              <span>Built digital experiences, automation systems, landing pages, and campaign support around growth goals.</span>
+            </div>
+          </a>
+          <a class="timeline-link" href="project-detail.html?slug=experience-outsourced">
+            <div class="timeline-item">
+              <strong>Web & Social Media Developer • Outsourced Doers • 2020–2021</strong>
+              <span>Delivered websites and branded multimedia content for clients in a fast-paced service environment.</span>
+            </div>
+          </a>
+          <a class="timeline-link" href="project-detail.html?slug=experience-support">
+            <div class="timeline-item">
+              <strong>Support, Operations, and Marketing Experience • 2014–2019</strong>
+              <span>Developed client handling, coordination, and problem-solving skills that travel well into modern web and product work.</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>Core stack</h2>
+        <div class="tech-list">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span><span>Node.js</span>
+          <span>Express</span><span>MongoDB</span><span>SQL</span><span>WordPress</span><span>GoHighLevel</span>
+          <span>Zapier</span><span>Notion</span><span>ChatGPT</span><span>Descript</span><span>CapCut</span>
+        </div>
+      </section>
+
+      <section class="section panel">
+        <h2>Contact</h2>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <strong>Email</strong><br />
+            <a href="mailto:dc@aequoradigital.com">dc@aequoradigital.com</a>
+          </div>
+          <div class="contact-card">
+            <strong>Phone</strong><br />
+            <a href="https://wa.me/639953151787">+63 995 315 1787</a>
+          </div>
+          <div class="contact-card">
+            <strong>Portfolio</strong><br />
+            <a href="project-detail.html?slug=portfolio">Open portfolio experience</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const root = document.documentElement;
+      let ticking = false;
+
+      const updateParallax = () => {
+        const scrollTop = window.scrollY || window.pageYOffset;
+        const progress = Math.min(scrollTop / 700, 1);
+        const pointerX = parseFloat(root.style.getPropertyValue('--pointer-x')) || 0;
+        const pointerY = parseFloat(root.style.getPropertyValue('--pointer-y')) || 0;
+
+        root.style.setProperty('--scroll-progress', progress.toFixed(4));
+        root.style.setProperty('--wave-shift', (scrollTop * 0.8).toFixed(2));
+        root.style.setProperty('--hero-shift-x', `${(pointerX * 12).toFixed(2)}px`);
+        root.style.setProperty('--hero-shift-y', `${(progress * 72).toFixed(2)}px`);
+        root.style.setProperty('--hero-overlay-x', `${(pointerX * -14).toFixed(2)}px`);
+        root.style.setProperty('--hero-overlay-y', `${(pointerY * 10).toFixed(2)}px`);
+        root.style.setProperty('--hero-content-x', `${(pointerX * 6).toFixed(2)}px`);
+        root.style.setProperty('--hero-content-y', `${(pointerY * 8).toFixed(2)}px`);
+
+        ticking = false;
+      };
+
+      const requestParallaxUpdate = () => {
+        if (!ticking) {
+          ticking = true;
+          window.requestAnimationFrame(updateParallax);
+        }
+      };
+
+      const updatePointer = (event) => {
+        const point = event?.touches ? event.touches[0] : event;
+        const clientX = point?.clientX ?? window.innerWidth / 2;
+        const clientY = point?.clientY ?? window.innerHeight / 2;
+        const x = (clientX / window.innerWidth - 0.5) * 2;
+        const y = (clientY / window.innerHeight - 0.5) * 2;
+
+        root.style.setProperty('--pointer-x', x.toFixed(3));
+        root.style.setProperty('--pointer-y', y.toFixed(3));
+        requestParallaxUpdate();
+      };
+
+      window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
+      window.addEventListener('mousemove', updatePointer, { passive: true });
+      window.addEventListener('touchmove', updatePointer, { passive: true });
+      window.addEventListener('resize', requestParallaxUpdate);
+      updatePointer({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+      requestParallaxUpdate();
+    </script>
+  </body>
+</html>

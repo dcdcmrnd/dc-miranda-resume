@@ -40,6 +40,10 @@
     }
     html { scroll-behavior: smooth; }
     body { margin: 0; background: var(--surface-page); }
+    [data-parallax] { will-change: transform; }
+    @media (prefers-reduced-motion: reduce) {
+      [data-parallax] { transform: none !important; }
+    }
     a { color: var(--text-link); }
     a:hover { color: var(--text-link-hover); }
 
@@ -117,8 +121,8 @@
         <div style="position: absolute; top: -18px; right: 6px; width: 92px; height: 92px; border-radius: 50%; border: 2px dashed var(--navy); display: flex; align-items: center; justify-content: center; transform: rotate(-8deg); background: var(--bg); z-index: 4;">
           <span style="font: 800 12px/1.15 var(--font-display); color: var(--navy); text-align: center; text-transform: uppercase; letter-spacing: 0.02em;">Fiery<br>Cup<br>Winner</span>
         </div>
-        <div style="position: absolute; inset: -24px 8px -24px -24px; background: radial-gradient(circle at 30% 20%, rgba(246,196,69,0.32), transparent 60%);"></div>
-        <img src="images/jar-chili-garlic-paste.png" alt="Jar of Nesta's Chili Garlic Paste" style="position: relative; width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); object-fit: cover; transform: rotate(-2deg);">
+        <div data-parallax="1" style="position: absolute; inset: -24px 8px -24px -24px; background: radial-gradient(circle at 30% 20%, rgba(246,196,69,0.32), transparent 60%);"></div>
+        <img data-parallax="0.5" src="images/jar-chili-garlic-paste.png" alt="Jar of Nesta's Chili Garlic Paste" style="position: relative; width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); object-fit: cover; transform: rotate(-2deg);">
         <div style="margin-top: var(--space-5); display: flex; flex-direction: column; gap: 0;">
           <div style="display: flex; justify-content: space-between; padding: var(--space-3) 0; border-bottom: 1px solid var(--border-default);">
             <span style="font: var(--text-body-sm); color: var(--text-muted);">Started with</span>
@@ -203,7 +207,7 @@
       <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" hint-size="100%,auto" style="width:100%;">
         <div style="position: relative; max-width: 340px; margin: 0 auto;">
           <div class="tape" style="top: -12px; left: 50%; margin-left: -38px;"></div>
-          <img src="images/founder-photo.png" alt="George Allen Callora at his chili farm in Davao City" style="width: 100%; border-radius: 2px; box-shadow: var(--shadow-md); object-fit: cover; transform: rotate(-2.5deg); background: white; padding: 10px 10px 44px; box-sizing: border-box;">
+          <img data-parallax="0.6" src="images/founder-photo.png" alt="George Allen Callora at his chili farm in Davao City" style="width: 100%; border-radius: 2px; box-shadow: var(--shadow-md); object-fit: cover; transform: rotate(-2.5deg); background: white; padding: 10px 10px 44px; box-sizing: border-box;">
         </div>
       </x-import>
       <x-import component-from-global-scope="AequoraDigitalDesignSystem_9c2f1b.Reveal" delay="120" hint-size="100%,auto" style="width:100%;">
@@ -363,5 +367,58 @@
 </div>
 
 </x-dc>
+
+<script>
+  (function () {
+    var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    // Elements get re-created when the design-system runtime finishes
+    // compiling <x-dc>, so re-query live nodes on every update instead of
+    // caching references — cached refs would go stale the moment that
+    // rebuild happens and silently stop moving.
+    var baseTransforms = new WeakMap();
+
+    function update() {
+      var els = document.querySelectorAll('[data-parallax]');
+      if (!els.length) return;
+      var vh = window.innerHeight || 800;
+      els.forEach(function (el) {
+        var base = baseTransforms.get(el);
+        if (base === undefined) {
+          base = el.style.transform || '';
+          baseTransforms.set(el, base);
+        }
+        var speed = parseFloat(el.getAttribute('data-parallax')) || 0;
+        var rect = el.getBoundingClientRect();
+        var progress = (vh - rect.top) / (vh + rect.height);
+        var offset = (progress - 0.5) * speed * 200;
+        el.style.transform = (base ? base + ' ' : '') + 'translate3d(0, ' + offset.toFixed(2) + 'px, 0)';
+      });
+    }
+
+    var raf = null;
+    function requestUpdate() {
+      if (raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = null;
+        update();
+      });
+    }
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    // The design system mounts/rebuilds these elements asynchronously
+    // (x-import), so keep nudging updates for a few seconds after load to
+    // catch the point the final DOM settles.
+    var mountAttempts = 0;
+    (function pollForMount() {
+      update();
+      mountAttempts++;
+      if (mountAttempts < 240) requestAnimationFrame(pollForMount);
+    })();
+  })();
+</script>
 </body>
 </html>
