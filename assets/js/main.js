@@ -62,30 +62,15 @@
   }
   setLoop(0);
 
-  /* ---------------- Smooth-scroll layer (Lenis) ---------------- */
-  var lenis = null;
-  if (!reduceMotion && typeof Lenis !== "undefined") {
-    lenis = new Lenis({
-      duration: 1.05,
-      easing: function (t) { return 1 - Math.pow(1 - t, 3); },
-      smoothWheel: true,
-    });
-    if (hasGSAP) {
-      lenis.on("scroll", function () { if (typeof ScrollTrigger !== "undefined") ScrollTrigger.update(); });
-      gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
-      gsap.ticker.lagSmoothing(0);
-    } else {
-      requestAnimationFrame(function raf(time) { lenis.raf(time); requestAnimationFrame(raf); });
-    }
-  }
-
-  function scrollToTarget(top, opts) {
-    opts = opts || {};
-    if (lenis) {
-      lenis.scrollTo(top, { offset: 0, duration: opts.duration || 1.0 });
-    } else {
-      window.scrollTo({ top: top, behavior: reduceMotion ? "auto" : "smooth" });
-    }
+  /* ---------------- Scrolling ----------------
+     Wheel/touch scrolling is native throughout — a Lenis smooth-scroll
+     layer was tried here and pulled back out: re-smoothing input the
+     OS already smooths is what reads as "delay when I scroll," and
+     its .scrollTo() proved unreliable for nav-link jumps once wheel
+     smoothing was disabled. ScrollTrigger works directly off native
+     scroll by default, so nothing else depends on this. */
+  function scrollToTarget(top) {
+    window.scrollTo({ top: top, behavior: reduceMotion ? "auto" : "smooth" });
   }
 
   /* ---------------- HUD scrolled state (write only on threshold crossing) ---------------- */
@@ -365,7 +350,7 @@
   rebuildBtns.forEach(function (btn) {
     btn.addEventListener("click", function () {
       setLoop(loopCount + 1);
-      scrollToTarget(0, { duration: 0.9 });
+      scrollToTarget(0);
       setTimeout(playHeroGlitch, reduceMotion ? 0 : 500);
     });
   });
@@ -379,7 +364,7 @@
       if (!target) return;
       e.preventDefault();
       var top = target.getBoundingClientRect().top + window.scrollY - 50;
-      scrollToTarget(top, { duration: 1.0 });
+      scrollToTarget(top);
     });
   });
 
