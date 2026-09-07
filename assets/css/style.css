@@ -7,12 +7,16 @@
 :root {
   --bg: #eaeae8;
   --bg-soft: #f2f1ee;
-  --panel: #fbfbf9;
+  --panel: rgba(255, 255, 255, 0.92);
+  --panel-solid: #fbfbf9;
   --ink: #262523;
   --muted: #83807a;
   --muted-2: #a5a29b;
   --line: rgba(38, 37, 35, 0.14);
-  --line-strong: rgba(38, 37, 35, 0.34);
+  --line-strong: rgba(38, 37, 35, 0.28);
+
+  /* One real accent, used sparingly: status LEDs, prompts, and
+     interactive hover/active states only — never on static labels. */
   --signal: #ff5a2b;
   --signal-dim: rgba(255, 90, 43, 0.14);
   --ok: #2fa876;
@@ -28,7 +32,7 @@
 
   --container: 1280px;
   --gutter: clamp(18px, 4.5vw, 56px);
-  --hud-h: 60px;
+  --hud-h: 52px;
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -160,8 +164,7 @@ body::after {
   transition: border-color 200ms ease, background 200ms ease, color 200ms ease;
   white-space: nowrap;
 }
-.pill:hover, .pill:focus-visible { border-color: var(--signal); color: var(--signal-ink, var(--ink)); background: var(--bg); }
-.pill.pill--accent { color: var(--signal); }
+.pill:hover, .pill:focus-visible { border-color: var(--signal); color: var(--ink); background: var(--bg); }
 .pill.pill--solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .pill.pill--solid:hover { background: var(--signal); border-color: var(--signal); color: var(--panel); }
 .hud-nav .nav-links { display: flex; gap: 8px; }
@@ -193,10 +196,20 @@ body::after {
 }
 .mobile-menu .pill { align-self: flex-start; }
 
-/* ---------------- Reveal ---------------- */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity 700ms var(--ease), transform 700ms var(--ease); transition-delay: var(--d, 0ms); }
+/* ---------------- Reveal ----------------
+   Initial hidden state only. The actual animated transition is owned
+   by GSAP + ScrollTrigger (assets/js/main.js), driven by MOTION
+   tokens (assets/js/motion.js) — not by a competing CSS transition.
+   .is-visible is a fallback for no-JS / prefers-reduced-motion, where
+   GSAP is skipped entirely and the element must still be readable. */
+.reveal { opacity: 0; transform: translateY(18px); }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
-@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+/* ---------------- RevealText word-mask ---------------- */
+[data-reveal-text] { display: block; }
+.rt-word { display: inline-block; overflow: hidden; vertical-align: top; }
+.rt-word-inner { display: inline-block; }
 
 /* ---------------- Custom reticle cursor ---------------- */
 .reticle-dot, .reticle-box {
@@ -222,7 +235,7 @@ body::after {
   font-size: var(--step-xs); letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
   margin-bottom: 18px;
 }
-.section-kicker::before { content: "//"; color: var(--signal); }
+.section-kicker::before { content: "//"; color: var(--muted-2); }
 
 /* ---------------- WebGL backdrop (persistent, scroll-reactive) ---------------- */
 .webgl-backdrop {
@@ -249,7 +262,7 @@ body::after {
   color: var(--muted);
   margin-bottom: 24px;
 }
-.hero-tag .signal { color: var(--signal); }
+.hero-tag .signal { color: var(--muted-2); }
 .hero h1 {
   font-family: var(--font-mono);
   font-weight: 500;
@@ -296,6 +309,8 @@ body::after {
 .panel {
   position: relative;
   background: var(--panel);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--line-strong);
   border-radius: 2px;
   padding: clamp(22px, 3vw, 36px);
@@ -357,8 +372,8 @@ body::after {
   min-width: 84px;
   flex-shrink: 0;
 }
-.log-line .tag::before { content: "["; color: var(--signal); margin-right: 4px; }
-.log-line .tag::after { content: "]"; color: var(--signal); margin-left: 4px; }
+.log-line .tag::before { content: "["; color: var(--muted-2); margin-right: 4px; }
+.log-line .tag::after { content: "]"; color: var(--muted-2); margin-left: 4px; }
 .log-line.status .tag { color: var(--ok); }
 
 .comment-line {
@@ -402,7 +417,7 @@ body::after {
 @media (max-width: 900px) { .subsystems-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .subsystems-grid { grid-template-columns: 1fr; } }
 .module-card {
-  background: var(--panel);
+  background: var(--panel-solid);
   padding: clamp(22px, 2.6vw, 30px);
   display: flex; flex-direction: column; gap: 12px;
   min-height: 220px;
@@ -449,7 +464,7 @@ body::after {
 }
 .filter-row button.is-active, .filter-row button:hover { color: var(--ink); border-color: var(--signal); background: var(--panel); }
 
-.dir-listing { border: 1px solid var(--line-strong); background: var(--panel); }
+.dir-listing { border: 1px solid var(--line-strong); background: var(--panel-solid); }
 .dir-row {
   display: grid; grid-template-columns: 22px 1fr auto auto;
   gap: 14px; align-items: center;
@@ -462,8 +477,9 @@ body::after {
 .dir-row .perm { color: var(--muted-2); font-size: var(--step-xs); }
 .dir-row .name { color: var(--ink); }
 .dir-row .cat { color: var(--muted); font-size: var(--step-xs); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
-.dir-row .act { font-size: var(--step-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); white-space: nowrap; }
+.dir-row .act { font-size: var(--step-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-2); white-space: nowrap; transition: color 200ms ease; }
 a.dir-row:hover { background: var(--bg-soft); padding-left: 22px; }
+a.dir-row:hover .act { color: var(--signal); }
 .dir-row.is-pending { opacity: 0.55; }
 .dir-row.is-pending .act { color: var(--muted-2); }
 @media (max-width: 640px) {
@@ -475,7 +491,7 @@ a.dir-row:hover { background: var(--bg-soft); padding-left: 22px; }
 .log-entry { border-top: 1px solid var(--line); padding: 22px 0; }
 .log-entry:last-child { border-bottom: 1px solid var(--line); }
 .log-entry-head { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
-.log-entry-id { color: var(--signal); font-size: var(--step-sm); }
+.log-entry-id { color: var(--muted-2); font-size: var(--step-sm); }
 .log-entry-name { font-size: 1.02rem; letter-spacing: 0.01em; }
 .log-entry-status { margin-left: auto; font-size: var(--step-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-strong); padding: 4px 9px; border-radius: 4px; }
 .log-entry p { margin-top: 10px; padding-left: 20px; position: relative; color: var(--muted); font-size: var(--step-sm); max-width: 64ch; }
@@ -488,8 +504,9 @@ a.dir-row:hover { background: var(--bg-soft); padding-left: 22px; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
 @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } }
 .contact-list a.log-line { color: var(--ink); transition: padding-left 200ms var(--ease), color 200ms ease; }
-.contact-list a.log-line:hover { padding-left: 10px; color: var(--signal-ink, var(--ink)); }
-.contact-list a.log-line .val { margin-left: auto; color: var(--signal); }
+.contact-list a.log-line:hover { padding-left: 10px; }
+.contact-list a.log-line .val { margin-left: auto; color: var(--muted-2); transition: color 200ms ease; }
+.contact-list a.log-line:hover .val { color: var(--signal); }
 
 /* ---------------- Footer / rebuild gate ---------------- */
 .rebuild-gate { text-align: left; }

@@ -3,6 +3,15 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var isCoarsePointer = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  var M = window.MOTION || {
+    duration: { fast: 0.3, normal: 0.6, slow: 0.9, hero: 1.1 },
+    ease: { standard: "power2.out", inOut: "power2.inOut", expressive: "expo.out" },
+    stagger: { tight: 0.035, normal: 0.06, loose: 0.12 },
+    distance: { sm: 14, md: 26, lg: 46 },
+    scrollTrigger: { start: "top 88%", once: true },
+  };
+  var hasGSAP = typeof gsap !== "undefined";
+  if (hasGSAP && typeof ScrollTrigger !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
   /* ---------------- Glitch text reveal ---------------- */
   var GLITCH_CHARS = "!<>-_\\/[]{}—=+*^?#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -53,47 +62,47 @@
   }
   setLoop(0);
 
+  /* ---------------- Smooth-scroll layer (Lenis) ---------------- */
+  var lenis = null;
+  if (!reduceMotion && typeof Lenis !== "undefined") {
+    lenis = new Lenis({
+      duration: 1.05,
+      easing: function (t) { return 1 - Math.pow(1 - t, 3); },
+      smoothWheel: true,
+    });
+    if (hasGSAP) {
+      lenis.on("scroll", function () { if (typeof ScrollTrigger !== "undefined") ScrollTrigger.update(); });
+      gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      requestAnimationFrame(function raf(time) { lenis.raf(time); requestAnimationFrame(raf); });
+    }
+  }
+
+  function scrollToTarget(top, opts) {
+    opts = opts || {};
+    if (lenis) {
+      lenis.scrollTo(top, { offset: 0, duration: opts.duration || 1.0 });
+    } else {
+      window.scrollTo({ top: top, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  }
+
   /* ---------------- HUD scrolled state ---------------- */
   var hud = document.querySelector(".hud");
   function updateHud() {
     if (hud) hud.style.borderBottomColor = window.scrollY > 20 ? "var(--line-strong)" : "var(--line)";
   }
 
-  /* ---------------- Generic scroll-linked parallax ---------------- */
-  var parallaxEls = Array.prototype.slice.call(document.querySelectorAll("[data-parallax]"));
-  function updateParallax() {
-    if (!parallaxEls.length || reduceMotion) return;
-    var vh = window.innerHeight;
-    parallaxEls.forEach(function (el) {
-      var speed = parseFloat(el.getAttribute("data-parallax")) || 0;
-      var rect = el.getBoundingClientRect();
-      var progress = (vh - rect.top) / (vh + rect.height); // 0 entering -> 1 leaving
-      var offset = (progress - 0.5) * speed * 200;
-      el.style.transform = "translate3d(0," + offset.toFixed(2) + "px,0)";
-    });
-  }
-
+  /* ---------------- Scroll progress (single source of truth, sampled per frame) ---------------- */
   var scrollProgress = 0;
-  function getScrollProgress() {
+  function readScrollProgress() {
     var max = document.documentElement.scrollHeight - window.innerHeight;
-    return max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+    scrollProgress = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+    updateHud();
+    requestAnimationFrame(readScrollProgress);
   }
-
-  var ticking = false;
-  window.addEventListener("scroll", function () {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(function () {
-        updateHud();
-        updateParallax();
-        scrollProgress = getScrollProgress();
-        ticking = false;
-      });
-    }
-  }, { passive: true });
-  updateHud();
-  updateParallax();
-  scrollProgress = getScrollProgress();
+  requestAnimationFrame(readScrollProgress);
 
   /* ---------------- Mobile menu ---------------- */
   var menuBtn = document.querySelector("[data-menu-toggle]");
@@ -102,28 +111,79 @@
   menuLinks.forEach(function (a) { a.addEventListener("click", function () { document.body.classList.remove("menu-open"); }); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") document.body.classList.remove("menu-open"); });
 
-  /* ---------------- Reveal on scroll ---------------- */
+  /* ---------------- Reveal on scroll (GSAP + ScrollTrigger, MOTION tokens) ---------------- */
   var revealEls = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          var glitchTarget = entry.target.querySelector("[data-glitch-on-reveal]");
-          if (glitchTarget && !glitchTarget.hasAttribute("data-glitched")) {
-            glitchTarget.setAttribute("data-glitched", "1");
-            glitchReveal(glitchTarget, { duration: 700 });
-          }
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
-    revealEls.forEach(function (el) { io.observe(el); });
-  } else {
+  if (reduceMotion || !hasGSAP) {
     revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+  } else {
+    revealEls.forEach(function (el) {
+      var delay = parseFloat((el.style.getPropertyValue("--d") || "0").replace("ms", "")) / 1000 || 0;
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: M.distance.md },
+        {
+          opacity: 1, y: 0, duration: M.duration.normal, delay: delay, ease: M.ease.standard,
+          scrollTrigger: { trigger: el, start: M.scrollTrigger.start, once: true },
+        }
+      );
+      var glitchTarget = el.querySelector("[data-glitch-on-reveal]");
+      if (glitchTarget) {
+        ScrollTrigger.create({
+          trigger: el, start: M.scrollTrigger.start, once: true,
+          onEnter: function () { glitchReveal(glitchTarget, { duration: 700 }); },
+        });
+      }
+    });
   }
 
-  /* ---------------- Reticle cursor ---------------- */
+  /* ---------------- RevealText: word-level split reveal for headings ---------------- */
+  function initRevealText() {
+    if (reduceMotion || !hasGSAP) return;
+    document.querySelectorAll("[data-reveal-text]").forEach(function (el) {
+      var words = el.textContent.trim().split(/\s+/);
+      el.innerHTML = words
+        .map(function (w) { return '<span class="rt-word"><span class="rt-word-inner">' + w + "</span></span>"; })
+        .join(" ");
+      gsap.from(el.querySelectorAll(".rt-word-inner"), {
+        yPercent: 110, opacity: 0, duration: M.duration.normal, ease: M.ease.standard, stagger: M.stagger.normal,
+        scrollTrigger: { trigger: el, start: M.scrollTrigger.start, once: true },
+      });
+    });
+  }
+
+  /* ---------------- Scroll-linked parallax (ScrollTrigger scrub) ---------------- */
+  function initParallax() {
+    if (reduceMotion || !hasGSAP) return;
+    document.querySelectorAll("[data-parallax]").forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax")) || 0;
+      gsap.to(el, {
+        yPercent: speed * 40,
+        ease: "none",
+        scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 0.4 },
+      });
+    });
+  }
+
+  /* ---------------- Image clip-path reveal (featured work media) ---------------- */
+  function initImageReveal() {
+    var frames = document.querySelectorAll(".work-featured-media");
+    if (reduceMotion || !hasGSAP) {
+      frames.forEach(function (f) { f.style.clipPath = "inset(0 0 0 0)"; });
+      return;
+    }
+    frames.forEach(function (frame) {
+      gsap.fromTo(
+        frame,
+        { clipPath: "inset(0 0 100% 0)" },
+        {
+          clipPath: "inset(0 0 0% 0)", duration: M.duration.slow, ease: M.ease.expressive,
+          scrollTrigger: { trigger: frame, start: M.scrollTrigger.start, once: true },
+        }
+      );
+    });
+  }
+
+  /* ---------------- Reticle cursor (states: default / hover) ---------------- */
   if (!isCoarsePointer && !reduceMotion) {
     document.documentElement.classList.add("has-reticle");
     var dot = document.createElement("div");
@@ -279,6 +339,7 @@
         var tags = (row.getAttribute("data-tags") || "").split(",");
         row.style.display = (f === "all" || tags.indexOf(f) !== -1) ? "" : "none";
       });
+      if (hasGSAP && typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
     });
   });
 
@@ -287,12 +348,12 @@
   rebuildBtns.forEach(function (btn) {
     btn.addEventListener("click", function () {
       setLoop(loopCount + 1);
-      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+      scrollToTarget(0, { duration: 0.9 });
       setTimeout(playHeroGlitch, reduceMotion ? 0 : 500);
     });
   });
 
-  /* ---------------- Smooth anchor scroll with HUD offset ---------------- */
+  /* ---------------- Anchor scroll with HUD offset ---------------- */
   document.querySelectorAll("a[href^='#']").forEach(function (a) {
     a.addEventListener("click", function (e) {
       var id = a.getAttribute("href");
@@ -301,14 +362,18 @@
       if (!target) return;
       e.preventDefault();
       var top = target.getBoundingClientRect().top + window.scrollY - 50;
-      window.scrollTo({ top: top, behavior: reduceMotion ? "auto" : "smooth" });
+      scrollToTarget(top, { duration: 1.0 });
     });
   });
 
   /* ---------------- Boot ---------------- */
   initTilt();
+  initRevealText();
+  initParallax();
+  initImageReveal();
   window.addEventListener("load", function () {
     setTimeout(playHeroGlitch, 150);
     initWebGLBackdrop();
+    if (hasGSAP && typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   });
 })();

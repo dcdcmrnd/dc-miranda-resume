@@ -33,10 +33,10 @@
     </div>
     <nav class="hud-nav">
       <div class="nav-links">
-        <a class="pill pill--accent" href="#home">[Home]</a>
-        <a class="pill pill--accent" href="#archive">[Work]</a>
-        <a class="pill pill--accent" href="#origin">[About]</a>
-        <a class="pill pill--accent" href="#contact">[Contact]</a>
+        <a class="pill" href="#home">[Home]</a>
+        <a class="pill" href="#archive">[Work]</a>
+        <a class="pill" href="#origin">[About]</a>
+        <a class="pill" href="#contact">[Contact]</a>
       </div>
       <button class="pill pill--solid" data-rebuild type="button">↻ [Rebuild]</button>
       <button class="pill menu-btn" data-menu-toggle type="button" aria-label="Open menu">[Menu]</button>
@@ -89,7 +89,7 @@
         <div class="panel reveal" style="--d:100ms" data-cursor-hover>
           <span class="tick tick-tl"></span><span class="tick tick-tr"></span><span class="tick tick-bl"></span><span class="tick tick-br"></span>
           <div class="panel-head"><span class="path">ARCHIVE://</span><span>NODE: ORIGIN</span></div>
-          <p class="panel-title">Record log</p>
+          <p class="panel-title" data-reveal-text>Record log</p>
           <p class="log-line"><span class="tag">2014–19</span> Customer support &amp; tech assistance — the foundation.</p>
           <p class="log-line"><span class="tag">2020–21</span> Social media &amp; web developer, Outsourced Doers.</p>
           <p class="log-line"><span class="tag">2021–now</span> Independent — running Aequora Digital.</p>
@@ -103,7 +103,7 @@
   <section id="subsystems" class="section">
     <div class="container">
       <div class="section-kicker reveal">ARCHIVE:// NODE: SUBSYSTEMS</div>
-      <p class="panel-title reveal">Capability map</p>
+      <p class="panel-title" data-reveal-text>Capability map</p>
     </div>
     <div class="subsystems-grid">
       <div class="module-card reveal" style="--d:0ms" data-cursor-hover>
@@ -156,7 +156,7 @@
     </div>
     <div class="container">
       <div class="section-kicker reveal">ARCHIVE:// NODE: SELECTED_WORK</div>
-      <p class="panel-title reveal">Directory listing</p>
+      <p class="panel-title" data-reveal-text>Directory listing</p>
 
       <div class="work-featured reveal" style="--d:60ms">
         <div class="work-featured-media" data-cursor-hover>
@@ -217,7 +217,7 @@
   <section id="logs" class="section">
     <div class="container">
       <div class="section-kicker reveal">ARCHIVE:// NODE: EXPT_LOGS</div>
-      <p class="panel-title reveal">Experiment logs</p>
+      <p class="panel-title" data-reveal-text>Experiment logs</p>
       <p class="comment-line reveal" style="--d:60ms; margin-top:-6px; margin-bottom:28px;">Not client work — just things worth testing before they become client work.</p>
 
       <div class="reveal" style="--d:100ms">
@@ -256,7 +256,7 @@
       <div class="panel reveal" style="--d:60ms" data-cursor-hover>
         <span class="tick tick-tl"></span><span class="tick tick-tr"></span><span class="tick tick-bl"></span><span class="tick tick-br"></span>
         <div class="panel-head"><span class="path">ARCHIVE://</span><span>NODE: VOW</span></div>
-        <p class="panel-title">Vow</p>
+        <p class="panel-title" data-reveal-text>Vow</p>
         <div class="vow-lines">
           <p class="log-line"><span class="tag">Craft</span> Design without follow-through is decoration.</p>
           <p class="log-line"><span class="tag">Craft</span> Automation without direction is noise.</p>
@@ -313,6 +313,10 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="assets/js/motion.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
