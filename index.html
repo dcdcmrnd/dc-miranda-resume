@@ -12,6 +12,22 @@
 </head>
 <body>
 
+<div class="origin-gate" data-origin-gate role="dialog" aria-modal="true" aria-labelledby="origin-gate-title">
+  <div class="origin-gate__scanline" aria-hidden="true"></div>
+  <div class="origin-gate__shell">
+    <div class="origin-gate__meta"><span class="hud-dot" aria-hidden="true"></span> DC_MIRANDA // SECURE HANDSHAKE</div>
+    <div class="origin-gate__mark" aria-hidden="true">[//]</div>
+    <p class="origin-gate__eyebrow">Audio routing protocol / v2.026</p>
+    <h2 id="origin-gate-title">Enter the working<br><span>system.</span></h2>
+    <p class="origin-gate__copy">A portfolio built in layers. Route the signal with audio, or enter silent mode.</p>
+    <div class="origin-gate__actions">
+      <button class="gate-choice gate-choice--primary" data-audio-choice="on" type="button"><span>01</span> AUDIO ON <small>recommended</small></button>
+      <button class="gate-choice" data-audio-choice="off" type="button"><span>02</span> AUDIO OFF <small>silent route</small></button>
+    </div>
+    <div class="origin-gate__footer"><span>LINK: WAITING</span><span>ESC // SKIP</span></div>
+  </div>
+</div>
+
 <div class="webgl-backdrop" aria-hidden="true">
   <canvas id="webgl-canvas"></canvas>
 </div>
