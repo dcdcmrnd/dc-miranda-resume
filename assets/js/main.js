@@ -88,21 +88,16 @@
     }
   }
 
-  /* ---------------- HUD scrolled state ---------------- */
+  /* ---------------- HUD scrolled state (write only on threshold crossing) ---------------- */
   var hud = document.querySelector(".hud");
+  var hudScrolled = false;
   function updateHud() {
-    if (hud) hud.style.borderBottomColor = window.scrollY > 20 ? "var(--line-strong)" : "var(--line)";
+    var scrolled = window.scrollY > 20;
+    if (scrolled !== hudScrolled) {
+      hudScrolled = scrolled;
+      if (hud) hud.style.borderBottomColor = scrolled ? "var(--line-strong)" : "var(--line)";
+    }
   }
-
-  /* ---------------- Scroll progress (single source of truth, sampled per frame) ---------------- */
-  var scrollProgress = 0;
-  function readScrollProgress() {
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    scrollProgress = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
-    updateHud();
-    requestAnimationFrame(readScrollProgress);
-  }
-  requestAnimationFrame(readScrollProgress);
 
   /* ---------------- Mobile menu ---------------- */
   var menuBtn = document.querySelector("[data-menu-toggle]");
@@ -183,7 +178,8 @@
     });
   }
 
-  /* ---------------- Reticle cursor (states: default / hover) ---------------- */
+  /* ---------------- Reticle cursor (position applied once per frame, not per event) ---------------- */
+  var cursor = null;
   if (!isCoarsePointer && !reduceMotion) {
     document.documentElement.classList.add("has-reticle");
     var dot = document.createElement("div");
@@ -193,19 +189,12 @@
     document.body.appendChild(dot);
     document.body.appendChild(box);
 
-    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    var bx = mx, by = my;
+    cursor = { dot: dot, box: box, mx: window.innerWidth / 2, my: window.innerHeight / 2, bx: 0, by: 0 };
+    cursor.bx = cursor.mx; cursor.by = cursor.my;
+
     window.addEventListener("mousemove", function (e) {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = "translate3d(" + mx + "px," + my + "px,0) translate(-50%,-50%)";
-    });
-    function raf() {
-      bx += (mx - bx) * 0.2;
-      by += (my - by) * 0.2;
-      box.style.transform = "translate3d(" + bx + "px," + by + "px,0) translate(-50%,-50%)";
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+      cursor.mx = e.clientX; cursor.my = e.clientY;
+    }, { passive: true });
     document.addEventListener("mouseover", function (e) {
       if (e.target.closest("a, button, [data-cursor-hover]")) box.classList.add("is-active");
     });
@@ -213,8 +202,16 @@
       if (e.target.closest("a, button, [data-cursor-hover]")) box.classList.remove("is-active");
     });
   }
+  function updateCursor() {
+    if (!cursor) return;
+    cursor.dot.style.transform = "translate3d(" + cursor.mx + "px," + cursor.my + "px,0) translate(-50%,-50%)";
+    cursor.bx += (cursor.mx - cursor.bx) * 0.2;
+    cursor.by += (cursor.my - cursor.by) * 0.2;
+    cursor.box.style.transform = "translate3d(" + cursor.bx + "px," + cursor.by + "px,0) translate(-50%,-50%)";
+  }
 
   /* ---------------- Persistent scroll-reactive WebGL backdrop ---------------- */
+  var webglTick = null; // set once initWebGLBackdrop() finishes setting up; called from the shared frame loop
   function initWebGLBackdrop() {
     var canvas = document.getElementById("webgl-canvas");
     var wrap = document.querySelector(".webgl-backdrop");
@@ -226,13 +223,16 @@
 
     var renderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
     } catch (e) {
       wrap.style.display = "none";
       return;
     }
     renderer.setSize(w, h, false);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // Capped at 1 rather than devicePixelRatio: on a 2x/3x display this
+    // is the single biggest lever on fill-rate cost for a full-viewport
+    // transparent canvas sitting under several backdrop-filter panels.
+    renderer.setPixelRatio(1);
 
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
@@ -265,13 +265,17 @@
       py = (e.clientY / window.innerHeight - 0.5) * 2;
     }, { passive: true });
 
+    var resizePending = false;
     function resize() {
       w = window.innerWidth; h = window.innerHeight;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h, false);
+      resizePending = false;
     }
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", function () {
+      if (!resizePending) { resizePending = true; requestAnimationFrame(resize); }
+    });
 
     var idle = 0;
     var start = performance.now();
@@ -283,11 +287,15 @@
       return 0.3 + ((p - 0.82) / 0.18) * 0.4;
     }
 
-    function tick(now) {
+    var lastOpacity = -1;
+    webglTick = function (now, scrollProgress) {
       idle += 0.0032;
       var elapsed = now - start;
       var opacity = opacityForProgress(scrollProgress);
-      wrap.style.opacity = opacity.toFixed(3);
+      if (Math.abs(opacity - lastOpacity) > 0.004) {
+        wrap.style.opacity = opacity.toFixed(3);
+        lastOpacity = opacity;
+      }
 
       group.rotation.y = idle + scrollProgress * Math.PI * 5.2;
       group.rotation.x = idle * 0.4 + scrollProgress * Math.PI * 1.6;
@@ -303,24 +311,33 @@
       camera.lookAt(0, 0, 0);
 
       renderer.render(scene, camera);
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
+    };
   }
 
-  /* ---------------- Panel tilt-on-hover ---------------- */
+  /* ---------------- Panel tilt-on-hover (rect cached, applied once per frame) ---------------- */
   function initTilt() {
     if (isCoarsePointer || reduceMotion) return;
     var targets = document.querySelectorAll(".panel, .module-card");
     targets.forEach(function (el) {
-      el.addEventListener("mousemove", function (e) {
-        var rect = el.getBoundingClientRect();
-        var px = (e.clientX - rect.left) / rect.width - 0.5;
-        var py = (e.clientY - rect.top) / rect.height - 0.5;
-        el.style.transform = "perspective(900px) rotateX(" + (-py * 5).toFixed(2) + "deg) rotateY(" + (px * 6).toFixed(2) + "deg) translateZ(0)";
+      var rect = null;
+      var pendingX = 0, pendingY = 0;
+      var raf = null;
+      function apply() {
+        raf = null;
+        el.style.transform = "perspective(900px) rotateX(" + (-pendingY * 5).toFixed(2) + "deg) rotateY(" + (pendingX * 6).toFixed(2) + "deg) translateZ(0)";
+      }
+      el.addEventListener("mouseenter", function () {
+        rect = el.getBoundingClientRect();
         el.classList.add("is-tilting");
       });
+      el.addEventListener("mousemove", function (e) {
+        if (!rect) rect = el.getBoundingClientRect();
+        pendingX = (e.clientX - rect.left) / rect.width - 0.5;
+        pendingY = (e.clientY - rect.top) / rect.height - 0.5;
+        if (!raf) raf = requestAnimationFrame(apply);
+      });
       el.addEventListener("mouseleave", function () {
+        rect = null;
         el.style.transform = "";
         el.classList.remove("is-tilting");
       });
@@ -365,6 +382,21 @@
       scrollToTarget(top, { duration: 1.0 });
     });
   });
+
+  /* ---------------- Single shared frame loop ----------------
+     One requestAnimationFrame driving scroll-progress sampling, the
+     HUD border check, the cursor, and the WebGL scene — rather than
+     three independent loops each doing their own work. */
+  var scrollProgress = 0;
+  function frame(now) {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProgress = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+    updateHud();
+    updateCursor();
+    if (webglTick) webglTick(now, scrollProgress);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 
   /* ---------------- Boot ---------------- */
   initTilt();
