@@ -244,6 +244,13 @@
     drift.rotation.x = Math.PI / 3;
     scene.add(drift);
 
+    var ringGeo = new THREE.TorusGeometry(3.25, 0.008, 8, 96);
+    var ringMat = new THREE.LineBasicMaterial({ color: 0xff5a2b, transparent: true, opacity: 0.16 });
+    var ring = new THREE.LineSegments(new THREE.EdgesGeometry(ringGeo), ringMat);
+    ring.rotation.x = Math.PI / 2.4;
+    ring.position.z = -1.8;
+    scene.add(ring);
+
     var px = 0, py = 0;
     window.addEventListener("mousemove", function (e) {
       px = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -290,6 +297,10 @@
       drift.rotation.z += 0.0012;
       drift.rotation.y -= 0.0009;
       drift.position.y = 1.4 - scrollProgress * 3.2;
+      ring.rotation.z += 0.0018;
+      ring.rotation.x = Math.PI / 2.4 + py * 0.08;
+      ring.position.x = px * 0.55;
+      ring.position.y = -scrollProgress * 2.4;
 
       camera.position.x += (px * 0.7 - camera.position.x) * 0.025;
       camera.position.y += (-py * 0.5 - camera.position.y) * 0.025;
@@ -343,6 +354,26 @@
       });
       if (hasGSAP && typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
     });
+  });
+
+  /* ---------------- Audio route / origin gate ---------------- */
+  var originGate = document.querySelector("[data-origin-gate]");
+  var audioChoice = null;
+  function clearOriginGate(choice) {
+    audioChoice = choice;
+    document.body.classList.add("system-ready");
+    if (originGate) {
+      originGate.setAttribute("aria-hidden", "true");
+      originGate.classList.add("is-cleared");
+      window.setTimeout(function () { originGate.remove(); }, 800);
+    }
+    playHeroGlitch();
+  }
+  document.querySelectorAll("[data-audio-choice]").forEach(function (btn) {
+    btn.addEventListener("click", function () { clearOriginGate(btn.getAttribute("data-audio-choice")); });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && originGate && !originGate.classList.contains("is-cleared")) clearOriginGate("off");
   });
 
   /* ---------------- Rebuild / origin gate ---------------- */
