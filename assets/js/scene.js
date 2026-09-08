@@ -19,6 +19,7 @@
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var isCoarsePointer = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
   var CHAPTERS = [
     { id: "home", camPos: [0, 0, 7.5], camLook: [0, 0, 0], camFov: 45 },
@@ -34,8 +35,8 @@
     { id: "contact", camPos: [0, 0.4, 6.2], camLook: [0, 0, 0], camFov: 42 },
   ];
 
-  var scene, camera, renderer, canvas, wrap;
-  var homeGroup, capsGroup, aiGroup, ghlGroup, workGroup, starPoints;
+  var scene, camera, renderer, canvas, wrap, composer;
+  var homeGroup, capsGroup, aiGroup, ghlGroup, workGroup, starPoints, floorGrid, pillarGroup;
   var waypoints = [];
   var px = 0, py = 0;
   var idle = 0;
@@ -220,6 +221,46 @@
     return new THREE.Points(geo, mat);
   }
 
+  // A perspective floor running the length of the scroll journey — this is
+  // what turns the scene from "a shape floating behind the text" into an
+  // actual ground plane the camera travels over, matching the sense of
+  // depth/scale in the AMIX reference.
+  function buildFloorGrid() {
+    var grid = new THREE.GridHelper(70, 56, 0x9fa8ff, 0x2a3060);
+    grid.position.set(0, -1.15, -8);
+    grid.material.transparent = true;
+    grid.material.opacity = 0.55;
+    grid.userData.baseOpacity = 0.55;
+    return grid;
+  }
+
+  // Tall thin neon "columns" scattered along the path at varying depth,
+  // additively blended so they read as glowing light bars (cheap stand-in
+  // for the vertical neon strips in the reference, without a full city model).
+  function buildPillarGroup() {
+    var g = new THREE.Group();
+    var layout = [
+      { x: -5.2, z: 3, h: 6, color: 0x49ffb4 },
+      { x: 5.6, z: 1.5, h: 7.5, color: 0xff6bd6 },
+      { x: -4.4, z: -3.5, h: 5.5, color: 0x5ec8ff },
+      { x: 4.8, z: -5.5, h: 6.5, color: 0xffd166 },
+      { x: -6, z: -9, h: 7, color: 0xb06bff },
+      { x: 6.2, z: -11.5, h: 6, color: 0x49ffb4 },
+    ];
+    layout.forEach(function (p) {
+      var geo = new THREE.PlaneGeometry(0.05, p.h);
+      var mat = new THREE.MeshBasicMaterial({
+        color: p.color, transparent: true, opacity: 0.7,
+        blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false, fog: false,
+      });
+      var bar = new THREE.Mesh(geo, mat);
+      bar.position.set(p.x, p.h / 2 - 1.15, p.z);
+      bar.userData.baseOpacity = 0.7;
+      g.add(bar);
+    });
+    return g;
+  }
+
   function computeWaypoints() {
     waypoints = [];
     CHAPTERS.forEach(function (ch, i) {
@@ -283,11 +324,16 @@
     renderer.setPixelRatio(1);
 
     scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x05060b, 9, 40);
     camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
     camera.position.set(0, 0, 7.5);
 
     starPoints = buildStarfield();
     scene.add(starPoints);
+
+    floorGrid = buildFloorGrid();
+    pillarGroup = buildPillarGroup();
+    scene.add(floorGrid, pillarGroup);
 
     homeGroup = buildHomeGroup();
     capsGroup = buildCapsGroup();
@@ -298,6 +344,21 @@
     workGroup = buildWorkGroup(markerCount);
 
     scene.add(homeGroup, capsGroup, aiGroup, ghlGroup, workGroup);
+
+    // Bloom is a real cost, so it only runs where hover/pointer precision
+    // implies a desktop-class GPU. Mobile keeps the plain renderer path
+    // from the earlier performance pass (capped pixel ratio, no antialias).
+    if (!isCoarsePointer && typeof THREE.EffectComposer === "function") {
+      try {
+        composer = new THREE.EffectComposer(renderer);
+        composer.addPass(new THREE.RenderPass(scene, camera));
+        var bloom = new THREE.UnrealBloomPass(new THREE.Vector2(w, h), 0.85, 0.7, 0.38);
+        composer.addPass(bloom);
+        composer.setSize(w, h);
+      } catch (e) {
+        composer = null;
+      }
+    }
 
     readout = document.getElementById("gallery-readout");
 
@@ -312,6 +373,7 @@
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h, false);
+      if (composer) composer.setSize(w, h);
       computeWaypoints();
       resizePending = false;
     }
@@ -357,6 +419,10 @@
     camera.position.x = camPos[0] + px * 0.35;
     camera.position.y = camPos[1] - py * 0.25;
     camera.position.z = camPos[2];
+
+    // A small constant downward tilt so the floor grid reads throughout the
+    // journey, instead of only when a chapter happens to look down already.
+    camLook[1] -= 0.9;
 
     // Work-gallery focus: blend the look target toward the focused marker.
     var workActivation = triangularActivation(globalIndex, 5, 1.1); // chapter index 5 = "work"
@@ -424,7 +490,8 @@
 
     starPoints.rotation.y += 0.0002;
 
-    renderer.render(scene, camera);
+    if (composer) composer.render();
+    else renderer.render(scene, camera);
   }
 
   function highlightNode(chapter, key) {
