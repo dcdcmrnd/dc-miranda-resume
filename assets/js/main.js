@@ -345,6 +345,20 @@
     });
   });
 
+  /* ---------------- "View Projects" (per Selected Work category) ---------------- */
+  document.querySelectorAll("[data-view-projects]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var f = btn.getAttribute("data-view-projects");
+      var filterBtn = document.querySelector('[data-filter="' + f + '"]');
+      if (filterBtn) filterBtn.click();
+      var listing = document.getElementById("work-listing");
+      if (listing) {
+        var top = listing.getBoundingClientRect().top + window.scrollY - 90;
+        scrollToTarget(top);
+      }
+    });
+  });
+
   /* ---------------- Rebuild / origin gate ---------------- */
   var rebuildBtns = document.querySelectorAll("[data-rebuild]");
   rebuildBtns.forEach(function (btn) {
