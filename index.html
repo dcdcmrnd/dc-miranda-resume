@@ -12,6 +12,8 @@
 </head>
 <body>
 
+<div class="scroll-progress" aria-hidden="true"></div>
+
 <div class="webgl-backdrop" aria-hidden="true">
   <canvas id="webgl-canvas"></canvas>
 </div>
@@ -47,6 +49,8 @@
 <nav class="mobile-menu" aria-label="Mobile navigation">
   <a href="#home">[Home]</a>
   <a href="#capabilities">[What I Do]</a>
+  <a href="#ai-automation">[AI + Automation]</a>
+  <a href="#ghl-flow">[GoHighLevel]</a>
   <a href="#work">[Work]</a>
   <a href="#process">[Process]</a>
   <a href="#contact">[Contact]</a>
@@ -62,6 +66,9 @@
       <h1>
         <span class="bracket">[</span><span data-glitch-hero data-glitch="DC MIRANDA">DC MIRANDA</span><span class="bracket">]</span>
       </h1>
+      <p class="hero-caps reveal" style="--d:140ms">
+        <span>AI</span><span>WEB</span><span>SOFTWARE</span><span>AUTOMATION</span><span>CREATIVE</span>
+      </p>
       <p class="terminal-line reveal" style="--d:160ms">I combine design, content, AI, development, and automation to build digital experiences that look great, work efficiently, and help businesses move forward.</p>
       <p class="comment-line reveal" style="--d:220ms">From websites and custom software to graphics, video, GoHighLevel systems, and AI automation — I help turn ideas into working digital systems.</p>
       <p class="hero-motto reveal" style="--d:260ms">Design it. Build it. Automate it.</p>
@@ -89,39 +96,52 @@
       <div class="section-kicker reveal">ARCHIVE:// NODE: CAPABILITIES</div>
       <p class="panel-title" data-reveal-text>What I Do</p>
       <p class="comment-line reveal" style="--d:60ms; margin-bottom:8px;">I work across the creative and technical side of digital projects, allowing me to take an idea from concept to execution without treating design, development, and automation as separate pieces.</p>
+
+      <div class="word-reveal reveal" style="--d:100ms" role="tablist" aria-label="Capability groups">
+        <button class="wr-word is-active" data-reveal-word="design" role="tab" aria-selected="true">DESIGN</button>
+        <button class="wr-word" data-reveal-word="build" role="tab" aria-selected="false">BUILD</button>
+        <button class="wr-word" data-reveal-word="automate" role="tab" aria-selected="false">AUTOMATE</button>
+        <button class="wr-word" data-reveal-word="create" role="tab" aria-selected="false">CREATE</button>
+      </div>
+      <div class="wr-panels reveal" style="--d:120ms">
+        <p class="wr-panel is-active" data-word-panel="design"><b>Design —</b> Web Design, UI/UX, Responsive Design, Interactive &amp; Animated Interfaces, Brand Graphics, Creative Direction.</p>
+        <p class="wr-panel" data-word-panel="build"><b>Build —</b> Front-End Development, Next.js, AI Web Applications, Custom Software, Dashboards, Client Portals, API Integrations.</p>
+        <p class="wr-panel" data-word-panel="automate"><b>Automate —</b> AI Workflows, AI Agents, Business Automation, CRM Automation, GoHighLevel Workflows, Lead Nurturing.</p>
+        <p class="wr-panel" data-word-panel="create"><b>Create —</b> Video Editing, Motion Graphics, Promotional Video, Short-Form Content, Social Media Graphics, Digital Assets.</p>
+      </div>
     </div>
     <div class="subsystems-grid" style="margin-top:36px;">
-      <div class="module-card reveal" style="--d:0ms" data-cursor-hover>
+      <div class="module-card reveal" style="--d:0ms" data-cursor-hover data-accent="web">
         <div class="m-head"><span class="m-no">01</span><span class="m-status-dot" aria-hidden="true"></span></div>
         <div class="m-name">Web Design &amp; Development</div>
         <p class="m-desc">Modern websites designed around the business — not just a template.</p>
         <div class="m-stack"><b>Includes:</b> Landing pages, business websites, conversion-focused websites, responsive experiences, interactive &amp; animated interfaces, performance optimization, custom front-end development, Next.js</div>
       </div>
-      <div class="module-card reveal" style="--d:40ms" data-cursor-hover>
+      <div class="module-card reveal" style="--d:40ms" data-cursor-hover data-accent="software">
         <div class="m-head"><span class="m-no">02</span><span class="m-status-dot" aria-hidden="true"></span></div>
         <div class="m-name">AI Web &amp; Software Development</div>
         <p class="m-desc">AI-assisted development to build software faster — without losing focus on usability, scalability, and the actual business problem.</p>
         <div class="m-stack"><b>Includes:</b> AI-powered web applications, custom business applications, internal tools, client portals, dashboards, database-driven applications, API integrations, custom workflows &amp; business systems</div>
       </div>
-      <div class="module-card reveal" style="--d:80ms" data-cursor-hover>
+      <div class="module-card reveal" style="--d:80ms" data-cursor-hover data-accent="automation">
         <div class="m-head"><span class="m-no">03</span><span class="m-status-dot" aria-hidden="true"></span></div>
         <div class="m-name">AI Automation</div>
         <p class="m-desc">Reducing repetitive work by connecting a business's tools, data, and processes.</p>
         <div class="m-stack"><b>Includes:</b> AI-powered workflows, lead automation, customer follow-ups, data processing, email &amp; messaging automation, CRM automation, AI agents &amp; assistants, API-based integrations</div>
       </div>
-      <div class="module-card reveal" style="--d:0ms" data-cursor-hover>
+      <div class="module-card reveal" style="--d:0ms" data-cursor-hover data-accent="gohighlevel">
         <div class="m-head"><span class="m-no">04</span><span class="m-status-dot" aria-hidden="true"></span></div>
         <div class="m-name">GoHighLevel</div>
         <p class="m-desc">Building and customizing GoHighLevel systems that connect marketing, sales, communication, and client management.</p>
         <div class="m-stack"><b>Includes:</b> CRM setup, pipelines, funnels, landing pages, forms &amp; surveys, calendars &amp; appointments, workflows, lead nurturing, email/SMS automation, client onboarding, custom integrations</div>
       </div>
-      <div class="module-card reveal" style="--d:40ms" data-cursor-hover>
+      <div class="module-card reveal" style="--d:40ms" data-cursor-hover data-accent="creative">
         <div class="m-head"><span class="m-no">05</span><span class="m-status-dot" aria-hidden="true"></span></div>
         <div class="m-name">Graphics &amp; Visual Content</div>
         <p class="m-desc">The visual assets needed to communicate a brand and support its digital presence.</p>
         <div class="m-stack"><b>Includes:</b> Brand graphics, social media graphics, marketing materials, website graphics, UI visuals, promotional graphics, presentation visuals, creative direction</div>
       </div>
-      <div class="module-card reveal" style="--d:80ms" data-cursor-hover>
+      <div class="module-card reveal" style="--d:80ms" data-cursor-hover data-accent="video">
         <div class="m-head"><span class="m-no">06</span><span class="m-status-dot" aria-hidden="true"></span></div>
         <div class="m-name">Video &amp; Motion</div>
         <p class="m-desc">Video assets designed to communicate ideas clearly and hold attention.</p>
@@ -152,6 +172,53 @@
     </div>
   </section>
 
+  <!-- AI + AUTOMATION -->
+  <section id="ai-automation" class="section" data-accent="automation">
+    <div class="container">
+      <div class="section-kicker reveal">ARCHIVE:// NODE: AI_AUTOMATION</div>
+      <p class="panel-title" data-reveal-text>AI isn't a feature. It's part of the workflow.</p>
+      <p class="comment-line reveal" style="--d:60ms">Keep the existing AI and automation approach at the center of how a digital system runs — from the first visit to the outcome the business actually wants.</p>
+      <div class="flow-diagram reveal" style="--d:120ms" aria-label="User to business outcome flow">
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">User</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Website</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">CRM</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Automation</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">AI</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Business Outcome</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOHIGHLEVEL FLOW -->
+  <section id="ghl-flow" class="section" data-accent="gohighlevel">
+    <div class="container">
+      <div class="section-kicker reveal">ARCHIVE:// NODE: GOHIGHLEVEL</div>
+      <p class="panel-title" data-reveal-text>GoHighLevel, beyond basic setup.</p>
+      <p class="comment-line reveal" style="--d:60ms">CRM, funnels, pipelines, workflows, forms, calendars, email, SMS, and automation, connected into one system that moves a lead all the way to a client.</p>
+      <div class="flow-diagram reveal" style="--d:120ms" aria-label="Lead to client flow">
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Leads</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">CRM</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Pipeline</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Follow-Up</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Appointment</span></div>
+        <div class="flow-line"><i class="flow-pulse"></i></div>
+        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Client</span></div>
+      </div>
+      <div class="flow-strip reveal" style="--d:160ms">
+        <span>CRM</span><i>&middot;</i><span>Funnels</span><i>&middot;</i><span>Pipelines</span><i>&middot;</i><span>Workflows</span><i>&middot;</i><span>Forms</span><i>&middot;</i><span>Calendars</span><i>&middot;</i><span>Email</span><i>&middot;</i><span>SMS</span><i>&middot;</i><span>Client Onboarding</span>
+      </div>
+    </div>
+  </section>
+
   <!-- SELECTED WORK -->
   <section id="work" class="section">
     <div class="deco deco-rings" data-parallax="0.3" aria-hidden="true">
@@ -166,31 +233,31 @@
       <p class="panel-title" data-reveal-text>Selected Work</p>
 
       <div class="work-categories reveal" style="--d:40ms">
-        <div class="work-category">
+        <div class="work-category" data-accent="web">
           <h3>Websites &amp; Digital Experiences</h3>
           <p>Websites built to do more than look good — considering user experience, business goals, performance, integrations, and the systems running behind the interface.</p>
           <div class="wc-tags">Web Design · UI/UX · Development · Animation · Responsive Design · Performance · Integrations</div>
           <button class="btn-cta" data-view-projects="web" data-cursor-hover>view projects//</button>
         </div>
-        <div class="work-category">
+        <div class="work-category" data-accent="software">
           <h3>AI &amp; Software Development</h3>
           <p>Custom digital tools built around a specific business problem instead of forcing a business into generic software.</p>
           <div class="wc-tags">AI Applications · Web Apps · Dashboards · Client Portals · APIs · Databases · AI-Assisted Development</div>
           <button class="btn-cta" data-view-projects="software" data-cursor-hover>view projects//</button>
         </div>
-        <div class="work-category">
+        <div class="work-category" data-accent="gohighlevel">
           <h3>GoHighLevel Systems</h3>
           <p>Connected systems that help businesses capture leads, manage opportunities, communicate with customers, and automate follow-up.</p>
           <div class="wc-tags">CRM · Funnels · Pipelines · Workflows · Forms · Calendars · Email · SMS · Automation</div>
           <button class="btn-cta" data-view-projects="gohighlevel" data-cursor-hover>view projects//</button>
         </div>
-        <div class="work-category">
+        <div class="work-category" data-accent="automation">
           <h3>AI Automation</h3>
           <p>Finding repetitive processes that can be connected, simplified, or automated — not adding AI just because it's available.</p>
           <div class="wc-tags">AI Workflows · Agents · Lead Qualification · Follow-Up · Data Processing · Integrations · Business Automation</div>
           <button class="btn-cta" data-view-projects="automation" data-cursor-hover>view projects//</button>
         </div>
-        <div class="work-category">
+        <div class="work-category" data-accent="creative">
           <h3>Graphics &amp; Video</h3>
           <p>Graphics and video content that support the brand, explain products, and make digital experiences more engaging.</p>
           <div class="wc-tags">Graphic Design · Marketing Assets · Social Content · Video Editing · Motion Graphics · Promotional Content</div>
@@ -269,13 +336,30 @@
           <p class="comment-line">Before AI, automation, or code, there was troubleshooting — helping people and teams get unstuck, one ticket at a time. That instinct became Aequora Digital.</p>
         </div>
         <div class="panel reveal" style="--d:100ms" data-cursor-hover>
-          <span class="tick tick-tl"></span><span class="tick tick-tr"></span><span class="tick tick-bl"></span><span class="tick tick-br"></span>
           <div class="panel-head"><span class="path">ARCHIVE://</span><span>NODE: ORIGIN</span></div>
           <p class="panel-title" data-reveal-text>Record log</p>
-          <p class="log-line"><span class="tag">2014–19</span> Customer support &amp; tech assistance — the foundation.</p>
-          <p class="log-line"><span class="tag">2020–21</span> Social media &amp; web developer, Outsourced Doers.</p>
-          <p class="log-line"><span class="tag">2021–now</span> Independent — running Aequora Digital.</p>
-          <p class="log-line status"><span class="tag">Status</span> Active — web, software, and automation, connected.</p>
+          <div class="timeline">
+            <div class="timeline-step">
+              <span class="ts-marker">01</span>
+              <div class="ts-period">2014–19</div>
+              <p>Customer support &amp; tech assistance — the foundation.</p>
+            </div>
+            <div class="timeline-step">
+              <span class="ts-marker">02</span>
+              <div class="ts-period">2020–21</div>
+              <p>Social media &amp; web developer, Outsourced Doers.</p>
+            </div>
+            <div class="timeline-step">
+              <span class="ts-marker">03</span>
+              <div class="ts-period">2021–now</div>
+              <p>Independent — running Aequora Digital.</p>
+            </div>
+            <div class="timeline-step status">
+              <span class="ts-marker">✓</span>
+              <div class="ts-period">Status</div>
+              <p>Active — web, software, and automation, connected.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -325,7 +409,7 @@
       <div class="section-kicker reveal">TRANSMIT:// NODE: OPEN_CHANNEL</div>
       <div class="contact-grid">
         <div class="reveal">
-          <p class="panel-title">Let's build<br>something useful.</p>
+          <p class="panel-title cta-statement">Let's build<br>something useful.</p>
           <p class="comment-line">Whether you need a new website, a custom application, a GoHighLevel system, AI automation, graphics, video, or a combination of all of them — let's figure out what the business actually needs.</p>
           <p class="hero-motto reveal" style="--d:80ms">You bring the problem. I'll help build the system.</p>
         </div>

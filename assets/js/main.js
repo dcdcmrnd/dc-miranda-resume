@@ -84,6 +84,32 @@
     }
   }
 
+  /* ---------------- Scroll progress bar ---------------- */
+  var progressBar = document.querySelector(".scroll-progress");
+  function updateProgressBar(p) {
+    if (progressBar) progressBar.style.width = (p * 100).toFixed(2) + "%";
+  }
+
+  /* ---------------- Capability word-reveal (DESIGN / BUILD / AUTOMATE / CREATE) ---------------- */
+  function initWordReveal() {
+    var words = document.querySelectorAll(".wr-word");
+    var panels = document.querySelectorAll(".wr-panel");
+    function activate(key) {
+      words.forEach(function (w) {
+        var active = w.getAttribute("data-reveal-word") === key;
+        w.classList.toggle("is-active", active);
+        w.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      panels.forEach(function (p) { p.classList.toggle("is-active", p.getAttribute("data-word-panel") === key); });
+    }
+    words.forEach(function (w) {
+      w.addEventListener("click", function () { activate(w.getAttribute("data-reveal-word")); });
+      if (!isCoarsePointer) {
+        w.addEventListener("mouseenter", function () { activate(w.getAttribute("data-reveal-word")); });
+      }
+    });
+  }
+
   /* ---------------- Mobile menu ---------------- */
   var menuBtn = document.querySelector("[data-menu-toggle]");
   var menuLinks = document.querySelectorAll(".mobile-menu a");
@@ -223,22 +249,40 @@
     var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
     camera.position.z = 6.5;
 
+    // Starfield: a sparse point cloud filling a large sphere around the
+    // camera, giving the dark backdrop depth without another canvas layer.
+    var starCount = 700;
+    var starPositions = new Float32Array(starCount * 3);
+    for (var i = 0; i < starCount; i++) {
+      var radius = 14 + Math.random() * 26;
+      var theta = Math.random() * Math.PI * 2;
+      var phi = Math.acos(Math.random() * 2 - 1);
+      starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      starPositions[i * 3 + 2] = radius * Math.cos(phi);
+    }
+    var starGeo = new THREE.BufferGeometry();
+    starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+    var starMat = new THREE.PointsMaterial({ color: 0xeef0ff, size: 0.045, transparent: true, opacity: 0.55, sizeAttenuation: true });
+    var stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
     var group = new THREE.Group();
     scene.add(group);
 
     var outerGeo = new THREE.IcosahedronGeometry(2.2, 1);
-    var outerMat = new THREE.LineBasicMaterial({ color: 0x262523, transparent: true, opacity: 0.5 });
+    var outerMat = new THREE.LineBasicMaterial({ color: 0x9fb4ff, transparent: true, opacity: 0.55 });
     var outer = new THREE.LineSegments(new THREE.EdgesGeometry(outerGeo), outerMat);
     group.add(outer);
 
     var innerGeo = new THREE.IcosahedronGeometry(1.15, 0);
-    var innerMat = new THREE.LineBasicMaterial({ color: 0xff5a2b, transparent: true, opacity: 0.45 });
+    var innerMat = new THREE.LineBasicMaterial({ color: 0xff5a2b, transparent: true, opacity: 0.55 });
     var inner = new THREE.LineSegments(new THREE.EdgesGeometry(innerGeo), innerMat);
     group.add(inner);
 
     // A second, independently drifting shape for extra depth/parallax
     var driftGeo = new THREE.TorusGeometry(1.4, 0.02, 6, 40);
-    var driftMat = new THREE.LineBasicMaterial({ color: 0x262523, transparent: true, opacity: 0.22 });
+    var driftMat = new THREE.LineBasicMaterial({ color: 0xb06bff, transparent: true, opacity: 0.28 });
     var drift = new THREE.LineSegments(new THREE.EdgesGeometry(driftGeo), driftMat);
     drift.position.set(-2.6, 1.4, -2.5);
     drift.rotation.x = Math.PI / 3;
@@ -290,6 +334,9 @@
       drift.rotation.z += 0.0012;
       drift.rotation.y -= 0.0009;
       drift.position.y = 1.4 - scrollProgress * 3.2;
+
+      stars.rotation.y += 0.0002;
+      stars.rotation.x = scrollProgress * 0.3;
 
       camera.position.x += (px * 0.7 - camera.position.x) * 0.025;
       camera.position.y += (-py * 0.5 - camera.position.y) * 0.025;
@@ -391,6 +438,7 @@
     var max = document.documentElement.scrollHeight - window.innerHeight;
     scrollProgress = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
     updateHud();
+    updateProgressBar(scrollProgress);
     updateCursor();
     if (webglTick) webglTick(now, scrollProgress);
     requestAnimationFrame(frame);
@@ -402,6 +450,7 @@
   initRevealText();
   initParallax();
   initImageReveal();
+  initWordReveal();
   window.addEventListener("load", function () {
     setTimeout(playHeroGlitch, 150);
     initWebGLBackdrop();
