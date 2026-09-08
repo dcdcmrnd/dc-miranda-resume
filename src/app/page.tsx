@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { ExperienceProvider, useExperience } from "@/hooks/useExperience";
+import { VideoPreviewProvider } from "@/hooks/useVideoPreview";
 import { useDevice } from "@/hooks/useDevice";
 import { isWebGLAvailable } from "@/lib/webgl";
 import Navigation from "@/components/Navigation/Navigation";
@@ -10,6 +11,7 @@ import Cursor from "@/components/Cursor/Cursor";
 import Loading from "@/components/Loading/Loading";
 import ExperienceUI from "@/components/ExperienceUI/ExperienceUI";
 import ProjectDetail from "@/components/ProjectUI/ProjectDetail";
+import VideoPreviewLayer from "@/components/ProjectUI/VideoPreviewLayer";
 import WebGLErrorBoundary from "@/experience/Scene/WebGLErrorBoundary";
 
 // The R3F canvas touches window/WebGL at module init, so it can only ever
@@ -76,6 +78,7 @@ function ExperienceRoot() {
           <Navigation />
           <ExperienceUI />
           <ProjectDetail />
+          <VideoPreviewLayer />
           <Cursor />
         </>
       )}
@@ -86,7 +89,9 @@ function ExperienceRoot() {
 export default function Page() {
   return (
     <ExperienceProvider>
-      <ExperienceRoot />
+      <VideoPreviewProvider>
+        <ExperienceRoot />
+      </VideoPreviewProvider>
     </ExperienceProvider>
   );
 }

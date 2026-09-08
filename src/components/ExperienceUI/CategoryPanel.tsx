@@ -2,12 +2,13 @@
 
 import { useExperience } from "@/hooks/useExperience";
 import { categories, projectsByCategory, aiAutomationFlow, ghlFlow, CategoryId } from "@/projects/projectData";
+import ProjectRow from "@/components/ProjectUI/ProjectRow";
 
 /** Phase 12–15: each category location shows its real capability
  * description, real tags, and its real project rows (or an honest
  * "in progress" status) next to the category's dedicated 3D environment. */
 export default function CategoryPanel({ category }: { category: CategoryId }) {
-  const { goTo, selectProject } = useExperience();
+  const { goTo } = useExperience();
   const data = categories.find((c) => c.id === category)!;
   const items = projectsByCategory(category);
 
@@ -31,17 +32,7 @@ export default function CategoryPanel({ category }: { category: CategoryId }) {
       {items.length > 0 && (
         <div className="project-list" style={{ maxHeight: "26vh" }}>
           {items.map((p, i) => (
-            <button
-              key={p.id}
-              className={`project-row${p.status === "pending" ? " is-pending" : ""}`}
-              data-cursor={p.status === "live" ? "open" : "view"}
-              onClick={() => selectProject(p.id)}
-            >
-              <span className="idx">{String(i + 1).padStart(2, "0")}</span>
-              <span className="name">{p.name}</span>
-              <span className="cat">{p.categoryLabel}</span>
-              <span className="act">{p.action}</span>
-            </button>
+            <ProjectRow key={p.id} project={p} index={i} />
           ))}
         </div>
       )}

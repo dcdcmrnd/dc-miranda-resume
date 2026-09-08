@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useExperience } from "@/hooks/useExperience";
 import { projects, categories, CategoryId } from "@/projects/projectData";
+import ProjectRow from "@/components/ProjectUI/ProjectRow";
 
 const FILTERS: Array<{ id: CategoryId | "all"; label: string }> = [
   { id: "all", label: "All" },
@@ -17,7 +18,7 @@ const FILTERS: Array<{ id: CategoryId | "all"; label: string }> = [
  * the visual representation lives in the 3D scene (WorkGallery markers);
  * this panel is the numbered/tagged information layer next to it. */
 export default function WorkPanel() {
-  const { selectedCategory, setSelectedCategory, selectedProjectId, selectProject } = useExperience();
+  const { selectedCategory, setSelectedCategory } = useExperience();
 
   const visible = useMemo(
     () => (selectedCategory === "all" ? projects : projects.filter((p) => p.category === selectedCategory)),
@@ -39,18 +40,7 @@ export default function WorkPanel() {
       </div>
       <div className="project-list">
         {visible.map((p, i) => (
-          <button
-            key={p.id}
-            className={`project-row${p.status === "pending" ? " is-pending" : ""}`}
-            data-active={selectedProjectId === p.id}
-            data-cursor={p.status === "live" ? "open" : "view"}
-            onClick={() => selectProject(p.id)}
-          >
-            <span className="idx">{String(i + 1).padStart(2, "0")}</span>
-            <span className="name">{p.name}</span>
-            <span className="cat">{p.categoryLabel}</span>
-            <span className="act">{p.action}</span>
-          </button>
+          <ProjectRow key={p.id} project={p} index={i} />
         ))}
       </div>
       <p className="muted-text" style={{ marginTop: 14, fontSize: 12 }}>
