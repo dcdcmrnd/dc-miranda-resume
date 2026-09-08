@@ -221,129 +221,63 @@
     cursor.box.style.transform = "translate3d(" + cursor.bx + "px," + cursor.by + "px,0) translate(-50%,-50%)";
   }
 
-  /* ---------------- Persistent scroll-reactive WebGL backdrop ---------------- */
-  var webglTick = null; // set once initWebGLBackdrop() finishes setting up; called from the shared frame loop
-  function initWebGLBackdrop() {
-    var canvas = document.getElementById("webgl-canvas");
-    var wrap = document.querySelector(".webgl-backdrop");
-    if (!canvas || !wrap || reduceMotion || typeof THREE === "undefined") {
-      if (wrap) wrap.style.display = "none";
-      return;
-    }
-    var w = window.innerWidth, h = window.innerHeight;
+  /* ---------------- WebGL experience layer (assets/js/scene.js) ----------------
+     The camera-rig / node-network / flow-pipeline / gallery-marker scene
+     lives in scene.js so the two concerns (DOM interaction, 3D world)
+     stay separable. This file only initializes it, ticks it from the
+     shared frame loop, and wires DOM hover/click into its API. */
+  var sceneReady = false;
+  function initScene() {
+    if (window.DCScene) sceneReady = window.DCScene.init();
+    hideBootOverlay();
+  }
 
-    var renderer;
-    try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
-    } catch (e) {
-      wrap.style.display = "none";
-      return;
-    }
-    renderer.setSize(w, h, false);
-    // Capped at 1 rather than devicePixelRatio: on a 2x/3x display this
-    // is the single biggest lever on fill-rate cost for a full-viewport
-    // transparent canvas sitting under several backdrop-filter panels.
-    renderer.setPixelRatio(1);
+  /* ---------------- Boot overlay ---------------- */
+  var bootOverlay = document.getElementById("boot-overlay");
+  var bootHidden = false;
+  function hideBootOverlay() {
+    if (bootHidden || !bootOverlay) return;
+    bootHidden = true;
+    bootOverlay.classList.add("is-hidden");
+  }
+  // Never let the overlay block content indefinitely if the scene fails
+  // to initialize for any reason (slow network, no WebGL, etc.).
+  setTimeout(hideBootOverlay, reduceMotion ? 0 : 1400);
 
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-    camera.position.z = 6.5;
-
-    // Starfield: a sparse point cloud filling a large sphere around the
-    // camera, giving the dark backdrop depth without another canvas layer.
-    var starCount = 700;
-    var starPositions = new Float32Array(starCount * 3);
-    for (var i = 0; i < starCount; i++) {
-      var radius = 14 + Math.random() * 26;
-      var theta = Math.random() * Math.PI * 2;
-      var phi = Math.acos(Math.random() * 2 - 1);
-      starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      starPositions[i * 3 + 2] = radius * Math.cos(phi);
-    }
-    var starGeo = new THREE.BufferGeometry();
-    starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
-    var starMat = new THREE.PointsMaterial({ color: 0xeef0ff, size: 0.045, transparent: true, opacity: 0.55, sizeAttenuation: true });
-    var stars = new THREE.Points(starGeo, starMat);
-    scene.add(stars);
-
-    var group = new THREE.Group();
-    scene.add(group);
-
-    var outerGeo = new THREE.IcosahedronGeometry(2.2, 1);
-    var outerMat = new THREE.LineBasicMaterial({ color: 0x9fb4ff, transparent: true, opacity: 0.55 });
-    var outer = new THREE.LineSegments(new THREE.EdgesGeometry(outerGeo), outerMat);
-    group.add(outer);
-
-    var innerGeo = new THREE.IcosahedronGeometry(1.15, 0);
-    var innerMat = new THREE.LineBasicMaterial({ color: 0xff5a2b, transparent: true, opacity: 0.55 });
-    var inner = new THREE.LineSegments(new THREE.EdgesGeometry(innerGeo), innerMat);
-    group.add(inner);
-
-    // A second, independently drifting shape for extra depth/parallax
-    var driftGeo = new THREE.TorusGeometry(1.4, 0.02, 6, 40);
-    var driftMat = new THREE.LineBasicMaterial({ color: 0xb06bff, transparent: true, opacity: 0.28 });
-    var drift = new THREE.LineSegments(new THREE.EdgesGeometry(driftGeo), driftMat);
-    drift.position.set(-2.6, 1.4, -2.5);
-    drift.rotation.x = Math.PI / 3;
-    scene.add(drift);
-
-    var px = 0, py = 0;
-    window.addEventListener("mousemove", function (e) {
-      px = (e.clientX / window.innerWidth - 0.5) * 2;
-      py = (e.clientY / window.innerHeight - 0.5) * 2;
-    }, { passive: true });
-
-    var resizePending = false;
-    function resize() {
-      w = window.innerWidth; h = window.innerHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h, false);
-      resizePending = false;
-    }
-    window.addEventListener("resize", function () {
-      if (!resizePending) { resizePending = true; requestAnimationFrame(resize); }
+  /* Hovering a flow-node in the AI/Automation or GoHighLevel diagrams
+     highlights the matching 3D node in that chapter's node network. */
+  function initNodeHighlighting() {
+    if (isCoarsePointer) return;
+    document.querySelectorAll("#ai-automation [data-node]").forEach(function (el) {
+      el.addEventListener("mouseenter", function () {
+        if (sceneReady) window.DCScene.highlightNode("ai", el.getAttribute("data-node"));
+      });
+      el.addEventListener("mouseleave", function () {
+        if (sceneReady) window.DCScene.clearHighlight("ai");
+      });
     });
+    document.querySelectorAll("#ghl-flow [data-node]").forEach(function (el) {
+      el.addEventListener("mouseenter", function () {
+        if (sceneReady) window.DCScene.highlightNode("ghl", el.getAttribute("data-node"));
+      });
+      el.addEventListener("mouseleave", function () {
+        if (sceneReady) window.DCScene.clearHighlight("ghl");
+      });
+    });
+  }
 
-    var idle = 0;
-    var start = performance.now();
-
-    function opacityForProgress(p) {
-      // bright in the hero, dims through the middle, lifts again near the close
-      if (p < 0.12) return 0.85 - (p / 0.12) * 0.55;
-      if (p < 0.82) return 0.3;
-      return 0.3 + ((p - 0.82) / 0.18) * 0.4;
-    }
-
-    var lastOpacity = -1;
-    webglTick = function (now, scrollProgress) {
-      idle += 0.0032;
-      var elapsed = now - start;
-      var opacity = opacityForProgress(scrollProgress);
-      if (Math.abs(opacity - lastOpacity) > 0.004) {
-        wrap.style.opacity = opacity.toFixed(3);
-        lastOpacity = opacity;
-      }
-
-      group.rotation.y = idle + scrollProgress * Math.PI * 5.2;
-      group.rotation.x = idle * 0.4 + scrollProgress * Math.PI * 1.6;
-      var breathe = 1 + Math.sin(elapsed * 0.0006) * 0.05;
-      group.scale.setScalar(breathe + scrollProgress * 0.35);
-
-      drift.rotation.z += 0.0012;
-      drift.rotation.y -= 0.0009;
-      drift.position.y = 1.4 - scrollProgress * 3.2;
-
-      stars.rotation.y += 0.0002;
-      stars.rotation.x = scrollProgress * 0.3;
-
-      camera.position.x += (px * 0.7 - camera.position.x) * 0.025;
-      camera.position.y += (-py * 0.5 - camera.position.y) * 0.025;
-      camera.lookAt(0, 0, 0);
-
-      renderer.render(scene, camera);
-    };
+  /* Clicking a project row moves the camera's look-target toward that
+     project's marker in the 3D work gallery, and updates the readout. */
+  function initGalleryFocus() {
+    var rows = document.querySelectorAll("#work-listing [data-marker-index]");
+    rows.forEach(function (row) {
+      row.addEventListener("click", function () {
+        if (!sceneReady) return;
+        var idx = parseInt(row.getAttribute("data-marker-index"), 10);
+        var name = row.querySelector(".name");
+        window.DCScene.focusMarker(idx, name ? name.textContent : "");
+      });
+    });
   }
 
   /* ---------------- Panel tilt-on-hover (rect cached, applied once per frame) ---------------- */
@@ -440,7 +374,7 @@
     updateHud();
     updateProgressBar(scrollProgress);
     updateCursor();
-    if (webglTick) webglTick(now, scrollProgress);
+    if (sceneReady) window.DCScene.frame(now, window.scrollY);
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
@@ -451,9 +385,11 @@
   initParallax();
   initImageReveal();
   initWordReveal();
+  initNodeHighlighting();
+  initGalleryFocus();
   window.addEventListener("load", function () {
     setTimeout(playHeroGlitch, 150);
-    initWebGLBackdrop();
+    initScene();
     if (hasGSAP && typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   });
 })();

@@ -14,6 +14,11 @@
 
 <div class="scroll-progress" aria-hidden="true"></div>
 
+<div class="boot-overlay" id="boot-overlay" aria-hidden="true">
+  <span class="boot-line">SYSTEM:// DC_MIRANDA</span>
+  <span class="boot-line boot-line--dim">initializing environment<span class="boot-dots"></span></span>
+</div>
+
 <div class="webgl-backdrop" aria-hidden="true">
   <canvas id="webgl-canvas"></canvas>
 </div>
@@ -179,18 +184,19 @@
       <p class="panel-title" data-reveal-text>AI isn't a feature. It's part of the workflow.</p>
       <p class="comment-line reveal" style="--d:60ms">Keep the existing AI and automation approach at the center of how a digital system runs — from the first visit to the outcome the business actually wants.</p>
       <div class="flow-diagram reveal" style="--d:120ms" aria-label="User to business outcome flow">
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">User</span></div>
+        <div class="flow-node" data-node="ai" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">User</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Website</span></div>
+        <div class="flow-node" data-node="data" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">Website</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">CRM</span></div>
+        <div class="flow-node" data-node="crm" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">CRM</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Automation</span></div>
+        <div class="flow-node" data-node="workflow" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">Automation</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">AI</span></div>
+        <div class="flow-node" data-node="logic" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">AI</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Business Outcome</span></div>
+        <div class="flow-node" data-node="result" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">Business Outcome</span></div>
       </div>
+      <p class="comment-line reveal" style="--d:180ms">Hover a stop above to see it highlighted in the network behind this page.</p>
     </div>
   </section>
 
@@ -201,18 +207,19 @@
       <p class="panel-title" data-reveal-text>GoHighLevel, beyond basic setup.</p>
       <p class="comment-line reveal" style="--d:60ms">CRM, funnels, pipelines, workflows, forms, calendars, email, SMS, and automation, connected into one system that moves a lead all the way to a client.</p>
       <div class="flow-diagram reveal" style="--d:120ms" aria-label="Lead to client flow">
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Leads</span></div>
+        <div class="flow-node" data-node="leads" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">Leads</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">CRM</span></div>
+        <div class="flow-node" data-node="crm" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">CRM</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Pipeline</span></div>
+        <div class="flow-node" data-node="pipeline" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">Pipeline</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Follow-Up</span></div>
+        <div class="flow-node" data-node="followup" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">Follow-Up</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Appointment</span></div>
+        <div class="flow-node" data-node="appointment" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">Appointment</span></div>
         <div class="flow-line"><i class="flow-pulse"></i></div>
-        <div class="flow-node"><span class="fn-dot"></span><span class="fn-label">Client</span></div>
+        <div class="flow-node" data-node="client" data-cursor-hover><span class="fn-dot"></span><span class="fn-label">Client</span></div>
       </div>
+      <p class="comment-line reveal" style="--d:180ms">Hover a stop above to see it highlighted in the pipeline behind this page.</p>
       <div class="flow-strip reveal" style="--d:160ms">
         <span>CRM</span><i>&middot;</i><span>Funnels</span><i>&middot;</i><span>Pipelines</span><i>&middot;</i><span>Workflows</span><i>&middot;</i><span>Forms</span><i>&middot;</i><span>Calendars</span><i>&middot;</i><span>Email</span><i>&middot;</i><span>SMS</span><i>&middot;</i><span>Client Onboarding</span>
       </div>
@@ -274,35 +281,37 @@
         <button data-filter="graphics-video">[GRAPHICS/VIDEO]</button>
       </div>
 
+      <p class="comment-line reveal" id="gallery-readout" style="--d:80ms; margin-top:-8px; margin-bottom:24px;">Select a row below to bring it into focus in the gallery behind this page.</p>
+
       <div class="dir-listing reveal" style="--d:100ms" id="work-listing">
-        <a class="dir-row" data-tags="graphics-video" href="https://drive.google.com/file/d/1DGOQpx4uDRX8DFot35eGjw-N-eCvDx5M/view?usp=sharing" target="_blank" rel="noreferrer">
+        <a class="dir-row" data-tags="graphics-video" data-marker-index="0" href="https://drive.google.com/file/d/1DGOQpx4uDRX8DFot35eGjw-N-eCvDx5M/view?usp=sharing" target="_blank" rel="noreferrer">
           <span class="perm">-rw-</span><span class="name">ai-talking-head-demo.mp4</span><span class="cat">Graphics/Video</span><span class="act">Watch ↗</span>
         </a>
-        <a class="dir-row" data-tags="graphics-video" href="https://drive.google.com/file/d/1mZFJ7r3PKA64NUfgIn2ZR1ZMYZUsGNu5/view?usp=sharing" target="_blank" rel="noreferrer">
+        <a class="dir-row" data-tags="graphics-video" data-marker-index="1" href="https://drive.google.com/file/d/1mZFJ7r3PKA64NUfgIn2ZR1ZMYZUsGNu5/view?usp=sharing" target="_blank" rel="noreferrer">
           <span class="perm">-rw-</span><span class="name">course-walkthrough.mp4</span><span class="cat">Graphics/Video</span><span class="act">Watch ↗</span>
         </a>
-        <a class="dir-row" data-tags="graphics-video" href="https://drive.google.com/file/d/1Oo-IFk9EyPYk-J_4zcyTdXfiy5Z8CfcZ/view?usp=sharing" target="_blank" rel="noreferrer">
+        <a class="dir-row" data-tags="graphics-video" data-marker-index="2" href="https://drive.google.com/file/d/1Oo-IFk9EyPYk-J_4zcyTdXfiy5Z8CfcZ/view?usp=sharing" target="_blank" rel="noreferrer">
           <span class="perm">-rw-</span><span class="name">ai-assisted-talking-head.mp4</span><span class="cat">Graphics/Video</span><span class="act">Watch ↗</span>
         </a>
-        <a class="dir-row" data-tags="graphics-video" href="https://drive.google.com/file/d/10pPppvF0aScidHWUu0uFMUIMGSHQSs1A/view?usp=drive_link" target="_blank" rel="noreferrer">
+        <a class="dir-row" data-tags="graphics-video" data-marker-index="3" href="https://drive.google.com/file/d/10pPppvF0aScidHWUu0uFMUIMGSHQSs1A/view?usp=drive_link" target="_blank" rel="noreferrer">
           <span class="perm">-rw-</span><span class="name">course-explainer-walkthrough.mp4</span><span class="cat">Graphics/Video</span><span class="act">Watch ↗</span>
         </a>
-        <a class="dir-row" data-tags="graphics-video" href="https://drive.google.com/file/d/1DhlfNliYJYvNu4ylvCxjvP59sYaB1jgl/view?usp=drive_link" target="_blank" rel="noreferrer">
+        <a class="dir-row" data-tags="graphics-video" data-marker-index="4" href="https://drive.google.com/file/d/1DhlfNliYJYvNu4ylvCxjvP59sYaB1jgl/view?usp=drive_link" target="_blank" rel="noreferrer">
           <span class="perm">-rw-</span><span class="name">social-media-reels.mp4</span><span class="cat">Graphics/Video</span><span class="act">Watch ↗</span>
         </a>
-        <a class="dir-row" data-tags="graphics-video" href="https://drive.google.com/file/d/1PsfUqRn9iZUgrB4IVPSmMh0aH-VQ_bWc/view?usp=sharing" target="_blank" rel="noreferrer">
+        <a class="dir-row" data-tags="graphics-video" data-marker-index="5" href="https://drive.google.com/file/d/1PsfUqRn9iZUgrB4IVPSmMh0aH-VQ_bWc/view?usp=sharing" target="_blank" rel="noreferrer">
           <span class="perm">-rw-</span><span class="name">reel-samples.mp4</span><span class="cat">Graphics/Video</span><span class="act">Watch ↗</span>
         </a>
-        <div class="dir-row is-pending" data-tags="web">
+        <div class="dir-row is-pending" data-tags="web" data-marker-index="6">
           <span class="perm">----</span><span class="name">web-projects.pending</span><span class="cat">Web</span><span class="act">In progress</span>
         </div>
-        <div class="dir-row is-pending" data-tags="software">
+        <div class="dir-row is-pending" data-tags="software" data-marker-index="7">
           <span class="perm">----</span><span class="name">ai-software-projects.pending</span><span class="cat">AI &amp; Software</span><span class="act">In progress</span>
         </div>
-        <div class="dir-row is-pending" data-tags="automation">
+        <div class="dir-row is-pending" data-tags="automation" data-marker-index="8">
           <span class="perm">----</span><span class="name">automation-case-studies.pending</span><span class="cat">AI Automation</span><span class="act">In progress</span>
         </div>
-        <div class="dir-row is-pending" data-tags="gohighlevel">
+        <div class="dir-row is-pending" data-tags="gohighlevel" data-marker-index="9">
           <span class="perm">----</span><span class="name">gohighlevel-builds.pending</span><span class="cat">GoHighLevel</span><span class="act">In progress</span>
         </div>
       </div>
@@ -488,6 +497,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="assets/js/motion.js"></script>
+<script src="assets/js/scene.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -78,6 +78,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* main content sits above the fixed WebGL backdrop */
 main, .site-footer { position: relative; z-index: 1; }
 
+/* ---------------- Boot / loading overlay ---------------- */
+.boot-overlay {
+  position: fixed; inset: 0; z-index: 1002;
+  background: var(--void);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  transition: opacity 500ms ease, visibility 0s linear 500ms;
+}
+.boot-overlay.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.boot-line { font-size: var(--step-xs); letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg); }
+.boot-line--dim { color: var(--muted); }
+.boot-dots::after { content: ""; animation: bootDots 1.2s steps(4) infinite; }
+@keyframes bootDots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } 100% { content: ""; } }
+@media (prefers-reduced-motion: reduce) { .boot-overlay { transition: none; } .boot-dots::after { animation: none; content: "..."; } }
+
 /* ---------------- Scroll progress bar ---------------- */
 .scroll-progress {
   position: fixed; top: 0; left: 0; height: 2px;
