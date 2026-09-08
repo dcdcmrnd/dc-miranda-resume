@@ -280,6 +280,61 @@
     });
   }
 
+  /* Hovering a published video row shows an inline Drive preview instead
+     of requiring a click-through — click still opens Drive directly as a
+     fallback for touch/keyboard users, who can't hover. */
+  function driveEmbedUrl(viewUrl) {
+    var m = viewUrl && viewUrl.match(/\/file\/d\/([^/]+)/);
+    return m ? "https://drive.google.com/file/d/" + m[1] + "/preview" : null;
+  }
+  function initVideoPreview() {
+    if (isCoarsePointer) return;
+    var rows = document.querySelectorAll("#work-listing a.dir-row[href*='drive.google.com']");
+    if (!rows.length) return;
+
+    var preview = document.createElement("div");
+    preview.className = "video-preview";
+    preview.setAttribute("aria-hidden", "true");
+    var frame = document.createElement("iframe");
+    frame.setAttribute("allow", "autoplay");
+    frame.setAttribute("frameborder", "0");
+    preview.appendChild(frame);
+    document.body.appendChild(preview);
+
+    var showTimer = null;
+    var activeRow = null;
+
+    function position(row) {
+      var rect = row.getBoundingClientRect();
+      var top = Math.max(12, Math.min(rect.top, window.innerHeight - 200));
+      var left = rect.right + 16;
+      if (left + 320 > window.innerWidth) left = Math.max(12, rect.left - 336);
+      preview.style.top = top + "px";
+      preview.style.left = left + "px";
+    }
+
+    rows.forEach(function (row) {
+      row.addEventListener("mouseenter", function () {
+        var embed = driveEmbedUrl(row.getAttribute("href"));
+        if (!embed) return;
+        activeRow = row;
+        clearTimeout(showTimer);
+        showTimer = setTimeout(function () {
+          if (activeRow !== row) return;
+          frame.src = embed;
+          position(row);
+          preview.classList.add("is-visible");
+        }, 220);
+      });
+      row.addEventListener("mouseleave", function () {
+        if (activeRow === row) activeRow = null;
+        clearTimeout(showTimer);
+        preview.classList.remove("is-visible");
+        frame.src = "";
+      });
+    });
+  }
+
   /* ---------------- Panel tilt-on-hover (rect cached, applied once per frame) ---------------- */
   function initTilt() {
     if (isCoarsePointer || reduceMotion) return;
@@ -387,6 +442,7 @@
   initWordReveal();
   initNodeHighlighting();
   initGalleryFocus();
+  initVideoPreview();
   window.addEventListener("load", function () {
     setTimeout(playHeroGlitch, 150);
     initScene();
