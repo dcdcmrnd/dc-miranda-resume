@@ -7,11 +7,15 @@
   --muted: #b9bccc;
   --line: rgba(245, 244, 240, 0.12);
   --line-strong: rgba(245, 244, 240, 0.22);
-  --brand: #ff5fa0;
-  --brand-bright: #ff7fb8;
-  --signal: #ff5a2b;
-  --signal-deep: #c22b00;
-  --link: #7ecbff;
+  /* Brand pair: electric blue primary, deep red secondary (contact
+     footer, closing statements) — both verified 4.5:1+ against the dark
+     navy/charcoal backgrounds; --signal-deep additionally verified for
+     white text on top of it. */
+  --brand: #4a86ff;
+  --brand-bright: #7aa6ff;
+  --signal: #ff4d4d;
+  --signal-deep: #c11919;
+  --link: #7aa6ff;
   --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }

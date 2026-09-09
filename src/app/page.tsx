@@ -23,7 +23,7 @@ import FloatingIcons from "@/components/FloatingIcons/FloatingIcons";
 // from a server component.
 const NAVY = "#171c33";
 const CHARCOAL = "#1c1c1e";
-const SIGNAL_DEEP = "#c22b00";
+const SIGNAL_DEEP = "#c11919";
 
 export default function Home() {
   return (

@@ -39,8 +39,8 @@ export const categories: Category[] = [
       "Custom front-end development",
       "Next.js",
     ],
-    bg: "rgba(126, 203, 255, 0.1)",
-    accent: "#7ecbff",
+    bg: "rgba(92, 156, 245, 0.1)",
+    accent: "#5c9cf5",
   },
   {
     id: "software",
@@ -58,8 +58,8 @@ export const categories: Category[] = [
       "API integrations",
       "Custom workflows & business systems",
     ],
-    bg: "rgba(194, 153, 255, 0.1)",
-    accent: "#c299ff",
+    bg: "rgba(134, 130, 247, 0.1)",
+    accent: "#8682f7",
   },
   {
     id: "automation",
@@ -76,8 +76,8 @@ export const categories: Category[] = [
       "AI agents & assistants",
       "API-based integrations",
     ],
-    bg: "rgba(92, 255, 194, 0.09)",
-    accent: "#5cffc2",
+    bg: "rgba(169, 102, 245, 0.09)",
+    accent: "#a966f5",
   },
   {
     id: "gohighlevel",
@@ -98,8 +98,8 @@ export const categories: Category[] = [
       "Client onboarding",
       "Custom integrations",
     ],
-    bg: "rgba(255, 209, 102, 0.1)",
-    accent: "#ffd166",
+    bg: "rgba(244, 82, 244, 0.1)",
+    accent: "#f452f4",
   },
   {
     id: "graphics",
@@ -116,8 +116,8 @@ export const categories: Category[] = [
       "Presentation visuals",
       "Creative direction",
     ],
-    bg: "rgba(255, 127, 174, 0.1)",
-    accent: "#ff7fae",
+    bg: "rgba(245, 92, 168, 0.1)",
+    accent: "#f55ca8",
   },
   {
     id: "video",
@@ -134,8 +134,8 @@ export const categories: Category[] = [
       "Video editing",
       "Short-form content",
     ],
-    bg: "rgba(163, 168, 255, 0.1)",
-    accent: "#a3a8ff",
+    bg: "rgba(245, 92, 105, 0.1)",
+    accent: "#f55c69",
   },
 ];
 
