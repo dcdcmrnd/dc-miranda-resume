@@ -70,7 +70,12 @@ export default function Home() {
           </p>
           <div className="cap-grid" data-reveal-group>
             {categories.map((c) => (
-              <div key={c.id} className="cap-card" data-reveal-item style={{ background: c.bg }}>
+              <div
+                key={c.id}
+                className="cap-card"
+                data-reveal-item
+                style={{ background: c.bg, ["--bar-color" as string]: c.accent }}
+              >
                 <span className="cap-no" style={{ color: c.accent }}>
                   {c.number}
                 </span>
@@ -82,21 +87,23 @@ export default function Home() {
         </section>
       </div>
 
-      <div className="container">
-        <section className="section" id="work">
-          <h2 className="section-title" data-reveal>
-            Selected Work
-          </h2>
-          <p className="section-intro" data-reveal>
-            Published deliverables link straight through; categories without a case study yet say so honestly.
-          </p>
-          <div className="work-grid" data-reveal-group>
-            {projects.map((p) => {
-              const category = categories.find((c) => c.id === p.category)!;
-              return <WorkCard key={p.id} project={p} category={category} />;
-            })}
-          </div>
-        </section>
+      <div className="tint-band">
+        <div className="container">
+          <section className="section" id="work">
+            <h2 className="section-title" data-reveal>
+              Selected Work
+            </h2>
+            <p className="section-intro" data-reveal>
+              Published deliverables link straight through; categories without a case study yet say so honestly.
+            </p>
+            <div className="work-grid" data-reveal-group>
+              {projects.map((p, i) => {
+                const category = categories.find((c) => c.id === p.category)!;
+                return <WorkCard key={p.id} project={p} category={category} featured={i === 0} />;
+              })}
+            </div>
+          </section>
+        </div>
       </div>
 
       <div className="container">
@@ -109,7 +116,14 @@ export default function Home() {
             separate projects, I connect them into one system.
           </p>
 
-          <div className="system-panel" data-reveal>
+          <div
+            className="system-panel"
+            data-reveal
+            style={{
+              background: categories.find((c) => c.id === "automation")!.bg,
+              ["--panel-accent" as string]: categories.find((c) => c.id === "automation")!.accent,
+            }}
+          >
             <h3>{aiAutomationFlow.title}</h3>
             <p className="body-text">{aiAutomationFlow.body}</p>
             <div className="flow-steps">
@@ -126,7 +140,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="system-panel" data-reveal>
+          <div
+            className="system-panel"
+            data-reveal
+            style={{
+              background: categories.find((c) => c.id === "gohighlevel")!.bg,
+              ["--panel-accent" as string]: categories.find((c) => c.id === "gohighlevel")!.accent,
+            }}
+          >
             <h3>{ghlFlow.title}</h3>
             <p className="body-text">{ghlFlow.body}</p>
             <div className="flow-steps">
@@ -151,12 +172,14 @@ export default function Home() {
           <h2 className="section-title" data-reveal>
             How I Approach Projects
           </h2>
-          <div className="cap-grid" data-reveal-group>
+          <div className="process-stepper" data-reveal-group>
             {processSteps.map((step) => (
-              <div key={step.no} className="cap-card" data-reveal-item style={{ background: "#f7f6f3" }}>
-                <span className="cap-no">{step.no}</span>
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
+              <div key={step.no} className="process-step" data-reveal-item>
+                <span className="process-no">{step.no}</span>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -168,15 +191,17 @@ export default function Home() {
           <h2 className="section-title" data-reveal>
             The Difference
           </h2>
-          <div className="diff-lines" data-reveal>
-            {differenceLines.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-            <p className="status">{differenceStatus}</p>
-          </div>
-          <p className="section-intro" style={{ marginTop: 14 }} data-reveal>
+          <p className="section-intro" data-reveal>
             {differenceClosing}
           </p>
+          <div className="manifesto-panel" data-reveal>
+            <div className="diff-lines">
+              {differenceLines.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+              <p className="status">{differenceStatus}</p>
+            </div>
+          </div>
 
           <div className="system-panel" style={{ marginTop: 24 }} data-reveal>
             <h3>{vow.title}</h3>
