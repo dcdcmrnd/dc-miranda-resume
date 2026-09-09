@@ -12,15 +12,9 @@ import {
   originStatement,
   contact,
 } from "@/projects/projectData";
+import Image from "next/image";
 import WorkCard from "@/components/ProjectUI/WorkCard";
 import BubbleWrap from "@/components/BubbleWrap/BubbleWrap";
-
-const BLOBS = [
-  { top: "-8%", left: "-6%", size: "58%", color: "#ffd6ee" },
-  { top: "30%", left: "58%", size: "46%", color: "#d6e8ff" },
-  { top: "56%", left: "6%", size: "38%", color: "#d6fff0" },
-  { top: "6%", left: "42%", size: "30%", color: "#fff2c2" },
-];
 
 export default function Home() {
   return (
@@ -49,15 +43,18 @@ export default function Home() {
               </svg>
             </a>
           </div>
-          <div className="hero-art" aria-hidden="true">
-            {BLOBS.map((b, i) => (
-              <span
-                key={i}
-                className="blob"
-                style={{ top: b.top, left: b.left, width: b.size, height: b.size, background: b.color }}
-              />
-            ))}
-            <span className="mark">DC · Aequora Digital</span>
+          <div className="hero-art">
+            <Image
+              src="/me.jpg"
+              alt="Portrait of DC Miranda"
+              fill
+              sizes="(max-width: 800px) 100vw, 480px"
+              style={{ objectFit: "cover" }}
+              priority
+            />
+            <span className="mark" aria-hidden="true">
+              DC · Aequora Digital
+            </span>
           </div>
         </section>
       </div>
