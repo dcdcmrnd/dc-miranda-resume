@@ -2,6 +2,8 @@ import {
   categories,
   projects,
   hero,
+  resumeSummary,
+  resumeTimeline,
   aiAutomationFlow,
   ghlFlow,
   processSteps,
@@ -17,6 +19,7 @@ import WorkCard from "@/components/ProjectUI/WorkCard";
 import BubbleWrap from "@/components/BubbleWrap/BubbleWrap";
 import TornDivider from "@/components/TornDivider/TornDivider";
 import FloatingIcons from "@/components/FloatingIcons/FloatingIcons";
+import TiltCard from "@/components/Motion/TiltCard";
 
 // Mirrors the CSS custom properties in globals.css — TornDivider needs the
 // literal hex value to fill its clip-path shape, which var() can't resolve
@@ -62,7 +65,7 @@ export default function Home() {
                 </svg>
               </a>
             </div>
-            <div className="hero-art">
+            <TiltCard className="hero-art" max={5} baseRotateZ={-2}>
               <Image
                 src="/me.jpg"
                 alt="Portrait of DC Miranda"
@@ -74,7 +77,7 @@ export default function Home() {
               <span className="mark" aria-hidden="true">
                 DC · Aequora Digital
               </span>
-            </div>
+            </TiltCard>
           </section>
         </div>
       </div>
@@ -92,18 +95,20 @@ export default function Home() {
             </p>
             <div className="cap-grid" data-reveal-group>
               {categories.map((c) => (
-                <div
+                <TiltCard
                   key={c.id}
                   className="cap-card"
+                  max={4}
+                  liftPx={-4}
                   data-reveal-item
-                  style={{ ["--bar-color" as string]: c.accent }}
+                  style={{ ["--bar-color" as string]: c.accent } as React.CSSProperties}
                 >
                   <span className="cap-no" style={{ color: c.accent }}>
                     {c.number}
                   </span>
                   <h3 style={{ color: c.accent }}>{c.name}</h3>
                   <p>{c.description}</p>
-                </div>
+                </TiltCard>
               ))}
             </div>
           </section>
@@ -133,6 +138,29 @@ export default function Home() {
 
       <div className="section-charcoal">
         <div className="container">
+          <section className="section" id="experience">
+            <h2 className="section-title" data-reveal>
+              Experience
+            </h2>
+            <p className="section-intro" data-reveal>
+              {resumeSummary}
+            </p>
+            <div className="timeline-scroll" data-reveal-group>
+              {resumeTimeline.map((t) => (
+                <div key={`${t.role}-${t.period}`} className="timeline-scroll-item" data-reveal-item data-timeline-item>
+                  <span className="timeline-scroll-period">{t.period}</span>
+                  <h3>{t.role}</h3>
+                  <p>{t.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+      <TornDivider color={NAVY} />
+
+      <div className="section-navy">
+        <div className="container">
           <section className="section">
             <h2 className="section-title" data-reveal>
               Systems, not just sites
@@ -142,54 +170,62 @@ export default function Home() {
               separate projects, I connect them into one system.
             </p>
 
-            <div
-              className="system-panel"
-              data-reveal
-              style={{ ["--panel-accent" as string]: categories.find((c) => c.id === "automation")!.accent }}
-            >
-              <h3>{aiAutomationFlow.title}</h3>
-              <p className="body-text">{aiAutomationFlow.body}</p>
-              <div className="flow-steps">
-                {aiAutomationFlow.steps.map((s, i) => (
-                  <span key={s} style={{ display: "contents" }}>
-                    <span className="step">{s}</span>
-                    {i < aiAutomationFlow.steps.length - 1 && (
-                      <span className="arrow" aria-hidden="true">
-                        →
-                      </span>
-                    )}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <div className="systems-grid" data-reveal-group>
+              <TiltCard
+                className="system-panel system-card"
+                max={3}
+                liftPx={-4}
+                data-reveal-item
+                style={{ ["--panel-accent" as string]: categories.find((c) => c.id === "automation")!.accent } as React.CSSProperties}
+              >
+                <span className="system-no">01</span>
+                <h3>{aiAutomationFlow.title}</h3>
+                <p className="body-text">{aiAutomationFlow.body}</p>
+                <div className="flow-steps">
+                  {aiAutomationFlow.steps.map((s, i) => (
+                    <span key={s} style={{ display: "contents" }}>
+                      <span className="step">{s}</span>
+                      {i < aiAutomationFlow.steps.length - 1 && (
+                        <span className="arrow" aria-hidden="true">
+                          →
+                        </span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </TiltCard>
 
-            <div
-              className="system-panel"
-              data-reveal
-              style={{ ["--panel-accent" as string]: categories.find((c) => c.id === "gohighlevel")!.accent }}
-            >
-              <h3>{ghlFlow.title}</h3>
-              <p className="body-text">{ghlFlow.body}</p>
-              <div className="flow-steps">
-                {ghlFlow.steps.map((s, i) => (
-                  <span key={s} style={{ display: "contents" }}>
-                    <span className="step">{s}</span>
-                    {i < ghlFlow.steps.length - 1 && (
-                      <span className="arrow" aria-hidden="true">
-                        →
-                      </span>
-                    )}
-                  </span>
-                ))}
-              </div>
-              <div className="tag-row">{ghlFlow.tags.join(" · ")}</div>
+              <TiltCard
+                className="system-panel system-card"
+                max={3}
+                liftPx={-4}
+                data-reveal-item
+                style={{ ["--panel-accent" as string]: categories.find((c) => c.id === "gohighlevel")!.accent } as React.CSSProperties}
+              >
+                <span className="system-no">02</span>
+                <h3>{ghlFlow.title}</h3>
+                <p className="body-text">{ghlFlow.body}</p>
+                <div className="flow-steps">
+                  {ghlFlow.steps.map((s, i) => (
+                    <span key={s} style={{ display: "contents" }}>
+                      <span className="step">{s}</span>
+                      {i < ghlFlow.steps.length - 1 && (
+                        <span className="arrow" aria-hidden="true">
+                          →
+                        </span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+                <div className="tag-row">{ghlFlow.tags.join(" · ")}</div>
+              </TiltCard>
             </div>
           </section>
         </div>
       </div>
-      <TornDivider color={NAVY} />
+      <TornDivider color={CHARCOAL} />
 
-      <div className="section-navy">
+      <div className="section-charcoal">
         <div className="container">
           <section className="section">
             <h2 className="section-title" data-reveal>
@@ -209,11 +245,11 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={CHARCOAL} />
+      <TornDivider color={NAVY} />
 
-      <div className="section-charcoal">
+      <div className="section-navy">
         <div className="container">
-          <section className="section">
+          <section className="section" id="about">
             <h2 className="section-title" data-reveal>
               The Difference
             </h2>
@@ -225,7 +261,7 @@ export default function Home() {
                 {differenceLines.map((line) => (
                   <p key={line}>{line}</p>
                 ))}
-                <p className="status">{differenceStatus}</p>
+                <p className="status pull-quote">{differenceStatus}</p>
               </div>
             </div>
 
@@ -243,9 +279,9 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={NAVY} />
+      <TornDivider color={CHARCOAL} />
 
-      <div className="section-navy">
+      <div className="section-charcoal">
         <div className="container">
           <section className="section">
             <h2 className="section-title" data-reveal>

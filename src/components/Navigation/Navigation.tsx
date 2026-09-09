@@ -14,9 +14,12 @@ export default function Navigation() {
         </Link>
         <nav className="nav-links" aria-label="Primary">
           <Link href="/#work">Work</Link>
+          <Link href="/#experience">Experience</Link>
+          <Link href="/#about">About</Link>
           <Link href="/resume" data-current={pathname === "/resume"} aria-current={pathname === "/resume" ? "page" : undefined}>
             Resume
           </Link>
+          <Link href="/#contact">Contact</Link>
         </nav>
       </div>
     </header>

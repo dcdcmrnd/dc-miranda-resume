@@ -289,6 +289,45 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
 }
 .system-panel h3 { font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 10px; color: var(--panel-accent, var(--ink)); }
 .system-panel p.body-text { color: var(--muted); max-width: 62ch; margin-bottom: 22px; }
+
+.systems-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+@media (max-width: 860px) { .systems-grid { grid-template-columns: 1fr; } }
+
+.system-card {
+  position: relative;
+  margin-bottom: 0;
+  padding-top: clamp(30px, 5vw, 46px);
+  overflow: hidden;
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+.system-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--panel-accent, var(--brand));
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+.system-card:hover { border-color: var(--line-strong); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35); }
+.system-no {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--panel-accent, var(--ink));
+  background: color-mix(in srgb, var(--panel-accent, var(--brand)) 16%, transparent);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 14px;
+}
+
 .flow-steps {
   display: flex;
   flex-wrap: wrap;
@@ -297,15 +336,15 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
   margin-bottom: 18px;
 }
 .flow-steps .step {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--panel-accent, var(--brand)) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--panel-accent, var(--brand)) 45%, transparent);
   border-radius: 999px;
   padding: 8px 16px;
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--panel-accent, var(--ink));
 }
-.flow-steps .arrow { color: var(--muted); }
+.flow-steps .arrow { color: var(--panel-accent, var(--muted)); font-weight: 700; opacity: 0.7; }
 
 /* ---------------- Process stepper ---------------- */
 .process-stepper { display: flex; flex-direction: column; }
@@ -352,6 +391,43 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
 /* ---------------- Difference / philosophy ---------------- */
 .diff-lines p { font-size: 1.02rem; margin-bottom: 7px; }
 .diff-lines p.status { color: var(--brand-bright); font-weight: 700; }
+
+/* Oversized quote treatment for one real line — same text, bigger moment */
+.pull-quote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 4vw, 2.6rem) !important;
+  line-height: 1.2;
+  font-weight: 600;
+  margin-top: 18px !important;
+  max-width: 22ch;
+}
+
+/* ---------------- Experience (homepage editorial timeline) ---------------- */
+.timeline-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 6vw, 56px);
+  padding: clamp(20px, 6vw, 48px) 0;
+}
+.timeline-scroll-item {
+  border-left: 2px solid var(--brand);
+  padding-left: clamp(20px, 4vw, 36px);
+  transform-origin: left center;
+}
+.timeline-scroll-period {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.timeline-scroll-item h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+  margin-bottom: 8px;
+}
+.timeline-scroll-item p { color: var(--muted); max-width: 60ch; }
 
 /* ---------------- Timeline (resume page) ---------------- */
 .timeline { display: flex; flex-direction: column; gap: 18px; }

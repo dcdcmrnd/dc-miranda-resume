@@ -4,6 +4,8 @@ import Link from "next/link";
 import type { Project, Category } from "@/projects/projectData";
 import { useVideoPreview } from "@/hooks/useVideoPreview";
 import { driveEmbedUrl } from "@/lib/drive";
+import { useTilt } from "@/hooks/useTilt";
+import { useDevice } from "@/hooks/useDevice";
 
 /** One card in the "Selected Work" bento grid. Hovering a published project
  * shows an inline Drive preview (see VideoPreviewLayer); clicking opens its
@@ -21,9 +23,12 @@ export default function WorkCard({
 }) {
   const { show, hide } = useVideoPreview();
   const embedUrl = project.status === "live" ? driveEmbedUrl(project.href) : null;
+  const { isTouch, reducedMotion, ready } = useDevice();
+  const tiltRef = useTilt<HTMLDivElement>({ max: 4, liftPx: -4, disabled: !ready || isTouch || reducedMotion });
 
   const card = (
     <div
+      ref={tiltRef}
       className={`work-card${project.status === "pending" ? " is-pending" : ""}`}
       style={{ background: category.bg, ["--bar-color" as string]: category.accent }}
     >
