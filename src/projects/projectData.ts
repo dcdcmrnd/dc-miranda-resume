@@ -19,8 +19,8 @@ export interface Category {
   name: string;
   description: string;
   tags: string[];
-  bg: string; // pastel section/card background
-  accent: string; // saturated foreground color for headings/links on that card
+  bg: string; // translucent tinted panel background (dark theme)
+  accent: string; // bright foreground color for headings/links on that card — verified 4.5:1+ against both dark section backgrounds
 }
 
 export const categories: Category[] = [
@@ -39,8 +39,8 @@ export const categories: Category[] = [
       "Custom front-end development",
       "Next.js",
     ],
-    bg: "#eaf4ff",
-    accent: "#2054c9",
+    bg: "rgba(126, 203, 255, 0.1)",
+    accent: "#7ecbff",
   },
   {
     id: "software",
@@ -58,8 +58,8 @@ export const categories: Category[] = [
       "API integrations",
       "Custom workflows & business systems",
     ],
-    bg: "#f3ecff",
-    accent: "#6d28d9",
+    bg: "rgba(194, 153, 255, 0.1)",
+    accent: "#c299ff",
   },
   {
     id: "automation",
@@ -76,8 +76,8 @@ export const categories: Category[] = [
       "AI agents & assistants",
       "API-based integrations",
     ],
-    bg: "#eafff3",
-    accent: "#047857",
+    bg: "rgba(92, 255, 194, 0.09)",
+    accent: "#5cffc2",
   },
   {
     id: "gohighlevel",
@@ -98,8 +98,8 @@ export const categories: Category[] = [
       "Client onboarding",
       "Custom integrations",
     ],
-    bg: "#fff8e6",
-    accent: "#b45309",
+    bg: "rgba(255, 209, 102, 0.1)",
+    accent: "#ffd166",
   },
   {
     id: "graphics",
@@ -116,8 +116,8 @@ export const categories: Category[] = [
       "Presentation visuals",
       "Creative direction",
     ],
-    bg: "#fff0f5",
-    accent: "#be185d",
+    bg: "rgba(255, 127, 174, 0.1)",
+    accent: "#ff7fae",
   },
   {
     id: "video",
@@ -134,8 +134,8 @@ export const categories: Category[] = [
       "Video editing",
       "Short-form content",
     ],
-    bg: "#eef1ff",
-    accent: "#4338ca",
+    bg: "rgba(163, 168, 255, 0.1)",
+    accent: "#a3a8ff",
   },
 ];
 

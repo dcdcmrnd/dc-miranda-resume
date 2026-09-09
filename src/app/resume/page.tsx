@@ -65,13 +65,7 @@ export default function ResumePage() {
         </p>
         <div className="work-grid" data-reveal-group>
           {liveProjects.map((p) => (
-            <a
-              key={p.id}
-              href={`/work/${p.slug}`}
-              className="work-card"
-              data-reveal-item
-              style={{ background: "#f7f6f3" }}
-            >
+            <a key={p.id} href={`/work/${p.slug}`} className="work-card" data-reveal-item>
               <h3>{p.displayName}</h3>
               <p>{p.blurb}</p>
               <span className="work-link">Open project →</span>
