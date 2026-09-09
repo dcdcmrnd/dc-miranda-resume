@@ -21,6 +21,7 @@ import TornDivider from "@/components/TornDivider/TornDivider";
 import FloatingIcons from "@/components/FloatingIcons/FloatingIcons";
 import TiltCard from "@/components/Motion/TiltCard";
 import GalleryTrack from "@/components/Motion/GalleryTrack";
+import SplitChars from "@/components/Motion/SplitChars";
 
 // Mirrors the CSS custom properties in globals.css — TornDivider needs the
 // literal hex value to fill its clip-path shape, which var() can't resolve
@@ -72,14 +73,18 @@ export default function Home() {
             </div>
 
             <div className="profile-links" data-reveal>
-              <a href={`mailto:${contact.email}`}>Email</a>
+              <a href={`mailto:${contact.email}`}>
+                <SplitChars text="Email" />
+              </a>
               <a href={contact.whatsapp.href} target="_blank" rel="noreferrer">
-                WhatsApp
+                <SplitChars text="WhatsApp" />
               </a>
               <a href={contact.portfolio.href} target="_blank" rel="noreferrer">
-                Notion
+                <SplitChars text="Notion" />
               </a>
-              <a href="/resume">Résumé</a>
+              <a href="/resume">
+                <SplitChars text="Résumé" />
+              </a>
             </div>
           </div>
         </div>
@@ -351,13 +356,15 @@ export default function Home() {
           <p className="contact-motto" data-reveal>
             {contact.motto}
           </p>
-          <div className="contact-links" data-reveal>
-            <a href={`mailto:${contact.email}`}>email</a>
+          <div className="contact-links">
+            <a href={`mailto:${contact.email}`}>
+              <SplitChars text="email" />
+            </a>
             <a href={contact.whatsapp.href} target="_blank" rel="noreferrer">
-              whatsapp
+              <SplitChars text="whatsapp" />
             </a>
             <a href={contact.portfolio.href} target="_blank" rel="noreferrer">
-              notion
+              <SplitChars text="notion" />
             </a>
           </div>
           <div className="footer-meta">
