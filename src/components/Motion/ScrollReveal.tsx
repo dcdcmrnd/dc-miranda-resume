@@ -33,10 +33,12 @@ export default function ScrollReveal() {
 
     const singles = document.querySelectorAll<HTMLElement>("[data-reveal]");
     const groups = document.querySelectorAll<HTMLElement>("[data-reveal-group]");
+    const blurSingles = document.querySelectorAll<HTMLElement>("[data-blur-reveal]");
 
     if (reduceMotion) {
       singles.forEach((el) => gsap.set(el, { clearProps: "all" }));
       groups.forEach((el) => gsap.set(el.querySelectorAll("[data-reveal-item]"), { clearProps: "all" }));
+      blurSingles.forEach((el) => gsap.set(el, { clearProps: "all" }));
       return;
     }
 
@@ -63,6 +65,19 @@ export default function ScrollReveal() {
         ease: "power2.out",
         stagger: 0.06,
         scrollTrigger: { trigger: group, start: "top 88%", once: true },
+      }).scrollTrigger;
+      if (st) triggers.push(st);
+    });
+
+    blurSingles.forEach((el) => {
+      gsap.set(el, { opacity: 0, y: 16, filter: "blur(10px)" });
+      const st = gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 0.9,
+        ease: "power2.out",
+        scrollTrigger: { trigger: el, start: "top 75%", once: true },
       }).scrollTrigger;
       if (st) triggers.push(st);
     });

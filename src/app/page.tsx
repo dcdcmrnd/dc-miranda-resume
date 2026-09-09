@@ -20,69 +20,101 @@ import BubbleWrap from "@/components/BubbleWrap/BubbleWrap";
 import TornDivider from "@/components/TornDivider/TornDivider";
 import FloatingIcons from "@/components/FloatingIcons/FloatingIcons";
 import TiltCard from "@/components/Motion/TiltCard";
+import GalleryTrack from "@/components/Motion/GalleryTrack";
 
 // Mirrors the CSS custom properties in globals.css — TornDivider needs the
 // literal hex value to fill its clip-path shape, which var() can't resolve
 // from a server component.
-const NAVY = "#171c33";
-const CHARCOAL = "#1c1c1e";
-const SIGNAL_DEEP = "#c11919";
+const BG = "#060606";
+const BG_ALT = "#0e0e0e";
 
 export default function Home() {
   return (
-    <main id="main-content">
-      <div className="section-navy" style={{ position: "relative" }}>
-        <FloatingIcons
-          placements={[
-            { icon: "code", top: "8%", left: "4%", size: 46, rotate: -12, color: "#7ecbff" },
-            { icon: "gear", top: "18%", left: "92%", size: 40, rotate: 20, color: "#5cffc2" },
-            { icon: "bolt", top: "70%", left: "3%", size: 36, rotate: 8, color: "#ffd166" },
-            { icon: "film", top: "80%", left: "90%", size: 42, rotate: -10, color: "#ff7fae" },
-            { icon: "brush", top: "4%", left: "60%", size: 34, rotate: 16, color: "#c299ff" },
-          ]}
-        />
+    <main id="main-content" className="creative-room-page">
+      {/* ---------------- Hero (Creative Room structure, DC content) ---------------- */}
+      <section className="hero-stage">
+        <div className="branch branch-left" aria-hidden="true">
+          <FloatingIcons
+            placements={[
+              { icon: "code", top: "6%", left: "6%", size: 42, rotate: -12, color: "rgba(245,243,238,0.5)" },
+              { icon: "gear", top: "30%", left: "24%", size: 30, rotate: 18, color: "rgba(245,243,238,0.35)" },
+            ]}
+          />
+        </div>
+        <div className="branch branch-right" aria-hidden="true">
+          <FloatingIcons
+            placements={[
+              { icon: "film", top: "70%", left: "68%", size: 36, rotate: -10, color: "rgba(245,243,238,0.4)" },
+              { icon: "brush", top: "50%", left: "82%", size: 38, rotate: 14, color: "rgba(245,243,238,0.5)" },
+            ]}
+          />
+        </div>
+
+        <div className="container hero-shell">
+          <div className="hero-content">
+            <h1 className="hero-wordmark" data-reveal>
+              <span className="line line-top">DC</span>
+              <span className="line line-bottom">MIRANDA</span>
+            </h1>
+            <p className="hero-caption" data-reveal>
+              {hero.eyebrow}
+            </p>
+            <p className="hero-copy" data-reveal>
+              {hero.statement}
+            </p>
+
+            <div className="services-list" data-reveal-group aria-label="Disciplines">
+              {categories.map((c) => (
+                <span key={c.id} data-reveal-item>
+                  {c.name.toUpperCase()}
+                </span>
+              ))}
+            </div>
+
+            <div className="profile-links" data-reveal>
+              <a href={`mailto:${contact.email}`}>Email</a>
+              <a href={contact.whatsapp.href} target="_blank" rel="noreferrer">
+                WhatsApp
+              </a>
+              <a href={contact.portfolio.href} target="_blank" rel="noreferrer">
+                Notion
+              </a>
+              <a href="/resume">Résumé</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- Bio (full-viewport blur reveal) ---------------- */}
+      <section className="bio-section">
         <div className="container">
-          <section className="hero-card">
-            <div>
-              <h1>
-                <span className="hero-heading" data-reveal>
-                  {hero.greeting}
-                </span>
-                <span className="hero-role" data-reveal>
-                  {hero.role}
-                </span>
-              </h1>
-              <p className="hero-body" data-reveal>
-                {hero.statement}
-              </p>
-              <p className="hero-sub" data-reveal>
-                {hero.body}
-              </p>
-              <a className="hero-cta" href="#work" data-reveal>
-                View my work
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+          <p className="bio-text" data-blur-reveal>
+            {resumeSummary}
+          </p>
+        </div>
+      </section>
+
+      {/* ---------------- Horizontal scroll-scrubbed gallery ---------------- */}
+      <section className="gallery-section" id="work-gallery">
+        <GalleryTrack>
+          {categories.map((c) => (
+            <div
+              key={c.id}
+              className="gallery-item"
+              data-gallery-item
+              style={{ ["--gallery-accent" as string]: c.accent }}
+            >
+              <a href="#work">
+                <span className="gallery-item-index">{c.number}</span>
+                <span className="gallery-item-name">{c.name}</span>
               </a>
             </div>
-            <TiltCard className="hero-art" max={5} baseRotateZ={-2}>
-              <Image
-                src="/me.jpg"
-                alt="Portrait of DC Miranda"
-                fill
-                sizes="(max-width: 800px) 100vw, 480px"
-                style={{ objectFit: "cover" }}
-                priority
-              />
-              <span className="mark" aria-hidden="true">
-                DC · Aequora Digital
-              </span>
-            </TiltCard>
-          </section>
-        </div>
-      </div>
-      <TornDivider color={CHARCOAL} />
+          ))}
+        </GalleryTrack>
+        <p className="gallery-caption">( scroll to explore — click any card to jump to selected work )</p>
+      </section>
 
+      {/* ---------------- What I Do ---------------- */}
       <div className="section-charcoal">
         <div className="container">
           <section className="section" id="capabilities">
@@ -114,8 +146,9 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={NAVY} />
+      <TornDivider color={BG} />
 
+      {/* ---------------- Selected Work ---------------- */}
       <div className="section-navy">
         <div className="container">
           <section className="section" id="work">
@@ -134,8 +167,9 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={CHARCOAL} />
+      <TornDivider color={BG_ALT} />
 
+      {/* ---------------- Experience ---------------- */}
       <div className="section-charcoal">
         <div className="container">
           <section className="section" id="experience">
@@ -143,7 +177,7 @@ export default function Home() {
               Experience
             </h2>
             <p className="section-intro" data-reveal>
-              {resumeSummary}
+              {hero.body}
             </p>
             <div className="timeline-scroll" data-reveal-group>
               {resumeTimeline.map((t) => (
@@ -157,8 +191,9 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={NAVY} />
+      <TornDivider color={BG} />
 
+      {/* ---------------- Systems ---------------- */}
       <div className="section-navy">
         <div className="container">
           <section className="section">
@@ -223,8 +258,9 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={CHARCOAL} />
+      <TornDivider color={BG_ALT} />
 
+      {/* ---------------- Process ---------------- */}
       <div className="section-charcoal">
         <div className="container">
           <section className="section">
@@ -245,8 +281,9 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={NAVY} />
+      <TornDivider color={BG} />
 
+      {/* ---------------- About / The Difference ---------------- */}
       <div className="section-navy">
         <div className="container">
           <section className="section" id="about">
@@ -279,8 +316,9 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={CHARCOAL} />
+      <TornDivider color={BG_ALT} />
 
+      {/* ---------------- Resume teaser ---------------- */}
       <div className="section-charcoal">
         <div className="container">
           <section className="section">
@@ -299,9 +337,10 @@ export default function Home() {
           </section>
         </div>
       </div>
-      <TornDivider color={SIGNAL_DEEP} />
+      <TornDivider color={BG_ALT} />
 
-      <div className="contact-block">
+      {/* ---------------- Footer / Contact ---------------- */}
+      <div className="contact-block" id="contact">
         <div className="container">
           <h2 className="contact-heading" data-reveal>
             {contact.statement}
@@ -312,35 +351,15 @@ export default function Home() {
           <p className="contact-motto" data-reveal>
             {contact.motto}
           </p>
-          <ul className="contact-links" data-reveal>
-            <li>
-              <a href={`mailto:${contact.email}`}>
-                <span>
-                  <span className="tag">Email</span>
-                  {contact.email}
-                </span>
-                <span className="val">Start a project →</span>
-              </a>
-            </li>
-            <li>
-              <a href={contact.whatsapp.href} target="_blank" rel="noreferrer">
-                <span>
-                  <span className="tag">WhatsApp</span>
-                  {contact.whatsapp.display}
-                </span>
-                <span className="val">Open →</span>
-              </a>
-            </li>
-            <li>
-              <a href={contact.portfolio.href} target="_blank" rel="noreferrer">
-                <span>
-                  <span className="tag">Portfolio</span>
-                  {contact.portfolio.display}
-                </span>
-                <span className="val">Open →</span>
-              </a>
-            </li>
-          </ul>
+          <div className="contact-links" data-reveal>
+            <a href={`mailto:${contact.email}`}>email</a>
+            <a href={contact.whatsapp.href} target="_blank" rel="noreferrer">
+              whatsapp
+            </a>
+            <a href={contact.portfolio.href} target="_blank" rel="noreferrer">
+              notion
+            </a>
+          </div>
           <div className="footer-meta">
             <span>© 2026 DC Miranda</span>
             <span>scroll on — the footer hides bubble wrap ↓</span>
