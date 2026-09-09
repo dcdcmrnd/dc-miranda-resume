@@ -12,9 +12,9 @@ export default function Navigation() {
         <Link href="/" className="site-logo">
           DC<span className="dot">.</span>
         </Link>
-        <nav className="nav-links">
+        <nav className="nav-links" aria-label="Primary">
           <Link href="/#work">Work</Link>
-          <Link href="/resume" data-current={pathname === "/resume"}>
+          <Link href="/resume" data-current={pathname === "/resume"} aria-current={pathname === "/resume" ? "page" : undefined}>
             Resume
           </Link>
         </nav>

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { projects, projectBySlug, categories } from "@/projects/projectData";
@@ -5,6 +6,12 @@ import { driveEmbedUrl } from "@/lib/drive";
 
 export function generateStaticParams() {
   return projects.filter((p) => p.status === "live").map((p) => ({ slug: p.slug }));
+}
+
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const project = projectBySlug(params.slug);
+  if (!project) return {};
+  return { title: `${project.displayName} — DC Miranda` };
 }
 
 export default function WorkDetailPage({ params }: { params: { slug: string } }) {
@@ -15,7 +22,7 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
   const embedUrl = driveEmbedUrl(project.href);
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <div className="detail-hero">
         <Link href="/#work" className="back-link">
           ← All work
@@ -28,7 +35,7 @@ export default function WorkDetailPage({ params }: { params: { slug: string } })
       </div>
 
       {embedUrl && (
-        <div className="detail-embed">
+        <div className="detail-embed" data-reveal>
           <iframe src={embedUrl} allow="autoplay" title={project.displayName} />
         </div>
       )}

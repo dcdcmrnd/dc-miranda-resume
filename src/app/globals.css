@@ -5,6 +5,7 @@
   --line: rgba(20, 22, 26, 0.1);
   --line-strong: rgba(20, 22, 26, 0.16);
   --brand: #ff5a2b;
+  --brand-deep: #c22b00; /* same hue, darkened for text/background pairs needing 4.5:1+ */
   --brand-2: #ff6bd6;
   --link: #2054c9;
   --panel: #f7f6f3;
@@ -39,6 +40,24 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
 
 :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 
+.skip-link {
+  position: fixed;
+  top: -60px;
+  left: 12px;
+  z-index: 1000;
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: top 150ms ease;
+}
+.skip-link:focus-visible {
+  top: 12px;
+  outline-color: #fff;
+}
+
 .container {
   max-width: 1180px;
   margin: 0 auto;
@@ -67,10 +86,20 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
   font-family: var(--font-serif);
   font-size: 1.3rem;
   font-weight: 600;
+  padding: 13px 6px;
+  margin: -13px -6px;
+  display: inline-block;
+  border-radius: 8px;
 }
 .site-logo .dot { color: var(--brand); }
-.nav-links { display: flex; gap: 22px; align-items: center; }
-.nav-links a { font-size: 0.95rem; font-weight: 500; }
+.nav-links { display: flex; gap: 8px; align-items: center; }
+.nav-links a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 13px 10px;
+  margin: -13px -10px;
+  border-radius: 8px;
+}
 .nav-links a[data-current="true"] { color: var(--link); }
 .nav-links a:hover { color: var(--link); }
 
@@ -89,12 +118,14 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
   .hero-card { grid-template-columns: 1fr; text-align: left; }
 }
 .hero-heading {
+  display: block;
   font-family: var(--font-serif);
   font-size: clamp(2.2rem, 5vw, 3.2rem);
   line-height: 1.08;
   margin: 0 0 6px;
 }
 .hero-role {
+  display: block;
   font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(1.8rem, 4.2vw, 2.6rem);
@@ -109,22 +140,39 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
   gap: 8px;
   font-weight: 600;
   color: var(--link);
+  padding: 12px 10px;
+  margin: -12px -10px;
+  border-radius: 8px;
 }
 .hero-cta:hover { text-decoration: underline; }
+.hero-cta svg { transition: transform 200ms ease; }
+.hero-cta:hover svg { transform: translateX(3px); }
+
 .hero-art {
+  position: relative;
   border-radius: 20px;
-  background: linear-gradient(135deg, #ffe3d4, #ffd6ee);
+  background: linear-gradient(135deg, #fff4ec, #fff6fb);
   aspect-ratio: 4 / 3.4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
 }
+.hero-art .blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: 0.85;
+}
 .hero-art .mark {
+  position: absolute;
+  bottom: 20px;
+  left: 24px;
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 9vw, 5.5rem);
-  color: rgba(20, 22, 26, 0.14);
+  font-size: 1.1rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 6px 14px;
+  border-radius: 999px;
 }
 
 /* ---------------- Section headings ---------------- */
@@ -180,7 +228,7 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
 }
 .work-card p { color: rgba(20, 22, 26, 0.72); margin-bottom: 18px; max-width: 46ch; }
 .work-card .work-link { margin-top: auto; font-weight: 600; }
-.work-card .work-status { margin-top: auto; font-weight: 600; font-size: 0.85rem; color: rgba(20,22,26,0.5); text-transform: uppercase; letter-spacing: 0.06em; }
+.work-card .work-status { margin-top: auto; font-weight: 600; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
 
 /* ---------------- Systems (AI+automation / GHL) ---------------- */
 .system-panel {
@@ -217,7 +265,7 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
 
 /* ---------------- Difference / philosophy ---------------- */
 .diff-lines p { font-size: 1rem; margin-bottom: 6px; }
-.diff-lines p.status { color: var(--brand); font-weight: 600; }
+.diff-lines p.status { color: var(--brand-deep); font-weight: 600; }
 
 /* ---------------- Timeline (resume page) ---------------- */
 .timeline { display: flex; flex-direction: column; gap: 18px; }
@@ -254,7 +302,7 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
 
 /* ---------------- Contact footer ---------------- */
 .contact-block {
-  background: var(--brand);
+  background: var(--brand-deep);
   color: #fff;
   padding: clamp(48px, 8vw, 90px) 0 60px;
   margin-top: 40px;
@@ -277,14 +325,21 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   font-size: 1rem;
 }
-.contact-links .tag { opacity: 0.7; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.08em; margin-right: 10px; }
-.contact-links .val { opacity: 0.85; font-size: 0.8rem; text-transform: uppercase; }
+.contact-links .tag { opacity: 0.88; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.08em; margin-right: 10px; }
+.contact-links .val { opacity: 0.88; font-size: 0.8rem; text-transform: uppercase; }
+.contact-links a {
+  border-radius: 8px;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left: -4px;
+  margin-right: -4px;
+}
 .footer-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.78rem;
-  opacity: 0.75;
+  opacity: 0.88;
   flex-wrap: wrap;
   gap: 10px;
 }
@@ -328,7 +383,18 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
   margin-bottom: 24px;
 }
 .detail-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
-.back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--link); font-weight: 600; margin-bottom: 20px; }
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--link);
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding: 12px 10px;
+  margin-left: -10px;
+  border-radius: 8px;
+}
+.back-link:hover { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }

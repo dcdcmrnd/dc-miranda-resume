@@ -31,11 +31,14 @@ export default function WorkCard({ project, category }: { project: Project; cate
     </div>
   );
 
-  if (project.status !== "live") return card;
+  if (project.status !== "live") {
+    return <div data-reveal-item>{card}</div>;
+  }
 
   return (
     <Link
       href={`/work/${project.slug}`}
+      data-reveal-item
       onMouseEnter={(e) => embedUrl && show(embedUrl, e.currentTarget)}
       onMouseLeave={hide}
     >

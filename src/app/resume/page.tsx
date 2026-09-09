@@ -17,7 +17,7 @@ export default function ResumePage() {
   const liveProjects = projects.filter((p) => p.status === "live");
 
   return (
-    <main className="container">
+    <main id="main-content" className="container">
       <div className="detail-hero">
         <p className="detail-kicker">Full-Stack Web Developer · AI-Enabled Digital Builder</p>
         <h1 className="detail-title">DC Miranda</h1>
@@ -25,14 +25,16 @@ export default function ResumePage() {
       </div>
 
       <section className="section">
-        <p className="section-title">Why this is credible for web development</p>
-        <p className="section-intro">
+        <h2 className="section-title" data-reveal>
+          Why this is credible for web development
+        </h2>
+        <p className="section-intro" data-reveal>
           Positioned around the same value modern service businesses look for: full-stack delivery, smart
           automation, SEO-ready structure, and a polished experience from concept to launch.
         </p>
-        <div className="stat-grid">
+        <div className="stat-grid" data-reveal-group>
           {resumeStats.map((s) => (
-            <div key={s.title} className="stat-card">
+            <div key={s.title} className="stat-card" data-reveal-item>
               <strong>{s.title}</strong>
               <span>{s.body}</span>
             </div>
@@ -41,10 +43,12 @@ export default function ResumePage() {
       </section>
 
       <section className="section">
-        <p className="section-title">What I can build</p>
-        <div className="caps-grid-2">
+        <h2 className="section-title" data-reveal>
+          What I can build
+        </h2>
+        <div className="caps-grid-2" data-reveal-group>
           {resumeCapabilities.map((c) => (
-            <div key={c.title} className="stat-card">
+            <div key={c.title} className="stat-card" data-reveal-item>
               <strong>{c.title}</strong>
               <span>{c.body}</span>
             </div>
@@ -53,11 +57,21 @@ export default function ResumePage() {
       </section>
 
       <section className="section">
-        <p className="section-title">Project proof</p>
-        <p className="section-intro">Real, published deliverables — each opens with the actual video embedded.</p>
-        <div className="work-grid">
+        <h2 className="section-title" data-reveal>
+          Project proof
+        </h2>
+        <p className="section-intro" data-reveal>
+          Real, published deliverables — each opens with the actual video embedded.
+        </p>
+        <div className="work-grid" data-reveal-group>
           {liveProjects.map((p) => (
-            <a key={p.id} href={`/work/${p.slug}`} className="work-card" style={{ background: "#f7f6f3" }}>
+            <a
+              key={p.id}
+              href={`/work/${p.slug}`}
+              className="work-card"
+              data-reveal-item
+              style={{ background: "#f7f6f3" }}
+            >
               <h3>{p.displayName}</h3>
               <p>{p.blurb}</p>
               <span className="work-link">Open project →</span>
@@ -67,10 +81,12 @@ export default function ResumePage() {
       </section>
 
       <section className="section">
-        <p className="section-title">Experience</p>
-        <div className="timeline">
+        <h2 className="section-title" data-reveal>
+          Experience
+        </h2>
+        <div className="timeline" data-reveal-group>
           {resumeTimeline.map((t) => (
-            <div key={t.role} className="timeline-item">
+            <div key={t.role} className="timeline-item" data-reveal-item>
               <div className="period">{t.period}</div>
               <div className="role">{t.role}</div>
               <p style={{ color: "var(--muted)", marginTop: 6 }}>{t.description}</p>
@@ -80,8 +96,10 @@ export default function ResumePage() {
       </section>
 
       <section className="section">
-        <p className="section-title">Core stack</p>
-        <div className="pill-row">
+        <h2 className="section-title" data-reveal>
+          Core stack
+        </h2>
+        <div className="pill-row" data-reveal>
           {techStack.map((t) => (
             <span key={t}>{t}</span>
           ))}
@@ -89,9 +107,11 @@ export default function ResumePage() {
       </section>
 
       <section className="section" style={{ paddingBottom: 60 }}>
-        <p className="section-title">Contact</p>
-        <div className="stat-grid">
-          <div className="stat-card">
+        <h2 className="section-title" data-reveal>
+          Contact
+        </h2>
+        <div className="stat-grid" data-reveal-group>
+          <div className="stat-card" data-reveal-item>
             <strong>Email</strong>
             <span>
               <a className="link" href={`mailto:${contact.email}`}>
@@ -99,7 +119,7 @@ export default function ResumePage() {
               </a>
             </span>
           </div>
-          <div className="stat-card">
+          <div className="stat-card" data-reveal-item>
             <strong>Phone / WhatsApp</strong>
             <span>
               <a className="link" href={contact.whatsapp.href} target="_blank" rel="noreferrer">

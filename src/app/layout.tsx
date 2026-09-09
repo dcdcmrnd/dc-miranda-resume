@@ -3,6 +3,7 @@ import "./globals.css";
 import Navigation from "@/components/Navigation/Navigation";
 import { VideoPreviewProvider } from "@/hooks/useVideoPreview";
 import VideoPreviewLayer from "@/components/ProjectUI/VideoPreviewLayer";
+import ScrollReveal from "@/components/Motion/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "DC Miranda — Full-Stack Web Developer",
@@ -22,10 +23,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <VideoPreviewProvider>
           <Navigation />
           {children}
           <VideoPreviewLayer />
+          <ScrollReveal />
         </VideoPreviewProvider>
       </body>
     </html>
