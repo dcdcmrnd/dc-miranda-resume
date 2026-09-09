@@ -294,6 +294,12 @@ export interface TimelineEntry {
 export const resumeSummary =
   "Full-stack developer specializing in Next.js, TypeScript, and Tailwind CSS, deploying production apps on Vercel. Founder of a web agency shipping client sites and custom applications end-to-end — from backend logic to polished, responsive UI. Background spanning UI/UX design, marketing automation, and data research, with a strong eye for clean, modern interfaces.";
 
+/** Shortened excerpt of resumeSummary — same real sentences, trimmed for
+ * the homepage bio section, which (like the reference it's modeled on)
+ * reads as one short block rather than the full resume-page summary. */
+export const bioShort =
+  "Full-stack developer specializing in Next.js, TypeScript, and Tailwind CSS. Founder of a web agency shipping client sites and custom applications end-to-end.";
+
 export const resumeTimeline: TimelineEntry[] = [
   {
     role: "Founder & Developer, Aequora Digital",

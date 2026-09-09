@@ -2,7 +2,7 @@ import {
   categories,
   projects,
   hero,
-  resumeSummary,
+  bioShort,
   resumeTimeline,
   aiAutomationFlow,
   ghlFlow,
@@ -94,7 +94,7 @@ export default function Home() {
       <section className="bio-section">
         <div className="container">
           <p className="bio-text" data-blur-reveal>
-            {resumeSummary}
+            {bioShort}
           </p>
         </div>
       </section>
