@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import {
-  hero,
+  resumeSummary,
   resumeStats,
   resumeCapabilities,
   resumeTimeline,
+  education,
+  resumeProjects,
   techStack,
   projects,
   contact,
@@ -19,9 +21,10 @@ export default function ResumePage() {
   return (
     <main id="main-content" className="container">
       <div className="detail-hero">
-        <p className="detail-kicker">Full-Stack Web Developer · AI-Enabled Digital Builder</p>
-        <h1 className="detail-title">DC Miranda</h1>
-        <p className="detail-blurb">{hero.statement}</p>
+        <p className="detail-kicker">Digital Solutions Expert · AI-Assisted Web & Software Development</p>
+        <h1 className="detail-title">DC Loumart Miranda</h1>
+        <p className="detail-blurb">{resumeSummary}</p>
+        <p className="section-intro" style={{ marginBottom: 0 }}>{contact.location}</p>
       </div>
 
       <section className="section">
@@ -51,6 +54,26 @@ export default function ResumePage() {
             <div key={c.title} className="stat-card" data-reveal-item>
               <strong>{c.title}</strong>
               <span>{c.body}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section">
+        <h2 className="section-title" data-reveal>
+          Projects
+        </h2>
+        <p className="section-intro" data-reveal>
+          Real, shipped software. Live links aren&apos;t wired up yet — ask DC directly for a walkthrough.
+        </p>
+        <div className="caps-grid-2" data-reveal-group>
+          {resumeProjects.map((p) => (
+            <div key={p.name} className="stat-card" data-reveal-item>
+              <strong>{p.name}</strong>
+              <div className="detail-kicker" style={{ marginTop: 4, marginBottom: 8 }}>
+                {p.org} · {p.period}
+              </div>
+              <span>{p.body}</span>
             </div>
           ))}
         </div>
@@ -91,11 +114,33 @@ export default function ResumePage() {
 
       <section className="section">
         <h2 className="section-title" data-reveal>
+          Education
+        </h2>
+        <div className="stat-card" data-reveal style={{ maxWidth: 640 }}>
+          <strong>{education.school}</strong>
+          <div className="detail-kicker" style={{ marginTop: 4, marginBottom: 8 }}>
+            {education.degree} · {education.period}
+          </div>
+          <span>{education.body}</span>
+        </div>
+      </section>
+
+      <section className="section">
+        <h2 className="section-title" data-reveal>
           Core stack
         </h2>
-        <div className="pill-row" data-reveal>
-          {techStack.map((t) => (
-            <span key={t}>{t}</span>
+        <div data-reveal-group style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {techStack.map((group) => (
+            <div key={group.category} data-reveal-item>
+              <div className="detail-kicker" style={{ marginBottom: 10 }}>
+                {group.category}
+              </div>
+              <div className="pill-row">
+                {group.items.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </section>
@@ -108,8 +153,8 @@ export default function ResumePage() {
           <div className="stat-card" data-reveal-item>
             <strong>Email</strong>
             <span>
-              <a className="link" href={`mailto:${contact.email}`}>
-                {contact.email}
+              <a className="link" href={`mailto:${contact.resumeEmail}`}>
+                {contact.resumeEmail}
               </a>
             </span>
           </div>

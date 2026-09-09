@@ -287,24 +287,70 @@ export interface TimelineEntry {
   description: string;
 }
 
-/** Verbatim from the "Experience and strengths" section of the resume
- * page — richer phrasing than the homepage's shorter origin-story
- * version, and this is the one used on /resume. */
+/** Transcribed from DC_Miranda_Resume (1).pdf — the current, authoritative
+ * resume (supersedes the older "DC Miranda - Resume.html" this file was
+ * originally built from). Dates, titles, and employer names here are
+ * exactly as printed on that document. */
+export const resumeSummary =
+  "Full-stack developer specializing in Next.js, TypeScript, and Tailwind CSS, deploying production apps on Vercel. Founder of a web agency shipping client sites and custom applications end-to-end — from backend logic to polished, responsive UI. Background spanning UI/UX design, marketing automation, and data research, with a strong eye for clean, modern interfaces.";
+
 export const resumeTimeline: TimelineEntry[] = [
   {
-    role: "Freelance Web & Digital Growth Specialist",
-    period: "2021–Present",
-    description: "Built digital experiences, automation systems, landing pages, and campaign support around growth goals.",
+    role: "Founder & Developer, Aequora Digital",
+    period: "Jun 2026 – Present",
+    description:
+      "Design, build, and deploy the agency site and client projects in Next.js, TypeScript, and Tailwind CSS, hosted on Vercel with GitHub version control. Built Klariti, a full-stack dental clinic management platform, and an internal project-management desktop app for team task tracking and delivery coordination.",
   },
   {
-    role: "Web & Social Media Developer, Outsourced Doers",
-    period: "2020–2021",
-    description: "Delivered websites and branded multimedia content for clients in a fast-paced service environment.",
+    role: "Creative Virtual Assistant, I2I Agency",
+    period: "Jun 2023 – Jun 2026",
+    description:
+      "Built and maintained client websites and landing pages across WordPress, Squarespace, Kajabi, and ClickFunnels. Managed GoHighLevel workflows, automations, and community operations for online events and membership programs; produced graphic design assets, video edits, and course content.",
   },
   {
-    role: "Support, Operations, and Marketing Experience",
-    period: "2014–2019",
-    description: "Developed client handling, coordination, and problem-solving skills that travel well into modern web and product work.",
+    role: "Data Research Analyst, Buildify",
+    period: "Nov 2022 – May 2023",
+    description:
+      "Maintained and expanded a research database — identifying new data sources, monitoring quality, and resolving discrepancies.",
+  },
+  {
+    role: "Virtual Assistant, Digital Marketing, Outsource Doers",
+    period: "Oct 2020 – Aug 2021",
+    description:
+      "Managed website content and design updates, social media scheduling and community response, and client email communication.",
+  },
+];
+
+export const education = {
+  school: "STI College, Davao City",
+  degree: "Bachelor of Science, Information Technology",
+  period: "2012 – 2017",
+  body: "Relevant coursework: Web Development, Database Management, Systems Analysis & Design, Software Development, and Information Technology. Practical experience building websites, web apps, CRM systems, and business automation solutions.",
+};
+
+export interface ResumeProject {
+  name: string;
+  org: string;
+  period: string;
+  body: string;
+  href?: string;
+}
+
+/** Real shipped software, from the resume's "Projects" section. No live
+ * links yet — the PDF has these hyperlinked but text extraction doesn't
+ * carry the href, so nothing is guessed here. */
+export const resumeProjects: ResumeProject[] = [
+  {
+    name: "Klariti",
+    org: "Aequora Digital · Davao City, Philippines",
+    period: "Jul 2026 – Aug 2026",
+    body: "A full practice-management platform, not just a marketing page — a subscription product clinics could run their front desk on: online appointment booking, automated patient reminders, a multi-staff calendar and dashboard, centralized patient records, and an upcoming clinic website generator.",
+  },
+  {
+    name: "Aequora Workspace",
+    org: "Aequora Digital",
+    period: "Present",
+    body: "Internal lead-management and outreach platform: source businesses, score them by fit percentage, run automated email and tagging outreach, and manage every prospect through a unified contact feed and conversation view — one system tracking leads from first touch to closed.",
   },
 ];
 
@@ -315,22 +361,31 @@ export const originStatement = {
 };
 
 export const resumeStats = [
-  { title: "Full-stack mindset", body: "Front end, backend logic, integrations, and launch-ready execution." },
-  { title: "AI-assisted delivery", body: "Content, automation, workflow design, and faster execution with modern tools." },
-  { title: "Growth-ready UX", body: "Designed to support lead capture, conversions, and digital experiences." },
-  { title: "Business-focused", body: "Built for service businesses, membership products, and client-facing platforms." },
+  { title: "Full-stack execution", body: "Next.js, TypeScript, and Tailwind CSS, deploying production apps on Vercel." },
+  { title: "Agency-run delivery", body: "Founder of a web agency shipping client sites and custom applications end-to-end — from backend logic to polished, responsive UI." },
+  { title: "Cross-disciplinary background", body: "UI/UX design, marketing automation, and data research, with a strong eye for clean, modern interfaces." },
+  { title: "AI-assisted workflow", body: "AI-assisted web and software development, plus AI-assisted editing and generation in video work." },
 ];
 
 export const resumeCapabilities = [
-  { title: "Modern websites", body: "Landing pages, service business sites, and polished marketing websites designed to look sharp and convert." },
-  { title: "Membership portals", body: "Client areas, course portals, gated content, dashboards, and onboarding experiences that feel structured and professional." },
-  { title: "Automation and CRM", body: "Forms, lead routing, follow-up automation, pipelines, and integrations that support smoother business operations." },
-  { title: "SEO and performance", body: "Search-friendly structure, discoverability, and performance-oriented thinking that helps sites get found and used." },
+  { title: "Practice management platforms", body: "Built Klariti, a full-stack dental clinic platform — online booking, automated reminders, a multi-staff calendar and dashboard, and centralized patient records." },
+  { title: "Agency & client sites", body: "Design, build, and deploy client projects end-to-end in Next.js, TypeScript, and Tailwind CSS, hosted on Vercel with GitHub version control." },
+  { title: "Internal tools", body: "An internal project-management desktop app for team task tracking, plus a lead-scoring outreach workspace tracking prospects from first touch to closed." },
+  { title: "CMS builds & automation", body: "Client websites and landing pages across WordPress, Squarespace, Kajabi, and ClickFunnels, plus GoHighLevel workflow and funnel automation." },
 ];
 
-export const techStack = [
-  "HTML", "CSS", "JavaScript", "React", "Node.js", "Express", "MongoDB", "SQL",
-  "WordPress", "GoHighLevel", "Zapier", "Notion", "ChatGPT", "Descript", "CapCut",
+export interface TechGroup {
+  category: string;
+  items: string[];
+}
+
+export const techStack: TechGroup[] = [
+  { category: "Development", items: ["Next.js", "React", "TypeScript", "JavaScript", "Tailwind CSS", "HTML/CSS", "Vercel", "Git & GitHub", "Responsive & mobile-first UI"] },
+  { category: "CMS & No-Code", items: ["WordPress", "Squarespace", "Kajabi", "ClickFunnels", "GoHighLevel"] },
+  { category: "Automation", items: ["Zapier", "Make.com", "GoHighLevel workflow & funnel automation", "Aequora Automation"] },
+  { category: "Marketing & Analytics", items: ["Google Ads", "SEO fundamentals", "Landing-page optimization", "Google Analytics"] },
+  { category: "Design", items: ["Adobe Photoshop", "Adobe Illustrator", "Canva", "Typography", "Page layout"] },
+  { category: "Video Editing", items: ["Adobe Premiere Pro", "Descript", "CapCut", "AI-assisted editing & generation"] },
 ];
 
 /** Real 6-step AI + Automation flow, transcribed from #ai-automation in
@@ -376,6 +431,11 @@ export const vow = {
 
 export const contact = {
   email: "dc@aequoradigital.com",
+  /** The email printed on the resume itself differs from the site-wide
+   * contact address above — kept separate rather than overwritten, since
+   * only the resume content was asked to change. */
+  resumeEmail: "dcdcmiranda@gmail.com",
+  location: "Davao City, Philippines · Open to Remote",
   whatsapp: { display: "+63 995 315 1787", href: "https://wa.me/639953151787" },
   portfolio: { display: "Notion archive", href: "https://app.notion.com/p/1a9a2bae673880779176edcf0d9e264f?pvs=21" },
   statement: "Let's build something useful.",
