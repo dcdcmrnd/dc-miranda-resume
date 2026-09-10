@@ -757,6 +757,27 @@ a.link:hover, .link-inline:hover { text-decoration-color: var(--link); }
 }
 .profile-links a:hover { color: var(--ink); transform: translateY(-2px); }
 
+/* Corner decorative elements — occupy the same compositional role as the
+   reference's illustrated branch artwork (large, anchored to opposite
+   corners, sweeping toward center) without literally copying its
+   cherry-blossom brand imagery. Bug note: these rules were accidentally
+   deleted in an earlier cleanup pass, which silently let FloatingIcons'
+   percentage-based positions resolve against the full hero box instead
+   of a contained corner region — the icons still rendered, just
+   scattered arbitrarily instead of grouped as a corner motif. */
+.branch {
+  position: absolute;
+  width: min(46vw, 620px);
+  height: min(46vw, 560px);
+  pointer-events: none;
+  z-index: 1;
+}
+.branch-left { left: 0; top: 0; }
+.branch-right { right: 0; bottom: 0; }
+@media (max-width: 800px) {
+  .branch { display: none; }
+}
+
 .reference-grid {
   background: var(--bg);
   padding: 18px 0 30px;

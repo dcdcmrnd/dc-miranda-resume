@@ -37,16 +37,20 @@ export default function Home() {
         <div className="branch branch-left" aria-hidden="true">
           <FloatingIcons
             placements={[
-              { icon: "code", top: "6%", left: "6%", size: 42, rotate: -12, color: "rgba(245,243,238,0.5)" },
-              { icon: "gear", top: "30%", left: "24%", size: 30, rotate: 18, color: "rgba(245,243,238,0.35)" },
+              { icon: "code", top: "8%", left: "8%", size: 64, rotate: -14, color: "rgba(245,243,238,0.6)" },
+              { icon: "gear", top: "32%", left: "26%", size: 42, rotate: 18, color: "rgba(245,243,238,0.45)" },
+              { icon: "bolt", top: "52%", left: "10%", size: 38, rotate: 8, color: "rgba(245,243,238,0.4)" },
+              { icon: "brush", top: "18%", left: "48%", size: 34, rotate: -10, color: "rgba(245,243,238,0.35)" },
             ]}
           />
         </div>
         <div className="branch branch-right" aria-hidden="true">
           <FloatingIcons
             placements={[
-              { icon: "film", top: "70%", left: "68%", size: 36, rotate: -10, color: "rgba(245,243,238,0.4)" },
-              { icon: "brush", top: "50%", left: "82%", size: 38, rotate: 14, color: "rgba(245,243,238,0.5)" },
+              { icon: "brush", top: "76%", left: "78%", size: 64, rotate: 14, color: "rgba(245,243,238,0.6)" },
+              { icon: "film", top: "54%", left: "60%", size: 46, rotate: -10, color: "rgba(245,243,238,0.45)" },
+              { icon: "gear", top: "30%", left: "38%", size: 36, rotate: 22, color: "rgba(245,243,238,0.4)" },
+              { icon: "bolt", top: "14%", left: "18%", size: 32, rotate: -6, color: "rgba(245,243,238,0.35)" },
             ]}
           />
         </div>
