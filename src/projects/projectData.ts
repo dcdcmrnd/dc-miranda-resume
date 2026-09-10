@@ -84,7 +84,7 @@ export const categories: Category[] = [
     number: "04",
     name: "GoHighLevel",
     description:
-      "Building and customizing GoHighLevel systems that connect marketing, sales, communication, and client management.",
+      "Setting up CRM, pipelines, funnels, and workflow automation inside GoHighLevel, so marketing, sales, and client communication run through one connected system instead of scattered tools.",
     tags: [
       "CRM setup",
       "Pipelines",
